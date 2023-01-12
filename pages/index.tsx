@@ -1,8 +1,10 @@
+import MapLoader from "../components/Map/MapLoader"
 
 export default function Home() {
   return (
     <>
-        <p>Hello world!</p>
+      <MapLoader/>
+        {/* <p>Hello world!</p> */}
     </>
   )
 }
