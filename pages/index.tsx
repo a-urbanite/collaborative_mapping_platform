@@ -1,5 +1,6 @@
 import MapLoader from "../components/Map/MapLoader"
 import { DrawingContextProvider } from '../components/DrawingContext'
+import MarkerList from "../components/MarkerList/MarkerList"
 
 export default function Home() {
   
@@ -7,6 +8,7 @@ export default function Home() {
     <>
       <DrawingContextProvider>
         <MapLoader/>
+        <MarkerList/>
       </DrawingContextProvider>
     </>
   )
