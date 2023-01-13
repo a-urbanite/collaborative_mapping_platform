@@ -11,10 +11,13 @@ const Map = () => {
 
   useEffect(() => {
     if (mapRef) {
-      console.log("MAPREF", mapRef);
-      console.log("PANES", mapRef.getPanes());
+      // console.log("MAPREF", mapRef);
+      // console.log("PANES", mapRef.getPanes());
       // console.log(mapRef.getPane('markerPane').children[0])
+      // const markersHTMLcollection = mapRef._panes.markerPane.children
+      // console.log(markersHTMLcollection)
     }
+
   }, [mapRef]);
 
   return (

@@ -1,8 +1,15 @@
 import { EditControl } from "react-leaflet-draw";
 import "leaflet-draw/dist/leaflet.draw.css";
-import { FeatureGroup } from "react-leaflet";
+import { FeatureGroup, useMap } from "react-leaflet";
+// import { useUserContext } from '../../components/UserContext';
+import { useDrawingContext } from '../DrawingContext'
 
 const EditingController = () => {
+
+  const { addDrawnMarker } = useDrawingContext()
+
+  // const map = useMap()
+
   return (
     <FeatureGroup>
       <EditControl
@@ -30,6 +37,10 @@ const EditingController = () => {
         }}
         onCreated={(e) => {
           console.log("CREATED EVENT", e);
+          const markerGeoJSON = e.layer.toGeoJSON()
+          // console.log(markerGeoJSON)
+          addDrawnMarker(markerGeoJSON)
+          // console.log(map)
         }}
         onMounted={() => console.log("onMounted!")}
         onEditStart={() => console.log("Edit bar opened")}
