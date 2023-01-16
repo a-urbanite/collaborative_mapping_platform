@@ -12,7 +12,7 @@ const MapLoader = () => {
   )
 
   return (
-    <Map />
+    <Map/>
   )
 }
 

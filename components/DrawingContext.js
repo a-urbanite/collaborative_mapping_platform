@@ -10,11 +10,11 @@ const DrawingContextProvider = ({ children }) => {
   //   console.log("DrawnmarkersState: ", DrawnMarkers)
   // }, [DrawnMarkers])
 
-  const addDrawnMarker = (markerGeoJSON) => {
+  const addDrawnMarker = (markerLayer) => {
     // console.log("addDrawnMarker functin triggered");
     // console.log("Marker to add: ", markerGeoJSON)
     // console.log("preexisting markers in state: ", DrawnMarkers)
-    setDrawnMarkers((oldArray) => [...oldArray, markerGeoJSON]);
+    setDrawnMarkers((oldArray) => [...oldArray, markerLayer]);
   };
 
   const getDrawnMarkers = () => DrawnMarkers;

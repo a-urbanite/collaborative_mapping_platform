@@ -36,10 +36,10 @@ const EditingController = () => {
           // console.log("ONEDITED", e)
         }}
         onCreated={(e) => {
-          console.log("CREATED EVENT", e);
-          const markerGeoJSON = e.layer.toGeoJSON()
+          console.log("CREATED EVENT", e.layer);
+          // const markerGeoJSON = e.layer.toGeoJSON()
           // console.log(markerGeoJSON)
-          addDrawnMarker(markerGeoJSON)
+          addDrawnMarker(e.layer)
           // console.log(map)
         }}
         onMounted={() => console.log("onMounted!")}

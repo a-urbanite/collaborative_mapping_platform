@@ -5,20 +5,24 @@ import "leaflet-defaulticon-compatibility";
 import styles from "./Map.module.css";
 import { MapContainer, TileLayer, useMap, Marker, Popup, FeatureGroup } from "react-leaflet";
 import EditingController from "./EditingController";
+import { useMapRefContext } from "../MapRefContext";
 
 const Map = () => {
-  const [mapRef, setMapRef] = useState<any>(null);
+  // const [mapRef, setMapRef] = useState<any>(null);
 
-  useEffect(() => {
-    if (mapRef) {
-      // console.log("MAPREF", mapRef);
-      // console.log("PANES", mapRef.getPanes());
-      // console.log(mapRef.getPane('markerPane').children[0])
-      // const markersHTMLcollection = mapRef._panes.markerPane.children
-      // console.log(markersHTMLcollection)
-    }
+  const { setMapInstance } = useMapRefContext()
+  const setter = setMapInstance()
 
-  }, [mapRef]);
+  // useEffect(() => {
+  //   if (mapRef) {
+  //     // console.log("MAPREF", mapRef);
+  //     // console.log("PANES", mapRef.getPanes());
+  //     // console.log(mapRef.getPane('markerPane').children[0])
+  //     // const markersHTMLcollection = mapRef._panes.markerPane.children
+  //     // console.log(markersHTMLcollection)
+  //   }
+
+  // }, [mapRef]);
 
   return (
     <MapContainer
@@ -26,7 +30,7 @@ const Map = () => {
       zoom={13}
       scrollWheelZoom={false}
       className={styles.mapContainer}
-      ref={setMapRef}
+      ref={setter}
     >
       <EditingController />
       <TileLayer

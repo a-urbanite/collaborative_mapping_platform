@@ -1,22 +1,37 @@
-import React from 'react'
-import { useMap } from 'react-leaflet'
-import { useDrawingContext } from '../DrawingContext'
+import React from "react";
+import { useDrawingContext } from "../DrawingContext";
+import { useMapRefContext } from "../MapRefContext";
 
 const MarkerList = () => {
-  const { getDrawnMarkers } = useDrawingContext()
-  const drawnMarkers = getDrawnMarkers();
+  const drawnMarkers = useDrawingContext().getDrawnMarkers();
+  const mapInstance = useMapRefContext().getMapInstance()
 
-  // const map = useMap()
+  const highlightMarker = (marker: any) => {
+    console.log(marker)
+    // marker.setIcon(bigIcon);
+    mapInstance.panTo(marker.getLatLng());
+  };
+
   return (
     <div>
       <ul>
         {drawnMarkers.map((marker: any, i: any) => {
-          console.log(marker)
-          return <li key={i}>Feature {i+1} - {marker.geometry.type}</li>
+          // console.log(marker)
+          return (
+            <li
+              key={i}
+              onMouseOver={(e) => {
+                // console.log("hover!");
+                highlightMarker(marker)
+              }}
+            >
+              Feature {i + 1}
+            </li>
+          );
         })}
       </ul>
     </div>
-  )
-}
+  );
+};
 
-export default MarkerList
+export default MarkerList;
