@@ -1,6 +1,8 @@
 .container {
+  display: flex;
+  flex-direction: row;
   background-color: red;
   border: 1px green solid;
-  max-width: 5rem;
+  width: 10rem;
   height: 2rem;
 }

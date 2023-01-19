@@ -1,6 +1,6 @@
 import React from "react";
 import { useMapRefContext } from "../../MapRefContext";
-import styles from './MarkerCard.module.scss'
+import styles from "./markerCard.module.scss";
 
 const MarkerCard = ({ marker, i }: any) => {
   const mapInstance = useMapRefContext().getMapInstance();
@@ -12,13 +12,20 @@ const MarkerCard = ({ marker, i }: any) => {
   };
 
   return (
-    <li
-      onMouseOver={(e) => {
-        // console.log("hover!");
-        highlightMarker(marker);
-      }}
-    >
-      <div className={styles.container}>Feature {i + 1}</div>
+    <li>
+      <div
+        onMouseOver={(e) => {
+          // console.log("hover!");
+          highlightMarker(marker);
+        }}
+        className={styles.container}
+      >
+        <div className={styles.textbar}>Feature {i + 1}</div>
+        <div className={styles.buttonbar}>
+          <button>Edit</button>
+          <button>Delete</button>
+        </div>
+      </div>
     </li>
   );
 };
