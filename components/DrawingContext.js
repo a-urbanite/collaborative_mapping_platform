@@ -6,14 +6,7 @@ const DrawingContext = createContext();
 const DrawingContextProvider = ({ children }) => {
   const [DrawnMarkers, setDrawnMarkers] = useState([]);
 
-  // useEffect(() => {
-  //   console.log("DrawnmarkersState: ", DrawnMarkers)
-  // }, [DrawnMarkers])
-
   const addDrawnMarker = (markerLayer) => {
-    // console.log("addDrawnMarker functin triggered");
-    // console.log("Marker to add: ", markerGeoJSON)
-    // console.log("preexisting markers in state: ", DrawnMarkers)
     setDrawnMarkers((oldArray) => [...oldArray, markerLayer]);
   };
 
