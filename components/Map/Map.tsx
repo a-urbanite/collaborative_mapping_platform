@@ -4,25 +4,11 @@ import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 import "leaflet-defaulticon-compatibility";
 import styles from "./Map.module.css";
 import { MapContainer, TileLayer, useMap, Marker, Popup, FeatureGroup } from "react-leaflet";
-import EditingController from "./EditingController";
+import DrawingController from "./DrawingController";
 import { useMapRefContext } from "../MapRefContext";
 
 const Map = () => {
-  // const [mapRef, setMapRef] = useState<any>(null);
-
-  const { setMapInstance } = useMapRefContext()
-  const setter = setMapInstance()
-
-  // useEffect(() => {
-  //   if (mapRef) {
-  //     // console.log("MAPREF", mapRef);
-  //     // console.log("PANES", mapRef.getPanes());
-  //     // console.log(mapRef.getPane('markerPane').children[0])
-  //     // const markersHTMLcollection = mapRef._panes.markerPane.children
-  //     // console.log(markersHTMLcollection)
-  //   }
-
-  // }, [mapRef]);
+  const { setMapRef } = useMapRefContext();
 
   return (
     <MapContainer
@@ -30,9 +16,9 @@ const Map = () => {
       zoom={13}
       scrollWheelZoom={false}
       className={styles.mapContainer}
-      ref={setter}
+      ref={setMapRef}
     >
-      <EditingController />
+      <DrawingController />
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

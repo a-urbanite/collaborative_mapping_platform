@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useModalContext } from "../../ModalContext";
 import styles from "./popupContentForm.module.scss";
 
@@ -6,6 +6,16 @@ const PopupContentForm = ({marker}: any) => {
   const { deactivateModal } = useModalContext();
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
+  const titleRef = useRef()
+  const textRef = useRef()
+
+  useEffect(() => {
+    if (marker._popup) {
+      console.log("already has popup", marker._popup.getContent())
+    }
+    console.log("has no popup yet")
+  }, [])
+  
 
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -22,6 +32,7 @@ const PopupContentForm = ({marker}: any) => {
         className={styles.input}
         type="text"
         placeholder="title"
+        // value={marker._popup ? title : "has no stuff"}
         onChange={(e) => setTitle(e.target.value)}
       />
       <textarea

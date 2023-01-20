@@ -5,31 +5,25 @@ import styles from "./markerCard.module.scss";
 
 const MarkerCard = ({ marker, i }: any) => {
   const { mapRef } = useMapRefContext();
-  const { setModal } = useModalContext()
+  const { setModal } = useModalContext();
 
-  const highlightMarker = (marker: any) => {
-    console.log(marker);
-    // marker.setIcon(bigIcon);
+  const highlightMarker = () => {
     mapRef.panTo(marker.getLatLng());
   };
 
-  const addContent = (marker: any) => {
-    setModal({isOpen: true, context: "markerContentForm", currentMarker: marker})
-    // marker.bindPopup("test")
-    // marker.openPopup()
+  const openFormModal = () => {
+    setModal({ isOpen: true, context: "markerContentForm", currentMarker: marker });
   };
 
   return (
-    <li>
-      <div
-        onMouseOver={(e) => highlightMarker(marker)}
-        className={styles.container}
-      >
+    <li className={styles.listItem}>
+      <div onMouseOver={() => highlightMarker()} className={styles.container}>
         <div className={styles.textbar}>Feature {i + 1}</div>
         <div className={styles.buttonbar}>
-          {/* <button>Edit</button>
-          <button>Delete</button> */}
-          <button onClick={() => addContent(marker)}>Add Content</button>
+          <button className={styles.button}>Delete</button>
+          <button className={styles.button} onClick={() => openFormModal()}>
+            { marker._popup ? "edit content" : "add content"}
+          </button>
         </div>
       </div>
     </li>

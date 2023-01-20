@@ -6,16 +6,8 @@ const MapRefContext = createContext();
 const MapRefContextProvider = ({ children }) => {
   const [mapRef, setMapRef] = useState(null);
 
-  const setMapInstance = () => {
-    return setMapRef;
-  };
-
-  const getMapInstance = () => {
-    return mapRef;
-  };
-
   return (
-    <MapRefContext.Provider value={{ setMapInstance, mapRef }}>{children}</MapRefContext.Provider>
+    <MapRefContext.Provider value={{ setMapRef, mapRef }}>{children}</MapRefContext.Provider>
   );
 };
 

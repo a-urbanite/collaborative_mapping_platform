@@ -1,8 +1,27 @@
 .container {
   display: flex;
   flex-direction: row;
+  justify-content: space-around;
+  align-content: center;
+  flex-wrap: wrap;
   background-color: red;
   border: 1px green solid;
-  width: 10rem;
-  height: 2rem;
+  width: 15rem;
+  height: 3rem;
+}
+
+.listItem:not(:last-child) {
+    margin-bottom: 5px;
+}
+
+.buttonbar {
+  display: flex;
+  flex-direction: row;
+  // align-content: center;
+  // justify-content: center;
+  gap: 1rem;
+}
+
+.button {
+  height: 1.5rem;
 }

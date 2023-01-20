@@ -4,7 +4,7 @@ import { FeatureGroup, useMap } from "react-leaflet";
 // import { useUserContext } from '../../components/UserContext';
 import { useDrawingContext } from '../DrawingContext'
 
-const EditingController = () => {
+const DrawingController = () => {
 
   const { addDrawnMarker } = useDrawingContext()
 
@@ -61,4 +61,4 @@ const EditingController = () => {
   );
 };
 
-export default EditingController;
+export default DrawingController;
