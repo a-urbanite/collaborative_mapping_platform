@@ -4,9 +4,17 @@ import { createContext } from "react";
 const ModalContext = createContext();
 
 const ModalContextProvider = ({ children }) => {
-  const [modalOpen, setModalOpen] = useState(false);
+  const [modal, setModal] = useState({
+    isOpen: false,
+    context: null,
+    currentMarker: null
+  });
 
-  return <ModalContext.Provider value={{ modalOpen, setModalOpen }}>{children}</ModalContext.Provider>;
+  const deactivateModal = () => {
+    setModal({isOpen: false, context: null, currentMarker: null})
+  }
+
+  return <ModalContext.Provider value={{ modal, setModal, deactivateModal }}>{children}</ModalContext.Provider>;
 };
 
 const useModalContext = () => React.useContext(ModalContext);

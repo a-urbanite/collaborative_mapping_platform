@@ -15,7 +15,7 @@ const MapRefContextProvider = ({ children }) => {
   };
 
   return (
-    <MapRefContext.Provider value={{ setMapInstance, getMapInstance }}>{children}</MapRefContext.Provider>
+    <MapRefContext.Provider value={{ setMapInstance, mapRef }}>{children}</MapRefContext.Provider>
   );
 };
 
