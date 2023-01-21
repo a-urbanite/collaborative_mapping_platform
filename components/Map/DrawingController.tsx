@@ -1,11 +1,20 @@
 import { EditControl } from "react-leaflet-draw";
 import "leaflet-draw/dist/leaflet.draw.css";
-import { FeatureGroup, useMap } from "react-leaflet";
+import { FeatureGroup, useMap, useMapEvent } from "react-leaflet";
 import { useMapContext } from "../MapContext";
 import { useEffect } from "react";
 
 const DrawingController = () => {
   const { addMarker, drawnMarkers } = useMapContext();
+
+  const mapLoad = useMapEvent('load', () => {
+    console.log("map load")
+  })
+
+  const mapClick = useMapEvent('click', () => {
+    console.log("map click")
+  })
+
 
   useEffect(() => {
     console.log("DarwnMarkers localstate", drawnMarkers);

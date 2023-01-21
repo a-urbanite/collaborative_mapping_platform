@@ -27,8 +27,7 @@ const MapContextProvider = ({ children }) => {
     updatedArray.splice(indexOfMarkerToChange, 1, currentMarker);
     setDrawnMarkers(updatedArray);
 
-    currentMarker.mapLayerObj.bindPopup(`<h4>${title}</h4><p>${text}</p>`)
-    currentMarker.mapLayerObj.openPopup()
+    currentMarker.mapLayerObj.bindPopup(`<h4>${title}</h4><p>${text}</p>`).openPopup()
   };
 
   const deleteMarker = (currentMarker) => {

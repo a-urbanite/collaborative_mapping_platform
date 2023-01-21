@@ -9,12 +9,12 @@ const PopupContentForm = ({marker}: any) => {
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
 
-  // useEffect(() => {
-  //   if (marker._popup) {
-  //     console.log("already has popup", marker.mapLayerObj._popup.getContent())
-  //   }
-  //   console.log("has no popup yet")
-  // }, [])
+  useEffect(() => {
+    if (marker.popupContent) {
+      console.log("already has popup")
+    }
+    console.log("has no popup yet")
+  }, [])
   
 
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
@@ -29,12 +29,13 @@ const PopupContentForm = ({marker}: any) => {
         className={styles.input}
         type="text"
         placeholder="title"
-        // value={marker._popup ? title : "has no stuff"}
+        defaultValue={marker.popupContent.title ? marker.popupContent.title : ""}
         onChange={(e) => setTitle(e.target.value)}
       />
       <textarea
         className={styles.textarea}
         placeholder="tell us your story..."
+        defaultValue={marker.popupContent.text ? marker.popupContent.text : ""}
         onChange={(e) => setText(e.target.value)}
       />
       <input className={styles.input} type="submit" value="Save" />
