@@ -7,7 +7,6 @@ const Modal = () => {
   const { modal, deactivateModal } = useModalContext();
 
   return (
-
     <Dialog open={modal.isOpen} onClose={() => deactivateModal()}>
       <div className={styles.background} aria-hidden="true">
         <Dialog.Panel as="div" className={styles.content}>
