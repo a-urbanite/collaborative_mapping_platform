@@ -1,29 +1,28 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useDrawingContext } from "../../DrawingContext";
 import { useModalContext } from "../../ModalContext";
 import styles from "./popupContentForm.module.scss";
 
 const PopupContentForm = ({marker}: any) => {
   const { deactivateModal } = useModalContext();
+  const { editPopupContent } = useDrawingContext();
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
-  const titleRef = useRef()
-  const textRef = useRef()
 
-  useEffect(() => {
-    if (marker._popup) {
-      console.log("already has popup", marker._popup.getContent())
-    }
-    console.log("has no popup yet")
-  }, [])
+  // useEffect(() => {
+  //   if (marker._popup) {
+  //     console.log("already has popup", marker.mapLayerObj._popup.getContent())
+  //   }
+  //   console.log("has no popup yet")
+  // }, [])
   
 
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // console.log("form submitted", title, text);
-    // console.log(marker)
+    editPopupContent(marker, title, text)
     deactivateModal()
-    marker.bindPopup(`<h4>${title}</h4><p>${text}</p>`)
-    marker.openPopup()
+    marker.mapLayerObj.bindPopup(`<h4>${title}</h4><p>${text}</p>`)
+    marker.mapLayerObj.openPopup()
   };
 
   return (

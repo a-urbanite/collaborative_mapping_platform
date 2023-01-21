@@ -2,13 +2,15 @@ import { EditControl } from "react-leaflet-draw";
 import "leaflet-draw/dist/leaflet.draw.css";
 import { FeatureGroup, useMap } from "react-leaflet";
 // import { useUserContext } from '../../components/UserContext';
-import { useDrawingContext } from '../DrawingContext'
+import { useDrawingContext } from "../DrawingContext";
+import { useEffect } from "react";
 
 const DrawingController = () => {
+  const { addDrawnMarker, drawnMarkers } = useDrawingContext();
 
-  const { addDrawnMarker } = useDrawingContext()
-
-  // const map = useMap()
+  useEffect(() => {
+    console.log("DarwnMarkers localstate", drawnMarkers);
+  }, [drawnMarkers]);
 
   return (
     <FeatureGroup>
@@ -32,21 +34,26 @@ const DrawingController = () => {
           },
         }}
         onEdited={(e) => {
-          console.log("Pressed Save button in edit bar");
-          // console.log("ONEDITED", e)
+          // console.log("Pressed Save button in edit bar");
         }}
         onCreated={(e) => {
-          console.log("CREATED EVENT", e.layer);
+          // console.log("CREATED EVENT", e.layer);
           // const markerGeoJSON = e.layer.toGeoJSON()
           // console.log(markerGeoJSON)
-          addDrawnMarker(e.layer)
+          addDrawnMarker(e.layer);
           // console.log(map)
         }}
-        onMounted={() => console.log("onMounted!")}
-        onEditStart={() => console.log("Edit bar opened")}
-        onEditStop={() => console.log("Pressed Cancel button in Edit Bar")}
+        onMounted={() => {
+          // console.log("onMounted!")
+        }}
+        onEditStart={() => {
+          // console.log("Edit bar opened")
+        }}
+        onEditStop={() => {
+          // console.log("Pressed Cancel button in Edit Bar")
+        }}
         onDeleted={() => {
-          console.log("onDeleted!");
+          // console.log("onDeleted!");
         }}
         onDeleteStart={() => console.log("onDeleteStart!")}
         onDeleteStop={() => console.log("onDeleteStop!")}

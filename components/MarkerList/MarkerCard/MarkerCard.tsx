@@ -8,7 +8,7 @@ const MarkerCard = ({ marker, i }: any) => {
   const { setModal } = useModalContext();
 
   const highlightMarker = () => {
-    mapRef.panTo(marker.getLatLng());
+    mapRef.panTo(marker.mapLayerObj.getLatLng());
   };
 
   const openFormModal = () => {

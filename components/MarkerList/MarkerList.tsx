@@ -6,7 +6,7 @@ import UploadButton from "./UploadButton/UploadButton";
 import styles from "./markerList.module.scss"
 
 const MarkerList = () => {
-  const drawnMarkers = useDrawingContext().getDrawnMarkers();
+  const { drawnMarkers } = useDrawingContext();
 
   return (
     <div className={styles.container}>
