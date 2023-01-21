@@ -9,14 +9,6 @@ const PopupContentForm = ({marker}: any) => {
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
 
-  useEffect(() => {
-    if (marker.popupContent) {
-      console.log("already has popup")
-    }
-    console.log("has no popup yet")
-  }, [])
-  
-
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     editMarkerPopupContent(marker, title, text)
@@ -29,13 +21,13 @@ const PopupContentForm = ({marker}: any) => {
         className={styles.input}
         type="text"
         placeholder="title"
-        defaultValue={marker.popupContent.title ? marker.popupContent.title : ""}
+        defaultValue={marker.popupContent ? marker.popupContent.title : ""}
         onChange={(e) => setTitle(e.target.value)}
       />
       <textarea
         className={styles.textarea}
         placeholder="tell us your story..."
-        defaultValue={marker.popupContent.text ? marker.popupContent.text : ""}
+        defaultValue={marker.popupContent ? marker.popupContent.text : ""}
         onChange={(e) => setText(e.target.value)}
       />
       <input className={styles.input} type="submit" value="Save" />

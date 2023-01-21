@@ -10,11 +10,15 @@ const ModalContextProvider = ({ children }) => {
     currentMarker: null
   });
 
+  const activateMarkerPopupContentFormModal = (currentMarker) => {
+    setModal({ isOpen: true, context: "markerContentForm", currentMarker: currentMarker });
+  }
+
   const deactivateModal = () => {
     setModal({isOpen: false, context: null, currentMarker: null})
   }
 
-  return <ModalContext.Provider value={{ modal, setModal, deactivateModal }}>{children}</ModalContext.Provider>;
+  return <ModalContext.Provider value={{ modal, setModal, deactivateModal, activateMarkerPopupContentFormModal }}>{children}</ModalContext.Provider>;
 };
 
 const useModalContext = () => React.useContext(ModalContext);
