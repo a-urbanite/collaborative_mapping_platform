@@ -1,11 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useDrawingContext } from "../../DrawingContext";
 import { useModalContext } from "../../ModalContext";
+import { useMapContext } from "../../MapContext";
 import styles from "./popupContentForm.module.scss";
 
 const PopupContentForm = ({marker}: any) => {
   const { deactivateModal } = useModalContext();
-  const { editPopupContent } = useDrawingContext();
+  const { editPopupContent } = useMapContext();
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
 

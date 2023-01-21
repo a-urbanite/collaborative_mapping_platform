@@ -1,6 +1,5 @@
 import MapLoader from "../components/Map/MapLoader";
-import { DrawingContextProvider } from "../components/DrawingContext";
-import { MapRefContextProvider } from "../components/MapRefContext";
+import { MapContextProvider } from "../components/MapContext";
 import { ModalContextProvider } from "../components/ModalContext";
 import MarkerList from "../components/MarkerList/MarkerList";
 import Modal from "../components/Modal/Modal";
@@ -8,15 +7,13 @@ import Modal from "../components/Modal/Modal";
 export default function Home() {
   return (
     <>
-    <ModalContextProvider>
-      <MapRefContextProvider>
-        <DrawingContextProvider>
-          <Modal/>
-          <MapLoader />
-          <MarkerList />
-        </DrawingContextProvider>
-      </MapRefContextProvider>
-    </ModalContextProvider>
+      <MapContextProvider>
+        <ModalContextProvider>
+              <Modal />
+              <MapLoader />
+              <MarkerList />
+        </ModalContextProvider>
+      </MapContextProvider>
     </>
   );
 }

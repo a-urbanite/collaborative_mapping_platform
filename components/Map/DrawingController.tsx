@@ -1,12 +1,11 @@
 import { EditControl } from "react-leaflet-draw";
 import "leaflet-draw/dist/leaflet.draw.css";
 import { FeatureGroup, useMap } from "react-leaflet";
-// import { useUserContext } from '../../components/UserContext';
-import { useDrawingContext } from "../DrawingContext";
+import { useMapContext } from "../MapContext";
 import { useEffect } from "react";
 
 const DrawingController = () => {
-  const { addDrawnMarker, drawnMarkers } = useDrawingContext();
+  const { addDrawnMarker, drawnMarkers } = useMapContext();
 
   useEffect(() => {
     console.log("DarwnMarkers localstate", drawnMarkers);

@@ -1,7 +1,5 @@
-import React, { useEffect } from "react";
 import { useModalContext } from "../ModalContext";
 import styles from "./modal.module.scss";
-import { useState } from "react";
 import { Dialog } from "@headlessui/react";
 import PopupContentForm from "./PopupContentForm/PopupContentForm";
 

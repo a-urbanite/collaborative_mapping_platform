@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from "react";
-// import { randomUUID } from "crypto";
-import { v4 as uuidv4 } from "uuid";
 import { createContext } from "react";
+import { v4 as uuidv4 } from "uuid";
 
-const DrawingContext = createContext();
+const MapContext = createContext();
 
-const DrawingContextProvider = ({ children }) => {
+const MapContextProvider = ({ children }) => {
+  const [mapRef, setMapRef] = useState(null);
   const [drawnMarkers, setDrawnMarkers] = useState([]);
 
   const addDrawnMarker = (mapLayerObj) => {
@@ -26,16 +26,23 @@ const DrawingContextProvider = ({ children }) => {
     const updatedArray = drawnMarkers;
     updatedArray.splice(indexOfMarkerToChange, 1, currentMarker);
     setDrawnMarkers(updatedArray);
+  };
 
+  const deleteMarker = (currentMarker) => {
+    const updatedArray = drawnMarkers.filter((marker) => marker.id !== currentMarker.id);
+    setDrawnMarkers(updatedArray);
+    // console.log("hit!")
   };
 
   return (
-    <DrawingContext.Provider value={{ addDrawnMarker, drawnMarkers, editPopupContent }}>
+    <MapContext.Provider
+      value={{ setMapRef, mapRef, addDrawnMarker, drawnMarkers, editPopupContent, deleteMarker }}
+    >
       {children}
-    </DrawingContext.Provider>
+    </MapContext.Provider>
   );
 };
 
-const useDrawingContext = () => React.useContext(DrawingContext);
+const useMapContext = () => React.useContext(MapContext);
 
-export { DrawingContextProvider, useDrawingContext };
+export { MapContextProvider, useMapContext };

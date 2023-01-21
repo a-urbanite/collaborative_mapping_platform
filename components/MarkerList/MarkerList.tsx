@@ -1,12 +1,11 @@
 import React from "react";
-import { useDrawingContext } from "../DrawingContext";
-
+import { useMapContext } from "../MapContext";
 import MarkerCard from "./MarkerCard/MarkerCard";
 import UploadButton from "./UploadButton/UploadButton";
 import styles from "./markerList.module.scss"
 
 const MarkerList = () => {
-  const { drawnMarkers } = useDrawingContext();
+  const { drawnMarkers } = useMapContext();
 
   return (
     <div className={styles.container}>

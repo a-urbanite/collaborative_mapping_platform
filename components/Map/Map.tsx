@@ -5,10 +5,10 @@ import "leaflet-defaulticon-compatibility";
 import styles from "./Map.module.css";
 import { MapContainer, TileLayer, useMap, Marker, Popup, FeatureGroup } from "react-leaflet";
 import DrawingController from "./DrawingController";
-import { useMapRefContext } from "../MapRefContext";
+import { useMapContext } from "../MapContext";
 
 const Map = () => {
-  const { setMapRef } = useMapRefContext();
+  const { setMapRef } = useMapContext();
 
   return (
     <MapContainer
