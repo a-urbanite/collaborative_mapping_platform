@@ -5,7 +5,7 @@ import { useMapContext } from "../MapContext";
 import { useEffect } from "react";
 
 const DrawingController = () => {
-  const { addDrawnMarker, drawnMarkers } = useMapContext();
+  const { addMarker, drawnMarkers } = useMapContext();
 
   useEffect(() => {
     console.log("DarwnMarkers localstate", drawnMarkers);
@@ -39,7 +39,7 @@ const DrawingController = () => {
           // console.log("CREATED EVENT", e.layer);
           // const markerGeoJSON = e.layer.toGeoJSON()
           // console.log(markerGeoJSON)
-          addDrawnMarker(e.layer);
+          addMarker(e.layer);
           // console.log(map)
         }}
         onMounted={() => {

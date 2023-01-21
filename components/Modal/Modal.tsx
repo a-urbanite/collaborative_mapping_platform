@@ -4,12 +4,7 @@ import { Dialog } from "@headlessui/react";
 import PopupContentForm from "./PopupContentForm/PopupContentForm";
 
 const Modal = () => {
-  const { modal, setModal, deactivateModal } = useModalContext();
-
-  // useEffect(() => {
-  //   console.log("Modal: ", modal)
-  // }, [modal])
-  
+  const { modal, deactivateModal } = useModalContext();
 
   return (
 

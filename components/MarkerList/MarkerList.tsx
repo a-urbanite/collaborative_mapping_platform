@@ -10,7 +10,7 @@ const MarkerList = () => {
   return (
     <div className={styles.container}>
       <ul className={styles.list}>
-        {drawnMarkers.map((marker: any, i: any) => <MarkerCard key={i} marker={marker} i={i}/>)}
+        {drawnMarkers.map((marker: any, i: any) => <MarkerCard key={i} marker={marker}/>)}
       </ul>
       <UploadButton/>
     </div>

@@ -8,7 +8,7 @@ const MapContextProvider = ({ children }) => {
   const [mapRef, setMapRef] = useState(null);
   const [drawnMarkers, setDrawnMarkers] = useState([]);
 
-  const addDrawnMarker = (mapLayerObj) => {
+  const addMarker = (mapLayerObj) => {
     const marker = {
       id: uuidv4(),
       mapLayerObj: mapLayerObj,
@@ -18,7 +18,7 @@ const MapContextProvider = ({ children }) => {
     setDrawnMarkers((oldArray) => [...oldArray, marker]);
   };
 
-  const editPopupContent = (currentMarker, title, text) => {
+  const editMarkerPopupContent = (currentMarker, title, text) => {
     currentMarker.popupContent = { title, text };
 
     const indexOfMarkerToChange = drawnMarkers.findIndex((marker) => marker.id == currentMarker.id);
@@ -26,17 +26,27 @@ const MapContextProvider = ({ children }) => {
     const updatedArray = drawnMarkers;
     updatedArray.splice(indexOfMarkerToChange, 1, currentMarker);
     setDrawnMarkers(updatedArray);
+
+    currentMarker.mapLayerObj.bindPopup(`<h4>${title}</h4><p>${text}</p>`)
+    currentMarker.mapLayerObj.openPopup()
   };
 
   const deleteMarker = (currentMarker) => {
-    const updatedArray = drawnMarkers.filter((marker) => marker.id !== currentMarker.id);
-    setDrawnMarkers(updatedArray);
-    // console.log("hit!")
+    if (confirm("Delete Marker?")) {
+      const updatedArray = drawnMarkers.filter((marker) => marker.id !== currentMarker.id);
+      mapRef.removeLayer(currentMarker.mapLayerObj)
+      setDrawnMarkers(updatedArray);
+    }
   };
+
+  const highlightMarker = (currentMarker) => {
+    currentMarker.mapLayerObj.openPopup()
+    mapRef.panTo(currentMarker.mapLayerObj.getLatLng());
+  }
 
   return (
     <MapContext.Provider
-      value={{ setMapRef, mapRef, addDrawnMarker, drawnMarkers, editPopupContent, deleteMarker }}
+      value={{ setMapRef, mapRef, addMarker, drawnMarkers, editMarkerPopupContent, deleteMarker, highlightMarker }}
     >
       {children}
     </MapContext.Provider>
