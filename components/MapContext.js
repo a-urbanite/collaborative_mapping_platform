@@ -32,9 +32,8 @@ const MapContextProvider = ({ children }) => {
 
   const deleteMarker = (currentMarker) => {
     if (confirm("Delete Marker?")) {
-      const updatedArray = drawnMarkers.filter((marker) => marker.id !== currentMarker.id);
       mapRef.removeLayer(currentMarker.mapLayerObj)
-      setDrawnMarkers(updatedArray);
+      setDrawnMarkers(drawnMarkers.filter((marker) => marker.id !== currentMarker.id));
     }
   };
 

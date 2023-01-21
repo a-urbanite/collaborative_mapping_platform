@@ -6,12 +6,28 @@ import styles from "./popupContentForm.module.scss";
 const PopupContentForm = ({marker}: any) => {
   const { deactivateModal } = useModalContext();
   const { editMarkerPopupContent } = useMapContext();
-  const [title, setTitle] = useState("");
-  const [text, setText] = useState("");
+  const [title, setTitle] = useState(null as unknown as string);
+  const [text, setText] = useState(null as unknown as string);
 
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    editMarkerPopupContent(marker, title, text)
+    const getTitleToSubmit = () => {
+      if ( title) {
+        return title
+      } 
+      if ( typeof title === null && marker.popupContent) {
+        return marker.popupContent.title
+      }
+      if ( typeof title === "string" && title.length === 0 && marker.popupContent) {
+        return "no title"
+      }
+      if ( !title && !marker.popupContent) {
+        return "no title"
+      }
+    }
+    const titleToSubmit = getTitleToSubmit()
+    const textToSubmit = (text ) ? text : (marker.popupContent ? marker.popupContent.text : "no text")
+    editMarkerPopupContent(marker, titleToSubmit, textToSubmit)
     deactivateModal()
   };
 
@@ -20,6 +36,7 @@ const PopupContentForm = ({marker}: any) => {
       <input
         className={styles.input}
         type="text"
+        required
         placeholder="title"
         defaultValue={marker.popupContent ? marker.popupContent.title : ""}
         onChange={(e) => setTitle(e.target.value)}
