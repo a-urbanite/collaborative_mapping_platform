@@ -9,25 +9,16 @@ const PopupContentForm = ({marker}: any) => {
   const [title, setTitle] = useState(null as unknown as string);
   const [text, setText] = useState(null as unknown as string);
 
+  useEffect(() => {
+    if (marker.popupContent) {
+      setTitle(marker.popupContent.title)
+      setText(marker.popupContent.text)
+    }
+  }, [])
+  
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const getTitleToSubmit = () => {
-      if ( title) {
-        return title
-      } 
-      if ( typeof title === null && marker.popupContent) {
-        return marker.popupContent.title
-      }
-      if ( typeof title === "string" && title.length === 0 && marker.popupContent) {
-        return "no title"
-      }
-      if ( !title && !marker.popupContent) {
-        return "no title"
-      }
-    }
-    const titleToSubmit = getTitleToSubmit()
-    const textToSubmit = (text ) ? text : (marker.popupContent ? marker.popupContent.text : "no text")
-    editMarkerPopupContent(marker, titleToSubmit, textToSubmit)
+    editMarkerPopupContent(marker, title || "no title", text || "no text")
     deactivateModal()
   };
 
@@ -36,15 +27,15 @@ const PopupContentForm = ({marker}: any) => {
       <input
         className={styles.input}
         type="text"
-        required
+        // required
         placeholder="title"
-        defaultValue={marker.popupContent ? marker.popupContent.title : ""}
+        defaultValue={marker.popupContent.title || ""}
         onChange={(e) => setTitle(e.target.value)}
       />
       <textarea
         className={styles.textarea}
         placeholder="tell us your story..."
-        defaultValue={marker.popupContent ? marker.popupContent.text : ""}
+        defaultValue={marker.popupContent.text || ""}
         onChange={(e) => setText(e.target.value)}
       />
       <input className={styles.input} type="submit" value="Save" />

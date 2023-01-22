@@ -14,6 +14,7 @@ const MapContextProvider = ({ children }) => {
       mapLayerObj: mapLayerObj,
       user: "mockupUser",
       dateCreated: Date.now(),
+      popupContent: {}
     };
     setDrawnMarkers((oldArray) => [...oldArray, marker]);
   };
