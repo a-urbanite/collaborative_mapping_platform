@@ -5,16 +5,16 @@ import { useMapContext } from "../MapContext";
 import { useEffect } from "react";
 
 const DrawingController = () => {
-  const { addMarker, drawnMarkers } = useMapContext();
+  const { addMarker, drawnMarkers, mapRef } = useMapContext();
+  const map = useMap();
 
-  const mapLoad = useMapEvent('load', () => {
-    console.log("map load")
-  })
+  const mapLoad = useMapEvent("viewreset", () => {
+    console.log("map load");
+  });
 
-  const mapClick = useMapEvent('click', () => {
-    console.log("map click")
-  })
-
+  const mapClick = useMapEvent("click", () => {
+    console.log("map click");
+  });
 
   useEffect(() => {
     console.log("DarwnMarkers localstate", drawnMarkers);
@@ -24,6 +24,9 @@ const DrawingController = () => {
     <FeatureGroup>
       <EditControl
         position="topright"
+        edit={{
+          remove: false,
+        }}
         draw={{
           rectangle: false,
           circle: false,
@@ -61,16 +64,33 @@ const DrawingController = () => {
           // console.log("Pressed Cancel button in Edit Bar")
         }}
         onDeleted={() => {
-          // console.log("onDeleted!");
+          console.log("onDeleted!");
+          // console.log(map._panes.overlayPane.children)
         }}
-        onDeleteStart={() => console.log("onDeleteStart!")}
-        onDeleteStop={() => console.log("onDeleteStop!")}
-        onDrawStart={() => console.log("onDrawStart!")}
-        onDrawStop={() => console.log("onDrawStop!")}
-        onDrawVertex={() => console.log("onDrawVertex!")}
-        onEditMove={() => console.log("onEditMove!")}
-        onEditResize={() => console.log("onEditResize!")}
-        onEditVertex={() => console.log("onEditVertex!")}
+        onDeleteStart={() => {
+          // console.log("onDeleteStart!");
+        }}
+        onDeleteStop={() => {
+          // console.log("onDeleteStop!");
+        }}
+        onDrawStart={() => {
+          // console.log("onDrawStart!");
+        }}
+        onDrawStop={() => {
+          // console.log("onDrawStop!");
+        }}
+        onDrawVertex={() => {
+          // console.log("onDrawVertex!");
+        }}
+        onEditMove={() => {
+          // console.log("onEditMove!");
+        }}
+        onEditResize={() => {
+          // console.log("onEditResize!");
+        }}
+        onEditVertex={() => {
+          // console.log("onEditVertex!");
+        }}
       />
     </FeatureGroup>
   );

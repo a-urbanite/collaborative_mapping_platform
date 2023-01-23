@@ -1,7 +1,7 @@
 import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css";
 import "leaflet-defaulticon-compatibility";
-import styles from "./Map.module.css";
+import styles from "./map.module.scss";
 import { MapContainer, TileLayer } from "react-leaflet";
 import DrawingController from "./DrawingController";
 import { useMapContext } from "../MapContext";
