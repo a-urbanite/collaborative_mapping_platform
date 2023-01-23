@@ -38,8 +38,14 @@ const MapContextProvider = ({ children }) => {
     }
   };
 
+  const markerHasComplexGeometry = (marker) => marker.mapLayerObj.hasOwnProperty('_latlngs');
+
   const highlightMarker = (currentMarker) => {
     currentMarker.mapLayerObj.openPopup()
+    if (markerHasComplexGeometry(currentMarker)) {
+      console.log("exception triggered")
+      return mapRef.panTo(currentMarker.mapLayerObj.getBounds().getCenter())
+    }
     mapRef.panTo(currentMarker.mapLayerObj.getLatLng());
   }
 
