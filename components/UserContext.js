@@ -1,53 +1,53 @@
 import * as React from "react";
 import { auth } from "../firebase-config";
 import { useState } from "react";
-import { signInWithEmailAndPassword, signOut, updateProfile, createUserWithEmailAndPassword } from "firebase/auth";
-import { useRouter } from "next/router";
+import {
+  signInWithEmailAndPassword,
+  signOut,
+  updateProfile,
+  createUserWithEmailAndPassword,
+} from "firebase/auth";
 
 const UserContext = React.createContext();
 
 const UserContextProvider = ({ children }) => {
-  const [isAuth, setIsAuth] = useState(false)
+  const [isAuth, setIsAuth] = useState(false);
+  const [userObj, setUserObj] = useState(null);
+  
+  const handleError = (e) => {
+    console.error(e);
+    throw new Error();
+  };
 
   const signInUser = (logInEmail, logInPassword) => {
     signInWithEmailAndPassword(auth, logInEmail, logInPassword)
-      .catch((e) => {
-        console.error(e);
-        throw new Error();
-      })
-      .then(() => setIsAuth(true))
+      .catch((e) => handleError(e))
+      .then(() => {
+        setUserObj(auth.currentUser);
+        setIsAuth(true);
+      });
   };
 
   const signOutUser = () => {
     signOut(auth)
-      .catch((e) => {
-        console.error(e);
-        throw new Error();
-      })
+      .catch((e) => handleError(e))
       .then(() => {
-        setIsAuth(false)
-      });
+        setUserObj(null)
+        setIsAuth(false)});
   };
 
   const updateUser = async (name, email) => {
     updateProfile(auth.currentUser, { displayName: name, photoURL: "" })
-      .catch((e) => {
-        console.error(e);
-        throw new Error();
-      })
+      .then(() => setUserObj(auth.currentUser))
+      .catch((e) => handleError(e));
   };
 
   const signUpUser = (signupEmail, signupPassword) => {
-    createUserWithEmailAndPassword(auth, signupEmail, signupPassword)
-      .catch((e) => {
-        console.error(e);
-        throw new Error();
-      })
+    createUserWithEmailAndPassword(auth, signupEmail, signupPassword).catch((e) => handleError(e));
   };
 
-
   return (
-    <UserContext.Provider value={{ isAuth, signInUser, signOutUser, updateUser, signUpUser }}>
+    <UserContext.Provider value={{ isAuth, userObj, signInUser, signOutUser, updateUser, signUpUser }}>
       {children}
     </UserContext.Provider>
   );
