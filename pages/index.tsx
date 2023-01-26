@@ -1,22 +1,15 @@
-import MapLoader from "../components/Map/MapLoader";
-import { MapContextProvider } from "../components/MapContext";
-import { ModalContextProvider } from "../components/ModalContext";
-import MarkerList from "../components/MarkerList/MarkerList";
-import Modal from "../components/Modal/Modal";
-import styles from '../styles/home.module.scss'
+import Router from 'next/router'
+import React, { useEffect } from 'react'
 
-export default function Home() {
+const Index = () => {
+
+  useEffect(() => {
+    Router.push('/home')
+  }, [])
+  
   return (
-    <>
-      <MapContextProvider>
-        <ModalContextProvider>
-              <Modal />
-              <div className={styles.homeContainer}>
-                <MapLoader />
-                <MarkerList />
-              </div>
-        </ModalContextProvider>
-      </MapContextProvider>
-    </>
-  );
+    <></>
+  )
 }
+
+export default Index

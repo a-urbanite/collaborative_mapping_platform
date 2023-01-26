@@ -8,11 +8,14 @@ const MapContextProvider = ({ children }) => {
   const [mapRef, setMapRef] = useState(null);
   const [drawnMarkers, setDrawnMarkers] = useState([]);
 
-  const addMarker = (mapLayerObj) => {
+  const addMarker = (mapLayerObj, userObj) => {
     const marker = {
       id: uuidv4(),
       mapLayerObj: mapLayerObj,
-      user: "mockupUser",
+      user: {
+        uid: userObj.uid,
+        name: userObj.displayName
+      },
       dateCreated: Date.now(),
       popupContent: {}
     };

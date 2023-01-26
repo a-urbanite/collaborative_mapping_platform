@@ -1,6 +1,7 @@
 import React from 'react'
 import styles from './uploadButton.module.scss'
 import { useMapContext } from '../../MapContext'
+import { useUserContext } from '../../UserContext'
 
 const UploadButton = () => {
   const { drawnMarkers } = useMapContext(); 

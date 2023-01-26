@@ -2,11 +2,13 @@ import { EditControl } from "react-leaflet-draw";
 import "leaflet-draw/dist/leaflet.draw.css";
 import { FeatureGroup, useMap, useMapEvent } from "react-leaflet";
 import { useMapContext } from "../MapContext";
+import { useUserContext } from "../UserContext";
 import { useEffect } from "react";
+import { auth } from "../../firebase-config";
 
 const DrawingController = () => {
-  const { addMarker, drawnMarkers, mapRef } = useMapContext();
-  const map = useMap();
+  const { addMarker, drawnMarkers } = useMapContext();
+  const { isAuth } = useUserContext();
 
   const mapLoad = useMapEvent("viewreset", () => {
     console.log("map load");
@@ -51,7 +53,9 @@ const DrawingController = () => {
           // console.log("CREATED EVENT", e.layer);
           // const markerGeoJSON = e.layer.toGeoJSON()
           // console.log(markerGeoJSON)
-          addMarker(e.layer);
+          // console.log("isAuth in DrawController: ", isAuth)
+          // console.log("authObj", auth)
+          addMarker(e.layer, auth.currentUser);
           // console.log(map)
         }}
         onMounted={() => {
