@@ -3,12 +3,14 @@ import { createContext } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { dbRef } from "../firebase-config";
 import { addDoc } from "firebase/firestore";
+import { useRouter } from "next/router";
 
 const MapContext = createContext();
 
 const MapContextProvider = ({ children }) => {
   const [mapRef, setMapRef] = useState(null);
   const [drawnMarkers, setDrawnMarkers] = useState([]);
+  const router = useRouter();
 
   const addMarker = (mapLayerObj, userObj) => {
     const marker = {
@@ -55,17 +57,19 @@ const MapContextProvider = ({ children }) => {
 
   const uploadDrawnMarkers = () => {
     drawnMarkers.forEach((marker) => {
-      // const readyToFlyObj = marker;
-      const readyToFlyObj = {
+      const geoJsonObj = marker.mapLayerObj.toGeoJSON();
+      geoJsonObj.properties = {
         id: marker.id,
         user: marker.user,
         dateCreated: marker.dateCreated,
         popupContent: marker.popupContent,
-      };
-      delete readyToFlyObj.mapLayerObj
-      const JsonStr = JSON.stringify(readyToFlyObj);
-      addDoc(dbRef, { feature: JsonStr })
-        .then((res) => console.log(res))
+      }
+      const geoJsonStr = JSON.stringify(geoJsonObj);
+      addDoc(dbRef, { feature: geoJsonStr })
+        .then((res) => {
+          console.log(res)
+          router.push('/teesat')
+        })
         .catch((error) => {
         console.log("error happened!", error);
       });

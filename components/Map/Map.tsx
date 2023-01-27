@@ -5,11 +5,11 @@ import styles from "./map.module.scss";
 import { MapContainer, TileLayer } from "react-leaflet";
 import DrawingController from "./DrawingController";
 import { useMapContext } from "../MapContext";
-import { useUserContext } from "../UserContext";
+import { useRouter } from "next/router";
 
 const Map = () => {
   const { setMapRef } = useMapContext();
-  const { isAuth } = useUserContext();
+  const router = useRouter();
 
   return (
     <MapContainer
@@ -19,7 +19,7 @@ const Map = () => {
       className={styles.mapContainer}
       ref={setMapRef}
     >
-      { isAuth && <DrawingController />}
+      {router.pathname === "/myPlaces" && <DrawingController />}
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

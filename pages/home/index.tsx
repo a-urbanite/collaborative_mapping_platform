@@ -12,3 +12,10 @@ export default function Home() {
     </>
   );
 }
+
+export async function getServerSideProps() {
+  const url = `http://localhost:3000/api/locations`
+  const res = await fetch(url)
+  const locations = await res.json()
+  return { props: { locations } }
+}
