@@ -1,0 +1,14 @@
+1) currently the firestore operations are all over the place:
+
+  get all is an API call in getsreversideprops of home
+  get by userid is an API call in a useeffect of myPlaces
+  upload is in a function in the FireStoreContext
+
+  i need to decide for one approach and implement that consistently
+
+2) marker are uploaded into firestore as one string
+
+  i believe this is suboptimal, firestore seems to provide for real tables so i 
+  should be able to upload it as object and firestore then recognises the single sttributes. 
+  only this way i can implement serverside functions that allow me to e.g. change the username 
+  of markers inside firestore
