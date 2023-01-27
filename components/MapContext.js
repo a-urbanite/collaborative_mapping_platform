@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { createContext } from "react";
 import { v4 as uuidv4 } from "uuid";
-import { dbRef } from "../firebase-config";
-import { addDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
 
 const MapContext = createContext();
@@ -55,27 +53,6 @@ const MapContextProvider = ({ children }) => {
     mapRef.panTo(currentMarker.mapLayerObj.getLatLng());
   };
 
-  const uploadDrawnMarkers = () => {
-    drawnMarkers.forEach((marker) => {
-      const geoJsonObj = marker.mapLayerObj.toGeoJSON();
-      geoJsonObj.properties = {
-        id: marker.id,
-        user: marker.user,
-        dateCreated: marker.dateCreated,
-        popupContent: marker.popupContent,
-      }
-      const geoJsonStr = JSON.stringify(geoJsonObj);
-      addDoc(dbRef, { feature: geoJsonStr })
-        .then((res) => {
-          console.log(res)
-          router.push('/teesat')
-        })
-        .catch((error) => {
-        console.log("error happened!", error);
-      });
-    });
-  };
-
   return (
     <MapContext.Provider
       value={{
@@ -86,7 +63,6 @@ const MapContextProvider = ({ children }) => {
         editMarkerPopupContent,
         deleteMarker,
         highlightMarker,
-        uploadDrawnMarkers,
       }}
     >
       {children}
