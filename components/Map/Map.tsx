@@ -2,7 +2,7 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css";
 import "leaflet-defaulticon-compatibility";
 import styles from "./map.module.scss";
-import { MapContainer, TileLayer, GeoJSON } from "react-leaflet";
+import { MapContainer, TileLayer, GeoJSON, Popup } from "react-leaflet";
 import DrawingController from "./DrawingController";
 import { useMapContext } from "../MapContext";
 import { useRouter } from "next/router";
@@ -22,21 +22,22 @@ const Map = ({markers}: any) => {
     >
       {router.pathname === "/myPlaces" && <DrawingController />}
 
-      {markers.map((marker: any) => {
+      {markers?.map((marker: any) => {
           // const timeObj = Date.parse(location.properties.creationDate);
           // const date = new Date(timeObj).toLocaleDateString();
+          // console.log(marker)
 
           return (
             <GeoJSON data={marker} key={marker.properties.firebaseDocID}>
-              {/* <Popup>
-                <b>{location.properties.featureName}</b>
+              <Popup>
+                <b>{marker.properties.popupContent?.title}</b>
                 <br />
-                <b>description:</b> {location.properties.featureDescr}
+                {/* <b>description:</b> {location.properties.featureDescr}
                 <br />
                 <b>user name:</b> {location.properties.userName}
                 <br />
-                <b>creation date:</b> {date}
-              </Popup> */}
+                <b>creation date:</b> {date} */}
+              </Popup>
             </GeoJSON>
           );
         })}

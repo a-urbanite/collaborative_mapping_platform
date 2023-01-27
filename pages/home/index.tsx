@@ -4,9 +4,9 @@ import MarkerList from "../../components/MarkerList/MarkerList";
 import styles from "./home.module.scss";
 
 export default function Home(props: any) {
-  useEffect(() => {
-    console.log(props.markers)
-  }, [props])
+  // useEffect(() => {
+  //   console.log(props.markers)
+  // }, [props])
   
   return (
     <>
