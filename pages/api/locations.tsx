@@ -6,7 +6,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
     const resp = await getDocs(dbRef);
     const locations: any[] = resp.docs.map((doc) => {
-        const { feature } = doc.data()
+        const feature = doc.data()
+        // console.log(feature)
         feature.properties.firebaseDocID = doc.id
         return feature
     })

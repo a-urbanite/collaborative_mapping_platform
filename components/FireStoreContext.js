@@ -11,23 +11,6 @@ const FireStoreContextProvider = ({ children }) => {
   const [userFirestoreMarkers, setUserFirestoreMarkers] = useState(null);
   const router = useRouter();
 
-  const stringify = (obj) => {
-    let cache = [];
-    let str = JSON.stringify(obj, function(key, value) {
-      if (typeof value === "object" && value !== null) {
-        if (cache.indexOf(value) !== -1) {
-          // Circular reference found, discard key
-          return;
-        }
-        // Store value in our collection
-        cache.push(value);
-      }
-      return value;
-    });
-    cache = null; // reset the cache
-    return str;
-  }
-
   const convertToPrunedGeoJsonObj = (obj) => {
     const geoJsonObj = obj.mapLayerObj.toGeoJSON();
     geoJsonObj.properties = {
@@ -37,48 +20,21 @@ const FireStoreContextProvider = ({ children }) => {
       popupContent: obj.popupContent,
     };
     const geoJsonStr = JSON.stringify(geoJsonObj);
-    return geoJsonStr
-  }
-
-  //called in Markerlist/Uploadbutton
-  const uploadDrawnMarkers = (drawnMarkers) => {
-    drawnMarkers.forEach((marker) => {
-      const geoJsonObj = marker.mapLayerObj.toGeoJSON();
-      geoJsonObj.properties = {
-        id: marker.id,
-        user: marker.user,
-        dateCreated: marker.dateCreated,
-        popupContent: marker.popupContent,
-      };
-      const geoJsonStr = JSON.stringify(geoJsonObj);
-      addDoc(dbRef, { feature: geoJsonStr })
-        .then((res) => {
-          console.log(res);
-          router.push("/teesat");
-        })
-        .catch((error) => {
-          console.log("error happened!", error);
-        });
-    });
+    return geoJsonStr;
   };
 
-  
   //called in Markerlist/Uploadbutton
   const postDrawnmarkers = async (drawnMarkers) => {
-    // console.log(drawnMarkers)
-    // const GeoJSONarr = drawnMarkers.map((obj) => convertToPrunedGeoJsonObj(obj))
-    // const arrStr = JSON.stringify(drawnMarkers.map((obj) => convertToPrunedGeoJsonObj(obj)))
-    // console.log(arrStr)
     const response = await fetch(`http://localhost:3000/api/uploadLocations`, {
-      method: 'POST',
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(drawnMarkers.map((obj) => convertToPrunedGeoJsonObj(obj)))
+      body: JSON.stringify(drawnMarkers.map((obj) => convertToPrunedGeoJsonObj(obj))),
     });
-    return response.json(); 
-  }
-
+    router.push('/home')
+    // return response.json();
+  };
 
   //called in home
   const fetchAllFirestoreMarkers = async () => {
@@ -96,7 +52,6 @@ const FireStoreContextProvider = ({ children }) => {
   return (
     <FireStoreContext.Provider
       value={{
-        uploadDrawnMarkers,
         postDrawnmarkers,
         fetchAllFirestoreMarkers,
         filterUserFirestoreMarkers,
