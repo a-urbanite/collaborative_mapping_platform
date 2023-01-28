@@ -32,31 +32,24 @@ const FireStoreContextProvider = ({ children }) => {
     });
   };
 
+  //called in home
   const fetchAllFirestoreMarkers = async () => {
     const res = await fetch(`http://localhost:3000/api/locations`);
     const markers = await res.json();
     setAllFirestoreMarkers(markers);
   };
 
-  const fetchUserFirestoreMarkers = async (userObj) => {
-    const res = await fetch(`http://localhost:3000/api/locations/${userObj.uid}`);
-    const mylocations = await res.json();
-    setUserFirestoreMarkers(mylocations);
-  };
-
+  //called in myPlaces
   const filterUserFirestoreMarkers = (userObj) => {
-    const userlocations = allFirestoreMarkers.filter(
-        (location) => location.properties.user.uid === userObj.uid
-      );
-      setUserFirestoreMarkers(userlocations)
-  }
+    const markers = allFirestoreMarkers.filter((marker) => marker.properties.user.uid === userObj.uid);
+    setUserFirestoreMarkers(markers);
+  };
 
   return (
     <FireStoreContext.Provider
       value={{
         uploadDrawnMarkers,
         fetchAllFirestoreMarkers,
-        fetchUserFirestoreMarkers,
         filterUserFirestoreMarkers,
         allFirestoreMarkers,
         userFirestoreMarkers,
