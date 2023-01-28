@@ -7,7 +7,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     const geoJsonArr: any[] = [];
     await req.body.forEach(async (str: string) => {
       const geoJsonObj = JSON.parse(str);
-      console.log(geoJsonObj);
+      console.log("GEOJSONOBJ ready to fly: ", geoJsonObj);
       await addDoc(dbRef, geoJsonObj);
       geoJsonArr.push(geoJsonObj);
     });

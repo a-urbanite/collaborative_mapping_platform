@@ -1,7 +1,5 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { createContext } from "react";
-import { dbRef } from "../firebase-config";
-import { addDoc } from "firebase/firestore";
 import { useRouter } from "next/router";
 
 const FireStoreContext = createContext();
@@ -11,6 +9,24 @@ const FireStoreContextProvider = ({ children }) => {
   const [userFirestoreMarkers, setUserFirestoreMarkers] = useState(null);
   const router = useRouter();
 
+  const serializeCoordsArr = (arrayOfArrays) => {
+    // let arrayOfArrays = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
+    let obj = arrayOfArrays.reduce((acc, curr, index) => {
+        acc[index] = curr;
+        return acc;
+    }, {});
+    // console.log(obj);
+    return obj
+  }
+
+  const deSerializeCoordsArr = (obj) => {
+    let array = [];
+    for (let key in obj) {
+        array.push(obj[key]);
+    }
+    return array;
+  }
+
   const convertToPrunedGeoJsonObj = (obj) => {
     const geoJsonObj = obj.mapLayerObj.toGeoJSON();
     geoJsonObj.properties = {
@@ -19,6 +35,8 @@ const FireStoreContextProvider = ({ children }) => {
       dateCreated: obj.dateCreated,
       popupContent: obj.popupContent,
     };
+    geoJsonObj.geometry.coordinates = serializeCoordsArr(geoJsonObj.geometry.coordinates)
+    // console.log("GEOJSONOBJ ready to fly: ", geoJsonObj)
     const geoJsonStr = JSON.stringify(geoJsonObj);
     return geoJsonStr;
   };
@@ -33,13 +51,13 @@ const FireStoreContextProvider = ({ children }) => {
       body: JSON.stringify(drawnMarkers.map((obj) => convertToPrunedGeoJsonObj(obj))),
     });
     router.push('/home')
-    // return response.json();
   };
 
   //called in home
   const fetchAllFirestoreMarkers = async () => {
     const res = await fetch(`http://localhost:3000/api/locations`);
     const markers = await res.json();
+    markers.forEach((marker) => {marker.geometry.coordinates = deSerializeCoordsArr(marker.geometry.coordinates)})
     setAllFirestoreMarkers(markers);
   };
 
