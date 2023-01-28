@@ -7,6 +7,8 @@ import { useRouter } from "next/router";
 const FireStoreContext = createContext();
 
 const FireStoreContextProvider = ({ children }) => {
+  const [allFirestoreMarkers, setAllFirestoreMarkers] = useState(null);
+  const [userFirestoreMarkers, setUserFirestoreMarkers] = useState(null);
   const router = useRouter();
 
   const uploadDrawnMarkers = (drawnMarkers) => {
@@ -17,23 +19,47 @@ const FireStoreContextProvider = ({ children }) => {
         user: marker.user,
         dateCreated: marker.dateCreated,
         popupContent: marker.popupContent,
-      }
+      };
       const geoJsonStr = JSON.stringify(geoJsonObj);
       addDoc(dbRef, { feature: geoJsonStr })
         .then((res) => {
-          console.log(res)
-          router.push('/teesat')
+          console.log(res);
+          router.push("/teesat");
         })
         .catch((error) => {
-        console.log("error happened!", error);
-      });
+          console.log("error happened!", error);
+        });
     });
   };
+
+  const fetchAllFirestoreMarkers = async () => {
+    const res = await fetch(`http://localhost:3000/api/locations`);
+    const markers = await res.json();
+    setAllFirestoreMarkers(markers);
+  };
+
+  const fetchUserFirestoreMarkers = async (userObj) => {
+    const res = await fetch(`http://localhost:3000/api/locations/${userObj.uid}`);
+    const mylocations = await res.json();
+    setUserFirestoreMarkers(mylocations);
+  };
+
+  const filterUserFirestoreMarkers = (userObj) => {
+    const userlocations = allFirestoreMarkers.filter(
+        (location) => location.properties.user.uid === userObj.uid
+      );
+      setUserFirestoreMarkers(userlocations)
+  }
 
   return (
     <FireStoreContext.Provider
       value={{
         uploadDrawnMarkers,
+        fetchAllFirestoreMarkers,
+        fetchUserFirestoreMarkers,
+        filterUserFirestoreMarkers,
+        allFirestoreMarkers,
+        userFirestoreMarkers,
       }}
     >
       {children}

@@ -1,20 +1,20 @@
+import { useEffect } from "react";
 import MapLoader from "../../components/Map/MapLoader";
 import styles from "./home.module.scss";
+import { useFireStoreContext } from "../../components/FireStoreContext";
 
-export default function Home(props: any) {
-  
+export default function Home() {
+  const { fetchAllFirestoreMarkers, allFirestoreMarkers } = useFireStoreContext();
+
+  useEffect(() => {
+    fetchAllFirestoreMarkers();
+  }, []);
+
   return (
     <>
       <div className={styles.homeContainer}>
-        <MapLoader markers={props.markers}/>
+        <MapLoader markers={allFirestoreMarkers} />
       </div>
     </>
   );
-}
-
-export async function getServerSideProps() {
-  const url = `http://localhost:3000/api/locations`
-  const res = await fetch(url)
-  const markers = await res.json()
-  return { props: { markers } }
 }

@@ -3,26 +3,27 @@ import { useUserContext } from '../../components/UserContext'
 import MapLoader from "../../components/Map/MapLoader";
 import MarkerList from '../../components/MarkerList/MarkerList';
 import styles from './myPlaces.module.scss'
+import { useFireStoreContext } from "../../components/FireStoreContext";
+import { useRouter } from 'next/router';
 
 const MyPlaces = () => {
   const { userObj } = useUserContext();
-  const [myPlaces, setmyPlaces] = useState(null)
+  const { filterUserFirestoreMarkers, userFirestoreMarkers } = useFireStoreContext();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!userObj) {
+      router.push('/home')
+    }
+  }, [])
 
   useEffect( () => {
-    const fetchMyLocations = async (uid: any) => {
-      const res = await fetch(`http://localhost:3000/api/locations/${uid}`)
-      const mylocations = await res.json()
-      return mylocations
-    }
-    fetchMyLocations(userObj.uid)
-      .then((mylocations) => {
-        console.log("myplaces: ", mylocations)
-        setmyPlaces(mylocations)})
+    filterUserFirestoreMarkers(userObj)
   }, [])
 
   return (
     <div className={styles.homeContainer}>
-      <MapLoader markers={myPlaces}/>
+      <MapLoader markers={userFirestoreMarkers}/>
       <MarkerList />
     </div>
   )
