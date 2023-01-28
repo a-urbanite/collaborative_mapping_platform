@@ -5,10 +5,10 @@ import { useFireStoreContext } from "../../FireStoreContext";
 
 const UploadButton = () => {
   const { drawnMarkers } = useMapContext();
-  const { uploadDrawnMarkers } = useFireStoreContext();
+  const { uploadDrawnMarkers, postDrawnmarkers } = useFireStoreContext();
 
   return (
-    <button className={styles.button} onClick={() => uploadDrawnMarkers(drawnMarkers)}>Upload my Features</button>
+    <button className={styles.button} onClick={() => postDrawnmarkers(drawnMarkers)}>Upload my Features</button>
   )
 }
 

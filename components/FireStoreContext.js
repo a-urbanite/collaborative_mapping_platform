@@ -11,6 +11,7 @@ const FireStoreContextProvider = ({ children }) => {
   const [userFirestoreMarkers, setUserFirestoreMarkers] = useState(null);
   const router = useRouter();
 
+  //called in Markerlist/Uploadbutton
   const uploadDrawnMarkers = (drawnMarkers) => {
     drawnMarkers.forEach((marker) => {
       const geoJsonObj = marker.mapLayerObj.toGeoJSON();
@@ -32,6 +33,20 @@ const FireStoreContextProvider = ({ children }) => {
     });
   };
 
+  
+  //called in Markerlist/Uploadbutton
+  const postDrawnmarkers = async (drawnMarkers) => {
+    const response = await fetch(`http://localhost:3000/api/uploadLocations`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: drawnMarkers
+    });
+    return response.json(); 
+  }
+
+
   //called in home
   const fetchAllFirestoreMarkers = async () => {
     const res = await fetch(`http://localhost:3000/api/locations`);
@@ -49,6 +64,7 @@ const FireStoreContextProvider = ({ children }) => {
     <FireStoreContext.Provider
       value={{
         uploadDrawnMarkers,
+        postDrawnmarkers,
         fetchAllFirestoreMarkers,
         filterUserFirestoreMarkers,
         allFirestoreMarkers,

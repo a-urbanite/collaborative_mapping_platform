@@ -18,9 +18,9 @@ const DrawingController = () => {
     console.log("map click");
   });
 
-  useEffect(() => {
-    console.log("DarwnMarkers localstate", drawnMarkers);
-  }, [drawnMarkers]);
+  // useEffect(() => {
+  //   console.log("DarwnMarkers localstate", drawnMarkers);
+  // }, [drawnMarkers]);
 
   return (
     <FeatureGroup>

@@ -14,10 +14,8 @@ const MyPlaces = () => {
   useEffect(() => {
     if (!userObj) {
       router.push('/home')
+      return
     }
-  }, [])
-
-  useEffect( () => {
     filterUserFirestoreMarkers(userObj)
   }, [])
 
