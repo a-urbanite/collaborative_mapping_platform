@@ -12,3 +12,10 @@
   should be able to upload it as object and firestore then recognises the single sttributes. 
   only this way i can implement serverside functions that allow me to e.g. change the username 
   of markers inside firestore
+
+3) i need to refactor the ModalContext. 
+
+  all functionalities should be exposed through functions, 
+  the state and setter itself not. i need to rewrite the modal in a way that i 
+  can provide various content for it. Maybe look in the code for the Portfolio page. When i have that 
+  i need to rewrite the user interactions (delete marker, upload marker, upload ongoing, markers still fetching on home) to make use of this new multipurpose modal
