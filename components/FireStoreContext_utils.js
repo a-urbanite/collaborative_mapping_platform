@@ -48,7 +48,7 @@ const deserializeGeoJsonCoords = (geoJsonObj) => {
   return deserializedCoordsObj;
 };
 
-const convertToPrunedGeoJsonStr = (obj) => {
+const convertToGeoJsonStr = (obj) => {
   const geoJsonObj = obj.mapLayerObj.toGeoJSON();
   geoJsonObj.properties = {
     id: obj.id,
@@ -66,5 +66,5 @@ export {
   deSerializeNestedArrays,
   serializeGeoJsonCoords,
   deserializeGeoJsonCoords,
-  convertToPrunedGeoJsonStr,
+  convertToGeoJsonStr,
 };
