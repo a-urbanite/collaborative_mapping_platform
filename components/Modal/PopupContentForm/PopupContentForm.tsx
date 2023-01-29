@@ -4,7 +4,7 @@ import { useMapContext } from "../../MapContext";
 import styles from "./popupContentForm.module.scss";
 
 const PopupContentForm = ({ marker }: any) => {
-  const { deactivateModal } = useModalContext();
+  const { closeModal } = useModalContext();
   const { editMarkerPopupContent } = useMapContext();
   const [title, setTitle] = useState(null as unknown as string);
   const [text, setText] = useState(null as unknown as string);
@@ -17,7 +17,7 @@ const PopupContentForm = ({ marker }: any) => {
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     editMarkerPopupContent(marker, title || "no title", text || "no text");
-    deactivateModal();
+    closeModal();
   };
 
   return (

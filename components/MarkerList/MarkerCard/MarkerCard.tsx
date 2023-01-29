@@ -5,7 +5,7 @@ import styles from "./markerCard.module.scss";
 
 const MarkerCard = ({ marker }: any) => {
   const { deleteMarker, highlightMarker } = useMapContext();
-  const { activateMarkerPopupContentFormModal } = useModalContext();
+  const { openModalWithMarkerPopupContentForm } = useModalContext();
 
   return (
     <li className={styles.listItem}>
@@ -20,7 +20,7 @@ const MarkerCard = ({ marker }: any) => {
           </button>
           <button
             className={styles.button}
-            onClick={() => activateMarkerPopupContentFormModal(marker)}
+            onClick={() => openModalWithMarkerPopupContentForm(marker)}
           >
             Edit Content
           </button>
