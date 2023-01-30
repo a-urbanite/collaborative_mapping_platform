@@ -25,6 +25,7 @@ const Login = () => {
           className={styles.loginForm__input}
           name='loginMail' 
           placeholder='Email...'
+          required
           onChange={(event) => {setlogInEmail(event.target.value)}}>
         </input>
         <input 
@@ -32,6 +33,7 @@ const Login = () => {
           type="password"
           name='loginPassword' 
           placeholder='password...'
+          required
           onChange={(event) => {setlogInPassword(event.target.value)}}>
         </input>
         <input 
