@@ -11,8 +11,8 @@ import {
 const FireStoreContext = createContext();
 
 const FireStoreContextProvider = ({ children }) => {
-  const [allFirestoreMarkers, setAllFirestoreMarkers] = useState(null);
-  const [userFirestoreMarkers, setUserFirestoreMarkers] = useState(null);
+  const [allFirestoreMarkers, setAllFirestoreMarkers] = useState([]);
+  const [userFirestoreMarkers, setUserFirestoreMarkers] = useState([]);
 
   //called in Markerlist/Uploadbutton
   const postDrawnmarkers = async (drawnMarkers) => {

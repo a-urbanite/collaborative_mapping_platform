@@ -12,7 +12,11 @@ const ModalContextProvider = ({ children }) => {
 
   const openModal = (context) => {
     setModal({ isOpen: true, context: context, payload: null });
-  }
+  };
+
+  const openModalWithSpinner = () => {
+    setModal({ isOpen: true, context: "spinner", payload: null });
+  };
 
   const openModalWithMarkerPopupContentForm = (currentMarker) => {
     setModal({ isOpen: true, context: "markerContentForm", payload: currentMarker });
@@ -23,7 +27,9 @@ const ModalContextProvider = ({ children }) => {
   };
 
   return (
-    <ModalContext.Provider value={{ modal, openModal, closeModal, openModalWithMarkerPopupContentForm }}>
+    <ModalContext.Provider
+      value={{ modal, openModal, closeModal, openModalWithSpinner, openModalWithMarkerPopupContentForm }}
+    >
       {children}
     </ModalContext.Provider>
   );

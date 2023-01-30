@@ -8,16 +8,18 @@ import { useRouter } from 'next/router';
 const UploadButton = () => {
   const { drawnMarkers } = useMapContext();
   const { postDrawnmarkers } = useFireStoreContext();
-  const { openModal, closeModal } = useModalContext();
+  const { openModalWithSpinner, closeModal } = useModalContext();
 
   const router = useRouter(); 
 
   const uploadDrawnMarkers = async () => {
-    openModal("test")
+    openModalWithSpinner()
     const response = await postDrawnmarkers(drawnMarkers)
-    console.log(response)
-    closeModal()
-    router.push("/home");
+    // console.log(response)
+    setTimeout(() => {
+      closeModal()
+      router.push("/home");
+    }, 1000);
   }
 
   return (

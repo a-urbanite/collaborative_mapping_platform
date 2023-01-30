@@ -13,14 +13,13 @@ const Login = () => {
   const signInWithEmail = async(event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     signInUser(logInEmail, logInPassword)
-    router.push('/')
+    router.push('/myPlaces')
   }
 
   return (
     <div className={styles.loginWrapper}>
       <h1>Sign in</h1>
       <form className={styles.loginForm} onSubmit={signInWithEmail}>
-        {/* <h2>Sign in with Email</h2> */}
         <input 
           className={styles.loginForm__input}
           name='loginMail' 
@@ -42,8 +41,6 @@ const Login = () => {
           autoFocus 
           value="Go!"/> 
       </form>
-      {/* <p>Sign in with Google</p>
-      <button className='login-with-google-btn' onClick={signInWithGoogle}>Sign in with Google</button> */}
       <p>not registered yet?</p>
       <button className={styles.loginForm__submit} onClick={() => router.push('/signup')}>Sign up!</button>
     </div>
