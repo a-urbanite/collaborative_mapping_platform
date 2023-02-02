@@ -22,8 +22,10 @@ const ModalContextProvider = ({ children }) => {
     setModal({ isOpen: true, context: "markerContentForm", payload: currentMarker });
   };
 
-  const closeModal = () => {
-    setModal({ isOpen: false, context: null, payload: null });
+  const closeModal = (delay = 0) => {
+    setTimeout(() => {
+      setModal({ isOpen: false, context: null, payload: null });
+    }, delay);
   };
 
   return (
