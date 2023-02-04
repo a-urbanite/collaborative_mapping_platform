@@ -10,6 +10,10 @@ const ModalContextProvider = ({ children }) => {
     payload: null,
   });
 
+  const isModalOpen = () => {
+    return modal.isOpen
+  }
+
   const openModal = (context) => {
     setModal({ isOpen: true, context: context, payload: null });
   };
@@ -30,7 +34,7 @@ const ModalContextProvider = ({ children }) => {
 
   return (
     <ModalContext.Provider
-      value={{ modal, openModal, closeModal, openModalWithSpinner, openModalWithMarkerPopupContentForm }}
+      value={{ modal, isModalOpen, openModal, closeModal, openModalWithSpinner, openModalWithMarkerPopupContentForm }}
     >
       {children}
     </ModalContext.Provider>
