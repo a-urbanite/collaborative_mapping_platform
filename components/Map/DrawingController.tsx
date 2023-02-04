@@ -6,7 +6,7 @@ import { useUserContext } from "../UserContext";
 import { useEffect } from "react";
 // import { auth } from "../../firebase-config";
 
-const DrawingController = () => {
+const DrawingController = ({setEditableLayers, editableLayers}: any) => {
   const { addMarker, drawnMarkers } = useMapContext();
   const { userObj } = useUserContext();
 
@@ -18,16 +18,13 @@ const DrawingController = () => {
     console.log("map click");
   });
 
-  // useEffect(() => {
-  //   console.log("DarwnMarkers localstate", drawnMarkers);
-  // }, [drawnMarkers]);
-
   return (
-    <FeatureGroup>
+    <FeatureGroup ref={setEditableLayers}>
       <EditControl
         position="topright"
         edit={{
           remove: false,
+          featureGroup: editableLayers,
         }}
         draw={{
           rectangle: false,
