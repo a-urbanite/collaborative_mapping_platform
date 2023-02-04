@@ -11,7 +11,7 @@ export default function Home() {
   useEffect(() => {
     openModalWithSpinner("Fetching Markers...");
     fetchAllFirestoreMarkers()
-      .then(() => closeModal(1000))
+      .then(() => closeModal(500))
       .catch(() => openModalWithError());
   }, []);
 

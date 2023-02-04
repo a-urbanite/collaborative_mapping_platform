@@ -4,7 +4,6 @@ import { FeatureGroup, useMap, useMapEvent } from "react-leaflet";
 import { useMapContext } from "../MapContext";
 import { useUserContext } from "../UserContext";
 import { useEffect } from "react";
-// import { auth } from "../../firebase-config";
 
 const DrawingController = ({setEditableLayers, editableLayers}: any) => {
   const { addMarker, drawnMarkers } = useMapContext();
