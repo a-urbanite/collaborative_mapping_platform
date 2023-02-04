@@ -10,16 +10,12 @@ const UploadButton = () => {
   const { postDrawnmarkers } = useFireStoreContext();
   const { openModalWithSpinner, closeModal } = useModalContext();
 
-  const router = useRouter(); 
+  const router = useRouter();
 
   const uploadDrawnMarkers = async () => {
     openModalWithSpinner()
     const response = await postDrawnmarkers(drawnMarkers)
-    // console.log(response)
-    setTimeout(() => {
-      closeModal()
-      router.push("/home");
-    }, 1000);
+    closeModal(1000)
   }
 
   return (
