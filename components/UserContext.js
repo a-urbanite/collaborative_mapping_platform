@@ -13,27 +13,34 @@ const UserContext = React.createContext();
 const UserContextProvider = ({ children }) => {
   const [isAuth, setIsAuth] = useState(false);
   const [userObj, setUserObj] = useState(null);
-  
+
   const handleError = (e) => {
     console.error(e);
     throw new Error();
   };
 
   const signInUser = (logInEmail, logInPassword) => {
-    signInWithEmailAndPassword(auth, logInEmail, logInPassword)
-      .catch((e) => handleError(e))
-      .then(() => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        await signInWithEmailAndPassword(auth, logInEmail, logInPassword);
         setUserObj(auth.currentUser);
         setIsAuth(true);
-      });
+        resolve();
+      } catch (err) {
+        // handleError(err)
+        console.error(err);
+        reject(err);
+      }
+    });
   };
 
   const signOutUser = () => {
     signOut(auth)
       .catch((e) => handleError(e))
       .then(() => {
-        setUserObj(null)
-        setIsAuth(false)});
+        setUserObj(null);
+        setIsAuth(false);
+      });
   };
 
   const updateUser = async (name, email) => {

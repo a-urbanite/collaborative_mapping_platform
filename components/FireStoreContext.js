@@ -27,55 +27,27 @@ const FireStoreContextProvider = ({ children }) => {
       res = await res.json();
       return res;
     } catch (err) {
-      console.error(err)
+      console.error(err);
     }
   };
 
-//   function doSomethingLong(param) {
-
-//     return new Promise(function(resolve, reject){
- 
-//         https.get('http://www.myurl.com?param=' + param, (resp) => {
-//            let data = '';
- 
-//            // A chunk of data has been recieved.
-//            resp.on('data', (chunk) => {
-//                data += chunk;
-//            });
- 
-//            // The whole response has been received. Print out the result.
-//            resp.on('end', () => {
-//                console.log("Call succeeded. Response: " + data);
-//                resolve();
-//            });
-//        }).on("error", (err) => {
-//            console.log("Call failed. Error: " + err.message);
-//            reject(err);
-//        });
-//     });
-//  }
-
   //called in home
   const fetchAllFirestoreMarkers = () => {
-
-    return new Promise( async (resolve, reject) => {
-      let markers;
+    return new Promise(async (resolve, reject) => {
       try {
+        let markers;
         let res = await fetch(`http://localhost:3000/api/locations`);
         markers = await res.json();
         markers.forEach((marker) => {
           marker.geometry.coordinates = deserializeGeoJsonCoords(marker);
         });
         setAllFirestoreMarkers(markers);
-        resolve()
+        resolve();
       } catch (err) {
-        console.error(err)
-        reject(err)
+        console.error(err);
+        reject(err);
       }
-
-    })
-
-
+    });
   };
 
   //called in myPlaces

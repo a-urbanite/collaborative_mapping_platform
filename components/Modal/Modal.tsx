@@ -2,8 +2,9 @@ import { useModalContext } from "../ModalContext";
 import styles from "./modal.module.scss";
 import { Dialog } from "@headlessui/react";
 import PopupContentForm from "./PopupContentForm/PopupContentForm";
-import Spinner from "./Spinner/Spinner";
+import LoadingSpin from "react-loading-spin";
 import { useRouter } from "next/router";
+import { RxCross1 } from "react-icons/rx";
 
 const Modal = () => {
   const { modal, closeModal } = useModalContext();
@@ -15,14 +16,16 @@ const Modal = () => {
         <Dialog.Panel as="div" className={styles.content}>
           {modal.context === "spinner" && (
             <>
-              <Spinner />
-              <h2>{modal.payload}</h2>
+              <Dialog.Title>Loading...</Dialog.Title>
+              <LoadingSpin/>
+              <Dialog.Description>{modal.payload}</Dialog.Description>
             </>
           )}
           {modal.context === "error" && (
             <>
-              XXX
-              <h2>{modal.payload}</h2>
+              <Dialog.Title>Error</Dialog.Title>
+              <RxCross1/>
+              <Dialog.Description>{modal.payload}</Dialog.Description>
               <button onClick={() => router.reload()}>Reload Page</button>
             </>
           )}

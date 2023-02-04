@@ -2,8 +2,10 @@ import { useState } from "react";
 import { useRouter } from 'next/router';
 import styles from './login.module.css'
 import { useUserContext } from '../../components/UserContext';
+import { useModalContext } from "../../components/ModalContext";
 
 const Login = () => {
+  const { openModalWithSpinner, openModalWithError, closeModal } = useModalContext();
   const { signInUser } = useUserContext()
   const router = useRouter()
   const [logInEmail, setlogInEmail] = useState<string>("");
@@ -12,8 +14,13 @@ const Login = () => {
   
   const signInWithEmail = async(event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    openModalWithSpinner()
     signInUser(logInEmail, logInPassword)
-    router.push('/myPlaces')
+      .then(() => {
+        closeModal()
+        router.push('/myPlaces')
+      })
+      .catch(() => openModalWithError("Unable to connect to Server!"))
   }
 
   return (

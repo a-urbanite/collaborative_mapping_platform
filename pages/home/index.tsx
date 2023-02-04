@@ -12,14 +12,8 @@ export default function Home() {
     openModalWithSpinner("Fetching Markers...");
     fetchAllFirestoreMarkers()
       .then(() => closeModal(1000))
-      .catch(() => openModalWithError("Something went wrong!"));
+      .catch(() => openModalWithError());
   }, []);
-
-  // useEffect(() => {
-  //   if (allFirestoreMarkers.length > 0) {
-  //     closeModal();
-  //   }
-  // }, [allFirestoreMarkers])
 
   return (
     <>

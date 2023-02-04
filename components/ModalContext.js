@@ -10,15 +10,7 @@ const ModalContextProvider = ({ children }) => {
     payload: null,
   });
 
-  const isModalOpen = () => {
-    return modal.isOpen;
-  };
-
-  const openModal = (context) => {
-    setModal({ isOpen: true, context: context, payload: null });
-  };
-
-  const openModalWithSpinner = (text) => {
+  const openModalWithSpinner = (text = "Wait a minute...") => {
     setModal({ isOpen: true, context: "spinner", payload: text });
   };
 
@@ -26,7 +18,7 @@ const ModalContextProvider = ({ children }) => {
     setModal({ isOpen: true, context: "markerContentForm", payload: currentMarker });
   };
 
-  const openModalWithError = (text) => {
+  const openModalWithError = (text = "Something went wrong...") => {
     setModal({ isOpen: true, context: "error", payload: text });
   };
 
@@ -40,8 +32,6 @@ const ModalContextProvider = ({ children }) => {
     <ModalContext.Provider
       value={{
         modal,
-        isModalOpen,
-        openModal,
         closeModal,
         openModalWithSpinner,
         openModalWithError,
