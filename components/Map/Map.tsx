@@ -21,6 +21,10 @@ const Map = ({ markers }: any) => {
       scrollWheelZoom={false}
       className={styles.mapContainer}
       ref={setMapRef}
+      whenReady={() => {
+        console.log("MAPLOAD")
+        // editableLayers.clearLayers()
+      }}
     >
       {router.pathname === "/myPlaces" && (
         <DrawingController setEditableLayers={setEditableLayers} editableLayers={editableLayers} />

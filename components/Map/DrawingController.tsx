@@ -9,13 +9,15 @@ const DrawingController = ({setEditableLayers, editableLayers}: any) => {
   const { addMarker, drawnMarkers } = useMapContext();
   const { userObj } = useUserContext();
 
-  const mapLoad = useMapEvent("viewreset", () => {
-    console.log("map load");
-  });
-
   const mapClick = useMapEvent("click", () => {
     console.log("map click");
   });
+
+  // useEffect(() => {
+  //   if (editableLayers) {
+  //     editableLayers.clearLayers()
+  //   }
+  // },[editableLayers])
 
   return (
     <FeatureGroup ref={setEditableLayers}>
@@ -23,7 +25,7 @@ const DrawingController = ({setEditableLayers, editableLayers}: any) => {
         position="topright"
         edit={{
           remove: false,
-          featureGroup: editableLayers,
+          // featureGroup: editableLayers,
         }}
         draw={{
           rectangle: false,

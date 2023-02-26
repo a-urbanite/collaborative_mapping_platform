@@ -38,6 +38,7 @@ const FireStoreContextProvider = ({ children }) => {
         let markers;
         let res = await fetch(`http://localhost:3000/api/locations`);
         markers = await res.json();
+        console.log("SERVERRES FROM MARKERFETCH: ", res)
         markers.forEach((marker) => {
           marker.geometry.coordinates = deserializeGeoJsonCoords(marker);
         });
