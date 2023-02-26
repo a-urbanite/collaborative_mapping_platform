@@ -17,7 +17,7 @@ const FireStoreContextProvider = ({ children }) => {
   //called in Markerlist/Uploadbutton
   const postDrawnmarkers = async (drawnMarkers) => {
     try {
-      let res = await fetch(`http://localhost:3000/api/uploadLocations`, {
+      let res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/uploadLocations`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -36,7 +36,8 @@ const FireStoreContextProvider = ({ children }) => {
     return new Promise(async (resolve, reject) => {
       try {
         let markers;
-        let res = await fetch(`http://localhost:3000/api/locations`);
+        console.log("HOST URL: ", process.env.NEXT_PUBLIC_HOST_URL)
+        let res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/locations`);
         markers = await res.json();
         console.log("SERVERRES FROM MARKERFETCH: ", res)
         markers.forEach((marker) => {

@@ -7,7 +7,7 @@ import { getAuth, GoogleAuthProvider } from 'firebase/auth'
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCqzOkod5c-TEwntpYZYGMkKJ55qbM73HE",
+  apiKey: `${process.env.NEXT_PUBLIC_FIRESTORE_API_KEY}`,
   authDomain: "collab-mapping.firebaseapp.com",
   projectId: "collab-mapping",
   storageBucket: "collab-mapping.appspot.com",
