@@ -66,6 +66,7 @@ const FireStoreContextProvider = ({ children }) => {
         filterUserFirestoreMarkers,
         allFirestoreMarkers,
         userFirestoreMarkers,
+        setUserFirestoreMarkers
       }}
     >
       {children}

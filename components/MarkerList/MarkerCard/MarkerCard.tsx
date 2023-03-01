@@ -10,7 +10,7 @@ const MarkerCard = ({ marker }: any) => {
   return (
     <li className={styles.listItem}>
       <div onMouseOver={() => highlightMarker(marker)} className={styles.container}>
-        <div className={styles.textbar}>{`Feature: ${marker.popupContent.title || "unnamed"}`}</div>
+        <div className={styles.textbar}>{`Feature: ${marker.popupContent?.title || "unnamed"}`}</div>
         <div className={styles.buttonbar}>
           <button
             className={styles.button}

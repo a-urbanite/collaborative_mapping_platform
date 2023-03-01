@@ -63,6 +63,7 @@ const MapContextProvider = ({ children }) => {
         editMarkerPopupContent,
         deleteMarker,
         highlightMarker,
+        drawnMarkers, setDrawnMarkers
       }}
     >
       {children}

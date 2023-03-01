@@ -5,40 +5,44 @@ import "leaflet-draw/dist/leaflet.draw.css";
 // import { EditControl } from '../../src';
 import { EditControl } from "react-leaflet-draw";
 import type { FeatureCollection } from 'geojson';
+import { useFireStoreContext } from '../FireStoreContext';
+import { useEffect } from 'react';
 
-interface Props {
-  geojson: FeatureCollection;
-  setGeojson: (geojson: FeatureCollection) => void;
-}
+// interface Props {
+//   geojson: FeatureCollection;
+//   setGeojson: (geojson: FeatureCollection) => void;
+// }
 
-export default function EditControlFC({ geojson, setGeojson }: Props) {
+export default function EditControlFC() {
+  const { userFirestoreMarkers, setUserFirestoreMarkers } = useFireStoreContext();
   const ref = React.useRef<L.FeatureGroup>(null);
 
-  React.useEffect(() => {
-    if (ref.current?.getLayers().length === 0 && geojson) {
-      L.geoJSON(geojson).eachLayer((layer) => {
+  // useEffect(() => {
+  //   console.log(userFirestoreMarkers)
+  // }, [userFirestoreMarkers])
+  
+
+  useEffect(() => {
+    if (ref.current?.getLayers().length === 0 && userFirestoreMarkers) {
+      L.geoJSON(userFirestoreMarkers).eachLayer((layer) => {
         if (
           layer instanceof L.Polyline ||
           layer instanceof L.Polygon ||
           layer instanceof L.Marker
         ) {
-          if (layer?.feature?.properties.radius && ref.current) {
-            new L.Circle(layer.feature.geometry.coordinates.slice().reverse(), {
-              radius: layer.feature?.properties.radius,
-            }).addTo(ref.current);
-          } else {
-            ref.current?.addLayer(layer);
-          }
+          // console.log("layer on Geojson func: ", layer)
+          layer.bindPopup("popupContent")
+          ref.current?.addLayer(layer);
         }
       });
     }
-  }, [geojson]);
+  }, [userFirestoreMarkers]);
 
   const handleChange = () => {
     const geo = ref.current?.toGeoJSON();
     console.log(geo);
     if (geo?.type === 'FeatureCollection') {
-      setGeojson(geo);
+      setUserFirestoreMarkers(geo);
     }
   };
 
@@ -51,9 +55,19 @@ export default function EditControlFC({ geojson, setGeojson }: Props) {
         onDeleted={handleChange}
         draw={{
           rectangle: false,
-          circle: true,
-          polyline: true,
-          polygon: true,
+          circle: false,
+          polyline: {
+            showLength: true,
+            metric: true,
+          },
+          polygon: {
+            allowIntersection: false, // Restricts shapes to simple polygons
+            drawError: {
+              color: "red", // Color the shape will turn when intersects
+              message: "<strong>That is a terrible polygon! Draw that again!", // Message that will show when intersect
+            },
+            // shapeOptions: {color: '#97009c'}
+          },
           marker: false,
           circlemarker: false,
         }}

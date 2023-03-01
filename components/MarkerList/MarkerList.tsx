@@ -1,11 +1,20 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useMapContext } from "../MapContext";
 import MarkerCard from "./MarkerCard/MarkerCard";
 import UploadButton from "./UploadButton/UploadButton";
 import styles from "./markerList.module.scss"
+import { useFireStoreContext } from "../FireStoreContext";
 
 const MarkerList = () => {
-  const { drawnMarkers } = useMapContext();
+  const { drawnMarkers, setDrawnMarkers } = useMapContext();
+  const { userFirestoreMarkers, setUserFirestoreMarkers } = useFireStoreContext();
+
+  useEffect(() => {
+    if (userFirestoreMarkers.length > 0) {
+      setDrawnMarkers(userFirestoreMarkers)
+    }
+  }, [userFirestoreMarkers])
+  
 
   return (
     <div className={styles.container}>

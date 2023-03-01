@@ -52,10 +52,8 @@ const Map = ({ markers }: any) => {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
 
-      {router.pathname === "/myPlaces" && 
-        <EditControlFC geojson={geojson} setGeojson={setGeojson} />
-      }
-      
+      {router.pathname === "/myPlaces" && <EditControlFC/>}
+
     </MapContainer>
   );
 };
