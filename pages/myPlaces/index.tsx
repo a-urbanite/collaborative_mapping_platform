@@ -12,6 +12,7 @@ const MyPlaces = () => {
   const router = useRouter();
 
   useEffect(() => {
+    // console.log("user markers: ", userFirestoreMarkers)
     if (!userObj) {
       router.push('/home')
       return

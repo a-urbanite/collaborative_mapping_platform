@@ -1,26 +1,21 @@
 import { EditControl } from "react-leaflet-draw";
 import "leaflet-draw/dist/leaflet.draw.css";
-import { FeatureGroup, useMap, useMapEvent } from "react-leaflet";
+// import { FeatureGroup, useMap, useMapEvent } from "react-leaflet";
 import { useMapContext } from "../MapContext";
 import { useUserContext } from "../UserContext";
-import { useEffect } from "react";
+// import { useEffect } from "react";
+// import L from "leaflet";
 
-const DrawingController = ({setEditableLayers, editableLayers}: any) => {
+const DrawingController = () => {
   const { addMarker, drawnMarkers } = useMapContext();
+  // const map = useMap()
   const { userObj } = useUserContext();
 
-  const mapClick = useMapEvent("click", () => {
-    console.log("map click");
-  });
-
-  // useEffect(() => {
-  //   if (editableLayers) {
-  //     editableLayers.clearLayers()
-  //   }
-  // },[editableLayers])
+  // const mapClick = useMapEvent("click", () => {
+  //   console.log("map click");
+  // });
 
   return (
-    <FeatureGroup ref={setEditableLayers}>
       <EditControl
         position="topright"
         edit={{
@@ -94,7 +89,6 @@ const DrawingController = ({setEditableLayers, editableLayers}: any) => {
           // console.log("onEditVertex!");
         }}
       />
-    </FeatureGroup>
   );
 };
 
