@@ -68,7 +68,7 @@ export default function EditControlFC() {
             },
             // shapeOptions: {color: '#97009c'}
           },
-          marker: false,
+          marker: true,
           circlemarker: false,
         }}
       />
