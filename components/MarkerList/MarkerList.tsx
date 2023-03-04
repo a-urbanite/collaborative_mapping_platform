@@ -9,19 +9,24 @@ const MarkerList = () => {
   const { drawnMarkers, setDrawnMarkers } = useMapContext();
   const { userFirestoreMarkers, setUserFirestoreMarkers } = useFireStoreContext();
 
-  useEffect(() => {
-    if (userFirestoreMarkers.length > 0) {
-      setDrawnMarkers(userFirestoreMarkers)
-    }
-  }, [userFirestoreMarkers])
+  // useEffect(() => {
+  //   if (userFirestoreMarkers.length > 0) {
+  //     setDrawnMarkers(userFirestoreMarkers)
+  //   }
+  // }, [userFirestoreMarkers])
+
+  // useEffect(() => {
+  //   console.log("markerlist rerender")
+  // }, [])
+  
   
 
   return (
     <div className={styles.container}>
       <ul className={styles.list}>
-        {drawnMarkers.map((marker: any, i: any) => <MarkerCard key={i} marker={marker}/>)}
+        {userFirestoreMarkers.map((marker: any, i: any) => <MarkerCard key={i} marker={marker}/>)}
       </ul>
-      {drawnMarkers.length > 0 && <UploadButton/>}
+      {userFirestoreMarkers.length > 0 && <UploadButton/>}
     </div>
   );
 };

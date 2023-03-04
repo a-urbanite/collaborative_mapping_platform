@@ -15,14 +15,14 @@ const FireStoreContextProvider = ({ children }) => {
   const [userFirestoreMarkers, setUserFirestoreMarkers] = useState([]);
 
   //called in Markerlist/Uploadbutton
-  const postDrawnmarkers = async (drawnMarkers) => {
+  const postDrawnmarkers = async () => {
     try {
       let res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/uploadLocations`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(drawnMarkers.map((obj) => convertToGeoJsonStr(obj))),
+        body: JSON.stringify(userFirestoreMarkers.map((obj) => convertToGeoJsonStr(obj))),
       });
       res = await res.json();
       return res;
@@ -36,12 +36,13 @@ const FireStoreContextProvider = ({ children }) => {
     return new Promise(async (resolve, reject) => {
       try {
         let markers;
-        console.log("HOST URL: ", process.env.NEXT_PUBLIC_HOST_URL)
+        // console.log("HOST URL: ", process.env.NEXT_PUBLIC_HOST_URL)
         let res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/locations`);
         markers = await res.json();
-        console.log("SERVERRES FROM MARKERFETCH: ", res)
+        // console.log("SERVERRES FROM MARKERFETCH: ", markers)
         markers.forEach((marker) => {
           marker.geometry.coordinates = deserializeGeoJsonCoords(marker);
+          marker.properties.updatedInCurrentSession = false
         });
         setAllFirestoreMarkers(markers);
         resolve();
@@ -65,6 +66,7 @@ const FireStoreContextProvider = ({ children }) => {
         fetchAllFirestoreMarkers,
         filterUserFirestoreMarkers,
         allFirestoreMarkers,
+        setAllFirestoreMarkers,
         userFirestoreMarkers,
         setUserFirestoreMarkers
       }}

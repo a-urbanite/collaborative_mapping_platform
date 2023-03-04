@@ -7,23 +7,30 @@ import DrawingController from "./DrawingController";
 import { useMapContext } from "../MapContext";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import type { FeatureCollection } from 'geojson';
+import type { FeatureCollection, GeoJsonObject } from 'geojson';
 import EditControlFC from "./EditControlFC";
+import { useFireStoreContext } from "../FireStoreContext";
+// import Geometry
+import { Geometry } from 'geojson';
+import L from "leaflet";
 
-const Map = ({ markers }: any) => {
-  const { setMapRef } = useMapContext();
+
+// interface Feature<G extends Geometry | null = Geometry, P = {}> extends GeoJsonObject {
+//   type: "Feature";
+//   geometry: G;
+//   properties: P;
+// }
+
+
+const Map = () => {
+  const { mapRef, setMapRef } = useMapContext();
+  const { allFirestoreMarkers } = useFireStoreContext();
   const router = useRouter();
-  
-  const [geojson, setGeojson] = useState<FeatureCollection>({
-    type: 'FeatureCollection',
-    features: markers,
-  });
 
-  useEffect(() => {
-    setGeojson(markers)
-  }, [markers])
+  // useEffect(() => {
+  //   console.log("MAPOBJ", mapRef)
+  // }, [mapRef])
   
-
   return (
     <MapContainer
       center={[52.52, 13.405]}
@@ -35,17 +42,19 @@ const Map = ({ markers }: any) => {
         console.log("MAPLOAD")
       }}
     >
-      {/* {router.pathname === "/myPlaces" && markers && (
-            <FeatureGroup >
-              <Marker position={[50.5, 30.5]}>
-                <Popup>Hello world</Popup>
-              </Marker>
-              <GeoJSON data={markers}/>
-              <DrawingController/>
-            </FeatureGroup>
-      )} */}
 
-      {router.pathname === "/home" && markers && <GeoJSON data={markers} />}
+      {router.pathname === "/home" && allFirestoreMarkers && 
+        allFirestoreMarkers.map((marker: any, index: any) => {
+          return (
+            <GeoJSON key={index} data={marker}>
+              <Popup>
+                <h2>{marker.properties.popupContent.title}</h2>
+                <p>{marker.properties.popupContent.title}</p>
+              </Popup>
+            </GeoJSON>
+          )
+        })
+      }
 
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

@@ -18,7 +18,7 @@ export default function Home() {
   return (
     <>
       <div className={styles.homeContainer}>
-        <MapLoader markers={allFirestoreMarkers} />
+        <MapLoader />
       </div>
     </>
   );

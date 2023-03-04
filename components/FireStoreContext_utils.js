@@ -49,15 +49,15 @@ const deserializeGeoJsonCoords = (geoJsonObj) => {
 };
 
 const convertToGeoJsonStr = (obj) => {
-  const geoJsonObj = obj.mapLayerObj.toGeoJSON();
-  geoJsonObj.properties = {
-    id: obj.id,
-    user: obj.user,
-    dateCreated: obj.dateCreated,
-    popupContent: obj.popupContent,
-  };
-  geoJsonObj.geometry.coordinates = serializeGeoJsonCoords(geoJsonObj);
-  const geoJsonStr = JSON.stringify(geoJsonObj);
+  // const geoJsonObj = obj.mapLayerObj.toGeoJSON();
+  // geoJsonObj.properties = {
+  //   id: obj.id,
+  //   user: obj.user,
+  //   dateCreated: obj.dateCreated,
+  //   popupContent: obj.popupContent,
+  // };
+  obj.geometry.coordinates = serializeGeoJsonCoords(obj);
+  const geoJsonStr = JSON.stringify(obj);
   return geoJsonStr;
 };
 

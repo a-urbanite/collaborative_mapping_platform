@@ -43,14 +43,15 @@ const MapContextProvider = ({ children }) => {
     }
   };
 
-  const markerHasComplexGeometry = (marker) => marker.mapLayerObj.hasOwnProperty("_latlngs");
+  const markerHasComplexGeometry = (marker) => marker.properties.mapLayerObj.hasOwnProperty("_latlngs");
 
   const highlightMarker = (currentMarker) => {
-    currentMarker.mapLayerObj.openPopup();
-    if (markerHasComplexGeometry(currentMarker)) {
-      return mapRef.panTo(currentMarker.mapLayerObj.getBounds().getCenter());
-    }
-    mapRef.panTo(currentMarker.mapLayerObj.getLatLng());
+    // console.log("inside highlightmarker: ", currentMarker)
+    // currentMarker.properties.mapLayerObj.openPopup();
+    // if (markerHasComplexGeometry(currentMarker)) {
+    //   return mapRef.panTo(currentMarker.mapLayerObj.getBounds().getCenter());
+    // }
+    // mapRef.panTo(currentMarker.properties.mapLayerObj.getLatLng());
   };
 
   return (

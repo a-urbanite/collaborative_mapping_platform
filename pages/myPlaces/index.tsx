@@ -22,7 +22,7 @@ const MyPlaces = () => {
 
   return (
     <div className={styles.homeContainer}>
-      <MapLoader markers={userFirestoreMarkers}/>
+      <MapLoader/>
       <MarkerList />
     </div>
   )
