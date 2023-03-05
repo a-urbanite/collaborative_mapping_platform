@@ -1,10 +1,10 @@
 import { getDocs } from 'firebase/firestore';
 import type { NextApiRequest, NextApiResponse } from 'next'
-import { dbRef } from '../../firebase-config';
+import { collRef } from '../../firebase-config';
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const resp = await getDocs(dbRef);
+    const resp = await getDocs(collRef);
     const locations: any[] = resp.docs.map((doc) => {
         const feature = doc.data()
         feature.properties.firebaseDocID = doc.id

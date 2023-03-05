@@ -57,10 +57,10 @@ export default function EditControlFC() {
 }; }, userObj: { uid: any; displayName: any; }) => {
 
     //create a new geojson and attach stuff
-    const geo = e.layer.toGeoJSON()
+    const geojson = e.layer.toGeoJSON()
     const uuid = uuidv4()
     e.layer.markerId = uuid
-    geo.properties = {
+    geojson.properties = {
       markerId: uuid,
       user: {
         uid: userObj.uid,
@@ -68,11 +68,11 @@ export default function EditControlFC() {
       },
       dateCreated: Date.now(),
       popupContent: {title: "default title", text: "default text"},
-
+      operationIndicator: "drawn in current session"
     }
 
     //update local state 
-    setUserFirestoreMarkers((oldArray: any) => [...oldArray, geo]);
+    setUserFirestoreMarkers((oldArray: any) => [...oldArray, geojson]);
   }
 
   const editMarker = (e: any) => {
@@ -83,7 +83,7 @@ export default function EditControlFC() {
       const geojson = layer.toGeoJSON()
       geojson.properties = layer.feature.properties
       geojson.properties.dateUpdated = Date.now()
-      geojson.properties.updatedInCurrentSession = true
+      geojson.properties.operationIndicator = "updated in current session"
       return geojson
     })
 

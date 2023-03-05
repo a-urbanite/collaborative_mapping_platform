@@ -15,20 +15,34 @@ const FireStoreContextProvider = ({ children }) => {
   const [userFirestoreMarkers, setUserFirestoreMarkers] = useState([]);
 
   //called in Markerlist/Uploadbutton
-  const postDrawnmarkers = async () => {
-    try {
-      let res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/uploadLocations`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userFirestoreMarkers.map((obj) => convertToGeoJsonStr(obj))),
-      });
-      res = await res.json();
-      return res;
-    } catch (err) {
-      console.error(err);
+  const uploadMarkers = async () => {
+
+    const markersToUpload = userFirestoreMarkers.filter((marker) => marker.properties.operationIndicator !== null)
+    console.log("markersToUpload: ", markersToUpload)
+    if (markersToUpload) {
+      try {
+        let res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/uploadLocations`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(markersToUpload.map((obj) => convertToGeoJsonStr(obj))),
+        });
+        res = await res.json();
+        return res;
+      } catch (err) {
+        console.error(err);
+      }
     }
+    // const newlyDrawnMarkers = userFirestoreMarkers.filter((marker) => marker.properties.operationIndicator === "drawn in current session")
+    // console.log("newlydrawnmarkersarray: ", newlyDrawnMarkers)
+    // if (newlyDrawnMarkers) {
+    // }
+
+    // const editedMarkers = userFirestoreMarkers.filter((marker) => marker.properties.operationIndicator === "updated in current session")
+    // console.log("editedMarkers: ", editedMarkers)
+    // if (editedMarkers) {
+    // }
   };
 
   //called in home
@@ -42,7 +56,7 @@ const FireStoreContextProvider = ({ children }) => {
         // console.log("SERVERRES FROM MARKERFETCH: ", markers)
         markers.forEach((marker) => {
           marker.geometry.coordinates = deserializeGeoJsonCoords(marker);
-          marker.properties.updatedInCurrentSession = false
+          marker.properties.operationIndicator = null
         });
         setAllFirestoreMarkers(markers);
         resolve();
@@ -62,7 +76,7 @@ const FireStoreContextProvider = ({ children }) => {
   return (
     <FireStoreContext.Provider
       value={{
-        postDrawnmarkers,
+        uploadMarkers,
         fetchAllFirestoreMarkers,
         filterUserFirestoreMarkers,
         allFirestoreMarkers,
