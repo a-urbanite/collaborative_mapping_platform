@@ -13,12 +13,14 @@ const FireStoreContext = createContext();
 const FireStoreContextProvider = ({ children }) => {
   const [allFirestoreMarkers, setAllFirestoreMarkers] = useState([]);
   const [userFirestoreMarkers, setUserFirestoreMarkers] = useState([]);
+  const [isUpdated, setisUpdated] = useState(false);
 
   //called in Markerlist/Uploadbutton
   const uploadMarkers = async () => {
-
-    const markersToUpload = userFirestoreMarkers.filter((marker) => marker.properties.operationIndicator !== null)
-    console.log("markersToUpload: ", markersToUpload)
+    const markersToUpload = userFirestoreMarkers.filter(
+      (marker) => marker.properties.operationIndicator !== null
+    );
+    console.log("markersToUpload: ", markersToUpload);
     if (markersToUpload) {
       try {
         let res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/uploadLocations`, {
@@ -34,15 +36,36 @@ const FireStoreContextProvider = ({ children }) => {
         console.error(err);
       }
     }
-    // const newlyDrawnMarkers = userFirestoreMarkers.filter((marker) => marker.properties.operationIndicator === "drawn in current session")
-    // console.log("newlydrawnmarkersarray: ", newlyDrawnMarkers)
-    // if (newlyDrawnMarkers) {
-    // }
+  };
 
-    // const editedMarkers = userFirestoreMarkers.filter((marker) => marker.properties.operationIndicator === "updated in current session")
-    // console.log("editedMarkers: ", editedMarkers)
-    // if (editedMarkers) {
-    // }
+  const deleteMarker = async (currentMarker) => {
+    // console.log("first")
+    // console.log(marker)
+    if (confirm("Delete Marker?")) {
+      await removeFirestoreMarker(currentMarker);
+      setUserFirestoreMarkers(
+        userFirestoreMarkers.filter(
+          (marker) => marker.properties.markerId !== currentMarker.properties.markerId
+        )
+      );
+    }
+  };
+
+  const removeFirestoreMarker = async (marker) => {
+    console.log("MARKER", marker);
+    try {
+      let res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/deleteLocation`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(marker),
+      });
+      res = await res.json();
+      return res;
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   //called in home
@@ -56,7 +79,7 @@ const FireStoreContextProvider = ({ children }) => {
         // console.log("SERVERRES FROM MARKERFETCH: ", markers)
         markers.forEach((marker) => {
           marker.geometry.coordinates = deserializeGeoJsonCoords(marker);
-          marker.properties.operationIndicator = null
+          marker.properties.operationIndicator = null;
         });
         setAllFirestoreMarkers(markers);
         resolve();
@@ -82,7 +105,10 @@ const FireStoreContextProvider = ({ children }) => {
         allFirestoreMarkers,
         setAllFirestoreMarkers,
         userFirestoreMarkers,
-        setUserFirestoreMarkers
+        setUserFirestoreMarkers,
+        isUpdated,
+        setisUpdated,
+        deleteMarker,
       }}
     >
       {children}
