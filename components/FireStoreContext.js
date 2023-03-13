@@ -7,6 +7,8 @@ import {
   deserializeGeoJsonCoords,
   convertToGeoJsonStr,
 } from "./FireStoreContext_utils";
+import { deleteDoc, doc } from "firebase/firestore";
+import { firestore } from "../firebase-config";
 
 const FireStoreContext = createContext();
 
@@ -39,10 +41,12 @@ const FireStoreContextProvider = ({ children }) => {
   };
 
   const deleteMarker = async (currentMarker) => {
-    // console.log("first")
-    // console.log(marker)
     if (confirm("Delete Marker?")) {
-      await removeFirestoreMarker(currentMarker);
+      // await removeFirestoreMarker(currentMarker);
+
+      const docRef = doc(firestore, "markers1", currentMarker.properties.firebaseDocID);
+      await deleteDoc(docRef)
+
       setUserFirestoreMarkers(
         userFirestoreMarkers.filter(
           (marker) => marker.properties.markerId !== currentMarker.properties.markerId
