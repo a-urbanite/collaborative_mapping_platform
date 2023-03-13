@@ -1,11 +1,14 @@
 import React from "react";
 import { useMapContext } from "../../MapContext";
 import { useModalContext } from "../../ModalContext";
+import { useFireStoreContext } from "../../FireStoreContext";
 import styles from "./markerCard.module.scss";
 
 const MarkerCard = ({ marker }: any) => {
-  const { deleteMarker, highlightMarker } = useMapContext();
+  const { highlightMarker } = useMapContext();
   const { openModalWithMarkerPopupContentForm } = useModalContext();
+  const { deleteMarker } = useFireStoreContext();
+
 
   return (
     <li className={styles.listItem}>
@@ -14,7 +17,7 @@ const MarkerCard = ({ marker }: any) => {
         <div className={styles.buttonbar}>
           <button
             className={styles.button}
-            onClick={() => deleteMarker(marker)}
+            onClick={() => deleteMarker(marker) }
           >
             Delete
           </button>

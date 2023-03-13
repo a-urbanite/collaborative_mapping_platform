@@ -10,37 +10,66 @@ import { useEffect } from 'react';
 import { uuidv4 } from '@firebase/util';
 import { useUserContext } from '../UserContext';
 
+// import { useFireStoreContext } from '../FireStoreContext';
+
 // interface Props {
 //   geojson: FeatureCollection;
 //   setGeojson: (geojson: FeatureCollection) => void;
 // }
 
+interface myLayer extends L.Layer{
+  markerId: string
+}
+
 export default function EditControlFC() {
-  const { userFirestoreMarkers, setUserFirestoreMarkers } = useFireStoreContext();
+  const { userFirestoreMarkers, setUserFirestoreMarkers, isUpdated, setisUpdated } = useFireStoreContext();
   const { userObj } = useUserContext();
   const ref = React.useRef<L.FeatureGroup>(null);
 
-  useEffect(() => {
-    console.log("current local state: ", userFirestoreMarkers)
-  }, [userFirestoreMarkers])
-  
+  // useEffect(() => {
+  //   console.log("current local state: ", userFirestoreMarkers)
+  // }, [userFirestoreMarkers])
 
   useEffect(() => {
-    // console.log(userFirestoreMarkers)
-    if (ref.current?.getLayers().length === 0 && userFirestoreMarkers) {
-      L.geoJSON(userFirestoreMarkers).eachLayer((layer) => {
-        if (
-          layer instanceof L.Polyline ||
-          layer instanceof L.Polygon ||
-          layer instanceof L.Marker
-        ) {
-          // console.log("layer on Geojson func: ", layer)
-          layer.bindPopup("popupContent")
+    console.log("RERENDER TRIGGERED")
+    if (ref.current?.getLayers().length === 0 && userFirestoreMarkers && isUpdated === false) {
+      console.log("GEOJSON OPERATION TRIGGERED, isUpdated===", isUpdated)
+      // const arr: any[]= []
+      L.geoJSON(userFirestoreMarkers, {
+        onEachFeature: (feature: any, layer: myLayer ) => {
+          // const updatedGeoJson = feature
+          // updatedGeoJson.mapLayerObj = layer
+          // arr.push(updatedGeoJson)
+          
+          layer.markerId = feature.properties.markerId;
+          layer.bindPopup(feature.properties.popupContent.title)
           ref.current?.addLayer(layer);
         }
-      });
+      })
+      // setisUpdated(true)
+      // setUserFirestoreMarkers(() => [... arr])
+      // setupdatedMarkers(() => [... arr]);
     }
+
   }, [userFirestoreMarkers]);
+  
+
+  // useEffect(() => {
+  //   // console.log(userFirestoreMarkers)
+  //   if (ref.current?.getLayers().length === 0 && userFirestoreMarkers) {
+  //     L.geoJSON(userFirestoreMarkers).eachLayer((layer) => {
+  //       if (
+  //         layer instanceof L.Polyline ||
+  //         layer instanceof L.Polygon ||
+  //         layer instanceof L.Marker
+  //       ) {
+  //         // console.log("layer on Geojson func: ", layer)
+  //         layer.bindPopup("popupContent")
+  //         ref.current?.addLayer(layer);
+  //       }
+  //     });
+  //   }
+  // }, [userFirestoreMarkers]);
 
   const handleChange = (e: any) => {
     // console.log("newly drawn: ",ref.current)
