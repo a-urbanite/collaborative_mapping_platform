@@ -42,10 +42,9 @@ const FireStoreContextProvider = ({ children }) => {
 
   const deleteMarker = async (currentMarker) => {
     if (confirm("Delete Marker?")) {
-      // await removeFirestoreMarker(currentMarker);
 
-      const docRef = doc(firestore, "markers1", currentMarker.properties.firebaseDocID);
-      await deleteDoc(docRef)
+      // await removeFirestoreMarker(currentMarker);
+      await deleteDoc(doc(firestore, "markers1", currentMarker.properties.firebaseDocID))
 
       setUserFirestoreMarkers(
         userFirestoreMarkers.filter(
@@ -55,22 +54,22 @@ const FireStoreContextProvider = ({ children }) => {
     }
   };
 
-  const removeFirestoreMarker = async (marker) => {
-    console.log("MARKER", marker);
-    try {
-      let res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/deleteLocation`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(marker),
-      });
-      res = await res.json();
-      return res;
-    } catch (err) {
-      console.error(err);
-    }
-  };
+  // const removeFirestoreMarker = async (marker) => {
+  //   console.log("MARKER", marker);
+  //   try {
+  //     let res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/deleteLocation`, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify(marker),
+  //     });
+  //     res = await res.json();
+  //     return res;
+  //   } catch (err) {
+  //     console.error(err);
+  //   }
+  // };
 
   //called in home
   const fetchAllFirestoreMarkers = () => {

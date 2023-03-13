@@ -71,15 +71,15 @@ export default function EditControlFC() {
   //   }
   // }, [userFirestoreMarkers]);
 
-  const handleChange = (e: any) => {
-    // console.log("newly drawn: ",ref.current)
-    console.log("current layer", e.layer.toGeoJSON())
-    const geo = ref.current?.toGeoJSON();
-    console.log(geo);
-    if (geo?.type === 'FeatureCollection') {
-      setUserFirestoreMarkers(geo);
-    }
-  };
+  // const handleChange = (e: any) => {
+  //   // console.log("newly drawn: ",ref.current)
+  //   console.log("current layer", e.layer.toGeoJSON())
+  //   const geo = ref.current?.toGeoJSON();
+  //   console.log(geo);
+  //   if (geo?.type === 'FeatureCollection') {
+  //     setUserFirestoreMarkers(geo);
+  //   }
+  // };
 
   const addmarker = (e: { layer: {
     markerId: string; toGeoJSON: () => any; 
@@ -129,22 +129,22 @@ export default function EditControlFC() {
   
   }
 
-  const deleteMarker = (e: any) => {
+  // const deleteMarker = (e: any) => {
 
-    const deletedLayersArr = e.layers.getLayers()
-    const updatedStateArr = userFirestoreMarkers
+  //   const deletedLayersArr = e.layers.getLayers()
+  //   const updatedStateArr = userFirestoreMarkers
 
-    deletedLayersArr.forEach((deletedLayer: any) => {
-      const currentMarkerId = deletedLayer.feature.properties.markerId
-      const index = updatedStateArr.findIndex((marker: any) => marker.properties.markerId === currentMarkerId)
-      if (index != -1) {
-        updatedStateArr.splice(index, 1)
-      }
-    });
+  //   deletedLayersArr.forEach((deletedLayer: any) => {
+  //     const currentMarkerId = deletedLayer.feature.properties.markerId
+  //     const index = updatedStateArr.findIndex((marker: any) => marker.properties.markerId === currentMarkerId)
+  //     if (index != -1) {
+  //       updatedStateArr.splice(index, 1)
+  //     }
+  //   });
 
-    setUserFirestoreMarkers((oldArray: any) => [...updatedStateArr])
+  //   setUserFirestoreMarkers((oldArray: any) => [...updatedStateArr])
 
-  }
+  // }
 
   return (
     <FeatureGroup ref={ref}>
@@ -152,7 +152,11 @@ export default function EditControlFC() {
         position="topright"
         onEdited={(e) => editMarker(e)}
         onCreated={(e) => addmarker(e, userObj)}
-        onDeleted={(e) => deleteMarker(e)}
+        // onDeleted={(e) => deleteMarker(e)}
+        edit={{
+          remove: false,
+          // featureGroup: editableLayers,
+        }}
         draw={{
           rectangle: false,
           circle: false,
