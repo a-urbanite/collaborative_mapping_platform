@@ -25,17 +25,17 @@ const MapContextProvider = ({ children }) => {
   //   setDrawnMarkers((oldArray) => [...oldArray, marker]);
   // };
 
-  const editMarkerPopupContent = (currentMarker, title, text) => {
-    currentMarker.popupContent = { title, text };
+  // const editMarkerPopupContent = (currentMarker, title, text) => {
+  //   currentMarker.popupContent = { title, text };
 
-    const indexOfMarkerToChange = drawnMarkers.findIndex((marker) => marker.id == currentMarker.id);
+  //   const indexOfMarkerToChange = drawnMarkers.findIndex((marker) => marker.id == currentMarker.id);
 
-    const updatedArray = drawnMarkers;
-    updatedArray.splice(indexOfMarkerToChange, 1, currentMarker);
-    setDrawnMarkers(updatedArray);
+  //   const updatedArray = drawnMarkers;
+  //   updatedArray.splice(indexOfMarkerToChange, 1, currentMarker);
+  //   setDrawnMarkers(updatedArray);
 
-    currentMarker.mapLayerObj.bindPopup(`<h4>${title}</h4><p>${text}</p>`).openPopup();
-  };
+  //   currentMarker.mapLayerObj.bindPopup(`<h4>${title}</h4><p>${text}</p>`).openPopup();
+  // };
 
   // const deleteMarker = (currentMarker) => {
   //   if (confirm("Delete Marker?")) {
@@ -60,11 +60,10 @@ const MapContextProvider = ({ children }) => {
   return (
     <MapContext.Provider
       value={{
-        setMapRef,
-        mapRef,
+        // setMapRef, mapRef,
         // addMarker,
         // drawnMarkers,
-        editMarkerPopupContent,
+        // editMarkerPopupContent,
         // deleteMarker,
         highlightMarker,
         // drawnMarkers, setDrawnMarkers,

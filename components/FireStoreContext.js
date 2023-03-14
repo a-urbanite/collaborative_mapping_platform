@@ -16,6 +16,7 @@ const FireStoreContextProvider = ({ children }) => {
   const [allFirestoreMarkers, setAllFirestoreMarkers] = useState([]);
   const [userFirestoreMarkers, setUserFirestoreMarkers] = useState([]);
   const [isUpdated, setisUpdated] = useState(false);
+  // const [mapRef, setMapRef] = useState(null);
 
   //called in Markerlist/Uploadbutton
   const uploadMarkers = async () => {
@@ -53,6 +54,8 @@ const FireStoreContextProvider = ({ children }) => {
       );
     }
   };
+
+
 
   // const removeFirestoreMarker = async (marker) => {
   //   console.log("MARKER", marker);
@@ -112,6 +115,7 @@ const FireStoreContextProvider = ({ children }) => {
         isUpdated,
         setisUpdated,
         deleteMarker,
+        // mapRef, setMapRef
       }}
     >
       {children}

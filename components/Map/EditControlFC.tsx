@@ -22,7 +22,7 @@ interface myLayer extends L.Layer{
 }
 
 export default function EditControlFC() {
-  const { userFirestoreMarkers, setUserFirestoreMarkers, isUpdated, setisUpdated } = useFireStoreContext();
+  const { userFirestoreMarkers, setUserFirestoreMarkers } = useFireStoreContext();
   const { userObj } = useUserContext();
   const ref = React.useRef<L.FeatureGroup>(null);
 
@@ -32,8 +32,8 @@ export default function EditControlFC() {
 
   useEffect(() => {
     console.log("RERENDER TRIGGERED")
-    if (ref.current?.getLayers().length === 0 && userFirestoreMarkers && isUpdated === false) {
-      console.log("GEOJSON OPERATION TRIGGERED, isUpdated===", isUpdated)
+    if (ref.current?.getLayers().length === 0 && userFirestoreMarkers ) {
+      // console.log("GEOJSON OPERATION TRIGGERED, isUpdated===", isUpdated)
       // const arr: any[]= []
       L.geoJSON(userFirestoreMarkers, {
         onEachFeature: (feature: any, layer: myLayer ) => {

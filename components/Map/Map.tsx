@@ -2,34 +2,17 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css";
 import "leaflet-defaulticon-compatibility";
 import styles from "./map.module.scss";
-import { MapContainer, TileLayer, GeoJSON, Popup, FeatureGroup, Marker } from "react-leaflet";
-import DrawingController from "./DrawingController";
+import { MapContainer, TileLayer, GeoJSON, Popup } from "react-leaflet";
 import { useMapContext } from "../MapContext";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import type { FeatureCollection, GeoJsonObject } from 'geojson';
 import EditControlFC from "./EditControlFC";
 import { useFireStoreContext } from "../FireStoreContext";
-// import Geometry
-import { Geometry } from 'geojson';
-import L from "leaflet";
-
-
-// interface Feature<G extends Geometry | null = Geometry, P = {}> extends GeoJsonObject {
-//   type: "Feature";
-//   geometry: G;
-//   properties: P;
-// }
 
 
 const Map = () => {
-  const { mapRef, setMapRef } = useMapContext();
+  const { setMapRef } = useMapContext();
   const { allFirestoreMarkers } = useFireStoreContext();
   const router = useRouter();
-
-  // useEffect(() => {
-  //   console.log("MAPOBJ", mapRef)
-  // }, [mapRef])
   
   return (
     <MapContainer
