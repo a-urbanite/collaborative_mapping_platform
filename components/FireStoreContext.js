@@ -7,8 +7,9 @@ import {
   deserializeGeoJsonCoords,
   convertToGeoJsonStr,
 } from "./FireStoreContext_utils";
-import { deleteDoc, doc } from "firebase/firestore";
+import { deleteDoc, doc, getDocs } from "firebase/firestore";
 import { firestore } from "../firebase-config";
+import { collRef } from "../firebase-config";
 
 const FireStoreContext = createContext();
 
@@ -57,32 +58,15 @@ const FireStoreContextProvider = ({ children }) => {
 
 
 
-  // const removeFirestoreMarker = async (marker) => {
-  //   console.log("MARKER", marker);
-  //   try {
-  //     let res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/deleteLocation`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(marker),
-  //     });
-  //     res = await res.json();
-  //     return res;
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
-
-  //called in home
-  const fetchAllFirestoreMarkers = () => {
+  const getAllMarkers = () => {
     return new Promise(async (resolve, reject) => {
       try {
-        let markers;
-        // console.log("HOST URL: ", process.env.NEXT_PUBLIC_HOST_URL)
-        let res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/locations`);
-        markers = await res.json();
-        // console.log("SERVERRES FROM MARKERFETCH: ", markers)
+        const resp = await getDocs(collRef);
+        let markers = resp.docs.map((doc) => {
+            const feature = doc.data()
+            feature.properties.firebaseDocID = doc.id
+            return feature
+        })
         markers.forEach((marker) => {
           marker.geometry.coordinates = deserializeGeoJsonCoords(marker);
           marker.properties.operationIndicator = null;
@@ -94,7 +78,9 @@ const FireStoreContextProvider = ({ children }) => {
         reject(err);
       }
     });
-  };
+  }
+
+
 
   //called in myPlaces
   const filterUserFirestoreMarkers = (userObj) => {
@@ -106,7 +92,8 @@ const FireStoreContextProvider = ({ children }) => {
     <FireStoreContext.Provider
       value={{
         uploadMarkers,
-        fetchAllFirestoreMarkers,
+        // fetchAllFirestoreMarkers, 
+        getAllMarkers,
         filterUserFirestoreMarkers,
         allFirestoreMarkers,
         setAllFirestoreMarkers,
