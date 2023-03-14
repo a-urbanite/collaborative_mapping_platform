@@ -7,7 +7,7 @@ import {
   deserializeGeoJsonCoords,
   convertToGeoJsonStr,
 } from "./FireStoreContext_utils";
-import { deleteDoc, doc, getDocs } from "firebase/firestore";
+import { deleteDoc, doc, getDocs, addDoc, query, where, updateDoc } from "firebase/firestore";
 import { firestore } from "../firebase-config";
 import { collRef } from "../firebase-config";
 
@@ -16,37 +16,60 @@ const FireStoreContext = createContext();
 const FireStoreContextProvider = ({ children }) => {
   const [allFirestoreMarkers, setAllFirestoreMarkers] = useState([]);
   const [userFirestoreMarkers, setUserFirestoreMarkers] = useState([]);
-  const [isUpdated, setisUpdated] = useState(false);
+  // const [isUpdated, setisUpdated] = useState(false);
   // const [mapRef, setMapRef] = useState(null);
 
-  //called in Markerlist/Uploadbutton
-  const uploadMarkers = async () => {
-    const markersToUpload = userFirestoreMarkers.filter(
-      (marker) => marker.properties.operationIndicator !== null
-    );
-    console.log("markersToUpload: ", markersToUpload);
-    if (markersToUpload) {
-      try {
-        let res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/uploadLocations`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(markersToUpload.map((obj) => convertToGeoJsonStr(obj))),
-        });
-        res = await res.json();
-        return res;
-      } catch (err) {
-        console.error(err);
+  const addMarkersToFirestore = () => {
+    userFirestoreMarkers.forEach( async (marker) => {
+      if (marker.properties.drawnInCurrentSession) {
+        marker.properties.operationIndicator === false
+        const serializedMarker = convertToGeoJsonStr(marker)
+        await addDoc(collRef, serializedMarker);
       }
-    }
+    })
   };
+
+  const updateMarkerAtFirestore = () => {
+    userFirestoreMarkers.forEach( async (marker) => {
+      if (marker.properties.updatedInCurrentSession) {
+        marker.properties.operationIndicator === false
+        const markerId = marker.properties.markerId
+        const q = query(collRef, where('properties.markerId', '==', markerId));
+        const querySnapshot = await getDocs(q)
+        const docRef = querySnapshot.docs[0].ref;
+        const serializedMarker = convertToGeoJsonStr(marker)
+        await updateDoc(docRef, serializedMarker)
+      }
+    })
+  }
+
+  // //called in Markerlist/Uploadbutton
+  // const uploadMarkers = async () => {
+  //   const markersToUpload = userFirestoreMarkers.filter(
+  //     (marker) => marker.properties.operationIndicator !== null
+  //   );
+  //   console.log("markersToUpload: ", markersToUpload);
+  //   if (markersToUpload) {
+  //     try {
+  //       let res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/uploadLocations`, {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify(markersToUpload.map((obj) => convertToGeoJsonStr(obj))),
+  //       });
+  //       res = await res.json();
+  //       return res;
+  //     } catch (err) {
+  //       console.error(err);
+  //     }
+  //   }
+  // };
 
   const deleteMarker = async (currentMarker) => {
     if (confirm("Delete Marker?")) {
-
       // await removeFirestoreMarker(currentMarker);
-      await deleteDoc(doc(firestore, "markers1", currentMarker.properties.firebaseDocID))
+      await deleteDoc(doc(firestore, "markers1", currentMarker.properties.firebaseDocID));
 
       setUserFirestoreMarkers(
         userFirestoreMarkers.filter(
@@ -56,20 +79,18 @@ const FireStoreContextProvider = ({ children }) => {
     }
   };
 
-
-
   const getAllMarkers = () => {
     return new Promise(async (resolve, reject) => {
       try {
         const resp = await getDocs(collRef);
         let markers = resp.docs.map((doc) => {
-            const feature = doc.data()
-            feature.properties.firebaseDocID = doc.id
-            return feature
-        })
+          const feature = doc.data();
+          feature.properties.firebaseDocID = doc.id;
+          return feature;
+        });
         markers.forEach((marker) => {
           marker.geometry.coordinates = deserializeGeoJsonCoords(marker);
-          marker.properties.operationIndicator = null;
+          // marker.properties.operationIndicator = null;
         });
         setAllFirestoreMarkers(markers);
         resolve();
@@ -78,9 +99,7 @@ const FireStoreContextProvider = ({ children }) => {
         reject(err);
       }
     });
-  }
-
-
+  };
 
   //called in myPlaces
   const filterUserFirestoreMarkers = (userObj) => {
@@ -91,18 +110,19 @@ const FireStoreContextProvider = ({ children }) => {
   return (
     <FireStoreContext.Provider
       value={{
-        uploadMarkers,
-        // fetchAllFirestoreMarkers, 
+        // uploadMarkers,
+        // fetchAllFirestoreMarkers,
         getAllMarkers,
         filterUserFirestoreMarkers,
         allFirestoreMarkers,
         setAllFirestoreMarkers,
         userFirestoreMarkers,
         setUserFirestoreMarkers,
-        isUpdated,
-        setisUpdated,
+        // isUpdated, setisUpdated,
         deleteMarker,
-        // mapRef, setMapRef
+        // mapRef, setMapRef,
+        addMarkersToFirestore,
+        updateMarkerAtFirestore
       }}
     >
       {children}

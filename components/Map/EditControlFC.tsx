@@ -97,7 +97,8 @@ export default function EditControlFC() {
       },
       dateCreated: Date.now(),
       popupContent: {title: "default title", text: "default text"},
-      operationIndicator: "drawn in current session"
+      // operationIndicator: "drawn in current session",
+      drawnInCurrentSession: true
     }
 
     //update local state 
@@ -112,7 +113,8 @@ export default function EditControlFC() {
       const geojson = layer.toGeoJSON()
       geojson.properties = layer.feature.properties
       geojson.properties.dateUpdated = Date.now()
-      geojson.properties.operationIndicator = "updated in current session"
+      // geojson.properties.operationIndicator = "updated in current session"
+      geojson.properties.updatedInCurrentSession = true
       return geojson
     })
 

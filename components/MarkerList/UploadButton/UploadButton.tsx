@@ -7,15 +7,17 @@ import { useRouter } from 'next/router';
 
 const UploadButton = () => {
   // const { drawnMarkers } = useMapContext();
-  const { uploadMarkers } = useFireStoreContext();
+  const { uploadMarkers, addMarkersToFirestore, updateMarkerAtFirestore } = useFireStoreContext();
   const { openModalWithSpinner, closeModal } = useModalContext();
 
   const router = useRouter();
 
   const uploadDrawnMarkers = async () => {
     openModalWithSpinner()
-    const response = await uploadMarkers()
-    console.log("response from upload", response)
+    // const response = await uploadMarkers()
+    addMarkersToFirestore()
+    updateMarkerAtFirestore()
+    // console.log("response from upload", response)
     closeModal(1000)
   }
 
