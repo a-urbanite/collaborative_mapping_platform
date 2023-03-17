@@ -38,3 +38,26 @@
   //     console.error(err);
   //   }
   // };
+
+    // //called in Markerlist/Uploadbutton
+  // const uploadMarkers = async () => {
+  //   const markersToUpload = userFirestoreMarkers.filter(
+  //     (marker) => marker.properties.operationIndicator !== null
+  //   );
+  //   console.log("markersToUpload: ", markersToUpload);
+  //   if (markersToUpload) {
+  //     try {
+  //       let res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/uploadLocations`, {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify(markersToUpload.map((obj) => convertToGeoJsonStr(obj))),
+  //       });
+  //       res = await res.json();
+  //       return res;
+  //     } catch (err) {
+  //       console.error(err);
+  //     }
+  //   }
+  // };

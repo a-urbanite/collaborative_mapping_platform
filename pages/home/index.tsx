@@ -5,12 +5,12 @@ import { useFireStoreContext } from "../../components/FireStoreContext";
 import { useModalContext } from "../../components/ModalContext";
 
 export default function Home() {
-  const { fetchAllFirestoreMarkers, allFirestoreMarkers, getAllMarkers } = useFireStoreContext();
+  const { getAllMarkersFromFirestore } = useFireStoreContext();
   const { openModalWithSpinner, openModalWithError, closeModal } = useModalContext();
 
   useEffect(() => {
     openModalWithSpinner("Fetching Markers...");
-    getAllMarkers()
+    getAllMarkersFromFirestore()
       .then(() => closeModal(500))
       .catch(() => openModalWithError());
   }, []);

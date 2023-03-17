@@ -57,8 +57,8 @@ const convertToGeoJsonStr = (obj) => {
   //   popupContent: obj.popupContent,
   // };
   obj.geometry.coordinates = serializeGeoJsonCoords(obj);
-  // const geoJsonStr = JSON.stringify(obj);
-  return obj;
+  const geoJsonStr = JSON.stringify(obj);
+  return geoJsonStr;
 };
 
 export {

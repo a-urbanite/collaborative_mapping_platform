@@ -9,6 +9,7 @@ import { useFireStoreContext } from '../FireStoreContext';
 import { useEffect } from 'react';
 import { uuidv4 } from '@firebase/util';
 import { useUserContext } from '../UserContext';
+import { useMapContext } from '../MapContext';
 
 // import { useFireStoreContext } from '../FireStoreContext';
 
@@ -23,12 +24,13 @@ interface myLayer extends L.Layer{
 
 export default function EditControlFC() {
   const { userFirestoreMarkers, setUserFirestoreMarkers } = useFireStoreContext();
+  // const { addMarker } = useMapContext();
   const { userObj } = useUserContext();
   const ref = React.useRef<L.FeatureGroup>(null);
 
-  // useEffect(() => {
-  //   console.log("current local state: ", userFirestoreMarkers)
-  // }, [userFirestoreMarkers])
+  useEffect(() => {
+    console.log("current local state: ", userFirestoreMarkers)
+  }, [userFirestoreMarkers])
 
   useEffect(() => {
     console.log("RERENDER TRIGGERED")
@@ -81,7 +83,7 @@ export default function EditControlFC() {
   //   }
   // };
 
-  const addmarker = (e: { layer: {
+  const addMarker = (e: { layer: {
     markerId: string; toGeoJSON: () => any; 
 }; }, userObj: { uid: any; displayName: any; }) => {
 
@@ -131,29 +133,13 @@ export default function EditControlFC() {
   
   }
 
-  // const deleteMarker = (e: any) => {
-
-  //   const deletedLayersArr = e.layers.getLayers()
-  //   const updatedStateArr = userFirestoreMarkers
-
-  //   deletedLayersArr.forEach((deletedLayer: any) => {
-  //     const currentMarkerId = deletedLayer.feature.properties.markerId
-  //     const index = updatedStateArr.findIndex((marker: any) => marker.properties.markerId === currentMarkerId)
-  //     if (index != -1) {
-  //       updatedStateArr.splice(index, 1)
-  //     }
-  //   });
-
-  //   setUserFirestoreMarkers((oldArray: any) => [...updatedStateArr])
-
-  // }
 
   return (
     <FeatureGroup ref={ref}>
       <EditControl
         position="topright"
         onEdited={(e) => editMarker(e)}
-        onCreated={(e) => addmarker(e, userObj)}
+        onCreated={(e) => addMarker(e, userObj)}
         // onDeleted={(e) => deleteMarker(e)}
         edit={{
           remove: false,

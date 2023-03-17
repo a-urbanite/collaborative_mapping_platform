@@ -7,7 +7,7 @@ import styles from "./markerCard.module.scss";
 const MarkerCard = ({ marker }: any) => {
   const { highlightMarker } = useMapContext();
   const { openModalWithMarkerPopupContentForm } = useModalContext();
-  const { deleteMarker } = useFireStoreContext();
+  const { deleteMarkerFromFirestore } = useFireStoreContext();
 
 
   return (
@@ -17,7 +17,7 @@ const MarkerCard = ({ marker }: any) => {
         <div className={styles.buttonbar}>
           <button
             className={styles.button}
-            onClick={() => deleteMarker(marker) }
+            onClick={() => deleteMarkerFromFirestore(marker) }
           >
             Delete
           </button>
