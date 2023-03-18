@@ -16,6 +16,7 @@ const FireStoreContext = createContext();
 const FireStoreContextProvider = ({ children }) => {
   const [allFirestoreMarkers, setAllFirestoreMarkers] = useState([]);
   const [userFirestoreMarkers, setUserFirestoreMarkers] = useState([]);
+  const [markersWereUpdated, setmarkersWereUpdated] = useState(false)
 
   const addMarkerToLocalState = async (e, userObj) => {
     const geojson = createGeojsonFromLayer(e.layer, userObj)
@@ -67,6 +68,7 @@ const FireStoreContextProvider = ({ children }) => {
         console.error(err);
       }
     }
+    setmarkersWereUpdated(true);
   };
 
   //called in home
@@ -106,6 +108,7 @@ const FireStoreContextProvider = ({ children }) => {
         setAllFirestoreMarkers,
         userFirestoreMarkers,
         setUserFirestoreMarkers,
+        markersWereUpdated
       }}
     >
       {children}
