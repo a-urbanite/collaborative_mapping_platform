@@ -16,7 +16,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     );
 
     newlyDrawnMarkers.forEach(async (newlyDrawnMarker: any) => {
-      newlyDrawnMarker.properties.operationIndicator === null
+      newlyDrawnMarker.properties.operationIndicator = null
       await addDoc(collRef, newlyDrawnMarker);
     });
 
@@ -26,7 +26,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     );
 
     updatedDrawnMarkers.forEach(async (updatedMarker: any) => {
-      updatedMarker.properties.operationIndicator === null
+      updatedMarker.properties.operationIndicator = null
       // console.log("updateMarker: ", updatedMarker)
       const markerId = updatedMarker.properties.markerId
       // const docRef = doc(db, "markers1", "5yKb6AuJxjXeHodUVEjy");
