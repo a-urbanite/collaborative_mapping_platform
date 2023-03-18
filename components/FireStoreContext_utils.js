@@ -68,7 +68,7 @@ const createGeojsonFromLayer = (layer, userObj) => {
     },
     dateCreated: Date.now(),
     popupContent: {title: "default title", text: "default text"},
-    operationIndicator: "drawn in current session"
+    operationIndicator: "created in current session"
   }
   return geojson
 }
@@ -81,6 +81,13 @@ const createUpdatedGeojsonFromLayer = (layer) => {
   return geojson
 }
 
+const createGeojsonMarkedForDeletionFromLayer = (layer) => {
+  const geojson = layer.toGeoJSON()
+  geojson.properties = layer.feature.properties
+  geojson.properties.operationIndicator = "deleted in current session"
+  return geojson
+}
+
 export {
   serializeNestedArrays,
   deSerializeNestedArrays,
@@ -88,5 +95,6 @@ export {
   deserializeGeoJsonCoords,
   convertToFirestoreCompatibleGeojson,
   createGeojsonFromLayer,
-  createUpdatedGeojsonFromLayer
+  createUpdatedGeojsonFromLayer,
+  createGeojsonMarkedForDeletionFromLayer
 };

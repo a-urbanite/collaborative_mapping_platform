@@ -15,12 +15,12 @@ const MarkerCard = ({ marker }: any) => {
       <div onMouseOver={() => highlightMarker(marker)} className={styles.container}>
         <div className={styles.textbar}>{`Feature: ${marker.popupContent?.title || "unnamed"}`}</div>
         <div className={styles.buttonbar}>
-          <button
+          {/* <button
             className={styles.button}
             onClick={() => deleteMarker(marker) }
           >
             Delete
-          </button>
+          </button> */}
           <button
             className={styles.button}
             onClick={() => openModalWithMarkerPopupContentForm(marker)}

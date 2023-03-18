@@ -7,13 +7,9 @@ import {
   deserializeGeoJsonCoords,
   convertToFirestoreCompatibleGeojson,
   createGeojsonFromLayer,
-  createUpdatedGeojsonFromLayer
+  createUpdatedGeojsonFromLayer,
+  createGeojsonMarkedForDeletionFromLayer
 } from "./FireStoreContext_utils";
-import { deleteDoc, doc } from "firebase/firestore";
-import { collRef, firestore } from "../firebase-config";
-import { uuidv4 } from '@firebase/util';
-import { addDoc, getDoc, getDocs, where, updateDoc, query } from 'firebase/firestore';
-// import { collRef } from '../../firebase-config';
 
 const FireStoreContext = createContext();
 
@@ -21,13 +17,12 @@ const FireStoreContextProvider = ({ children }) => {
   const [allFirestoreMarkers, setAllFirestoreMarkers] = useState([]);
   const [userFirestoreMarkers, setUserFirestoreMarkers] = useState([]);
 
-  const addMarkerToLocalState = async (layer, userObj) => {
-    const geojson = createGeojsonFromLayer(layer, userObj)
-    // await addDoc(collRef, convertToFirestoreCompatibleGeojson(geojson));
+  const addMarkerToLocalState = async (e, userObj) => {
+    const geojson = createGeojsonFromLayer(e.layer, userObj)
     setUserFirestoreMarkers((oldArray) => [...oldArray, geojson]);
   }
 
-  const updateMarkerInLocalState = (e) => {
+  const updateMarkersInLocalState = (e) => {
     const editedLayersArr = e.layers.getLayers().map((layer) => createUpdatedGeojsonFromLayer(layer))
     const updatedStateArr = userFirestoreMarkers
 
@@ -35,42 +30,24 @@ const FireStoreContextProvider = ({ children }) => {
       const i = updatedStateArr.findIndex((marker) => marker.properties.markerId === editedLayer.properties.markerId)
       updatedStateArr.splice(i, 1, editedLayer)
     });
+
     setUserFirestoreMarkers((oldArray) => [...updatedStateArr])
   }
 
-  const deleteMarker = async (currentMarker) => {
-    if (confirm("Delete Marker?")) {
+  const deleteMarkersFromLocalState = (e) => {
+    const deletedLayersArr = e.layers.getLayers().map((layer) => createGeojsonMarkedForDeletionFromLayer(layer))
+    const updatedStateArr = userFirestoreMarkers
 
-      // await removeFirestoreMarker(currentMarker);
-      await deleteDoc(doc(firestore, "markers1", currentMarker.properties.firebaseDocID))
+    deletedLayersArr.forEach((deletedLayer) => {
+      const i = updatedStateArr.findIndex((marker) => marker.properties.markerId === deletedLayer.properties.markerId)
+      updatedStateArr.splice(i, 1, deletedLayer)
+    });
 
-      setUserFirestoreMarkers(
-        userFirestoreMarkers.filter(
-          (marker) => marker.properties.markerId !== currentMarker.properties.markerId
-        )
-      );
-    }
-  };
-
-  // const deleteMarkerFromLocalState = (e: any) => {
-
-  //   const deletedLayersArr = e.layers.getLayers()
-  //   const updatedStateArr = userFirestoreMarkers
-
-  //   deletedLayersArr.forEach((deletedLayer: any) => {
-  //     const currentMarkerId = deletedLayer.feature.properties.markerId
-  //     const index = updatedStateArr.findIndex((marker: any) => marker.properties.markerId === currentMarkerId)
-  //     if (index != -1) {
-  //       updatedStateArr.splice(index, 1)
-  //     }
-  //   });
-
-  //   setUserFirestoreMarkers((oldArray: any) => [...updatedStateArr])
-
-  // }
+    setUserFirestoreMarkers((oldArray) => [...updatedStateArr])
+  }
 
   //called in Markerlist/Uploadbutton
-  const uploadMarkers = async () => {
+  const uploadEditsToFirestore = async () => {
     const markersToUpload = userFirestoreMarkers.filter(
       (marker) => marker.properties.operationIndicator !== null
     );
@@ -91,23 +68,6 @@ const FireStoreContextProvider = ({ children }) => {
       }
     }
   };
-
-  // const removeFirestoreMarker = async (marker) => {
-  //   console.log("MARKER", marker);
-  //   try {
-  //     let res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/deleteLocation`, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify(marker),
-  //     });
-  //     res = await res.json();
-  //     return res;
-  //   } catch (err) {
-  //     console.error(err);
-  //   }
-  // };
 
   //called in home
   const fetchAllFirestoreMarkers = () => {
@@ -137,15 +97,15 @@ const FireStoreContextProvider = ({ children }) => {
     <FireStoreContext.Provider
       value={{
         addMarkerToLocalState,
-        updateMarkerInLocalState,
-        uploadMarkers,
+        updateMarkersInLocalState,
+        deleteMarkersFromLocalState,
+        uploadEditsToFirestore,
         fetchAllFirestoreMarkers,
         filterUserFirestoreMarkers,
         allFirestoreMarkers,
         setAllFirestoreMarkers,
         userFirestoreMarkers,
         setUserFirestoreMarkers,
-        deleteMarker,
       }}
     >
       {children}

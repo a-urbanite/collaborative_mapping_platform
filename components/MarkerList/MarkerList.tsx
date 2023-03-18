@@ -6,25 +6,16 @@ import styles from "./markerList.module.scss"
 import { useFireStoreContext } from "../FireStoreContext";
 
 const MarkerList = () => {
-  const { drawnMarkers, setDrawnMarkers } = useMapContext();
-  const { userFirestoreMarkers, setUserFirestoreMarkers } = useFireStoreContext();
-
-  // useEffect(() => {
-  //   if (userFirestoreMarkers.length > 0) {
-  //     setDrawnMarkers(userFirestoreMarkers)
-  //   }
-  // }, [userFirestoreMarkers])
-
-  // useEffect(() => {
-  //   console.log("markerlist rerender")
-  // }, [])
-  
-  
+  const { userFirestoreMarkers } = useFireStoreContext();
 
   return (
     <div className={styles.container}>
       <ul className={styles.list}>
-        {userFirestoreMarkers.map((marker: any, i: any) => <MarkerCard key={i} marker={marker}/>)}
+        {userFirestoreMarkers.map((marker: any, i: any) => {
+          if (marker.properties.operationIndicator !== "deleted in current session") {
+            return <MarkerCard key={i} marker={marker}/>
+          }
+          })}
       </ul>
       {userFirestoreMarkers.length > 0 && <UploadButton/>}
     </div>
