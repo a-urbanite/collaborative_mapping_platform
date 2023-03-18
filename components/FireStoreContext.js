@@ -19,9 +19,15 @@ const FireStoreContextProvider = ({ children }) => {
   const addMarkersToFirestore = () => {
     userFirestoreMarkers.forEach( async (marker) => {
       if (marker.properties.drawnInCurrentSession) {
-        marker.properties.operationIndicator === false
+        marker.properties.drawnInCurrentSession === false
         marker.geometry.coordinates = serializeGeoJsonCoords(marker);
         await addDoc(collRef, marker);
+
+        // setUserFirestoreMarkers(
+        //   userFirestoreMarkers.filter(
+        //     (marker) => marker.properties.markerId !== currentMarker.properties.markerId
+        //   )
+        // );
       }
     })
   };
@@ -29,7 +35,7 @@ const FireStoreContextProvider = ({ children }) => {
   const updateMarkerAtFirestore = () => {
     userFirestoreMarkers.forEach( async (marker) => {
       if (marker.properties.updatedInCurrentSession) {
-        marker.properties.operationIndicator === false
+        marker.properties.updatedInCurrentSession === false
         const markerId = marker.properties.markerId
         const q = query(collRef, where('properties.markerId', '==', markerId));
         const querySnapshot = await getDocs(q)
@@ -63,7 +69,8 @@ const FireStoreContextProvider = ({ children }) => {
         });
         markers.forEach((marker) => {
           marker.geometry.coordinates = deserializeGeoJsonCoords(marker);
-          // marker.properties.operationIndicator = null;
+          marker.properties.drawnInCurrentSession === false
+          marker.properties.updatedInCurrentSession === false
         });
         setAllFirestoreMarkers(markers);
         resolve();

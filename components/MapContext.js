@@ -26,12 +26,12 @@ const MapContextProvider = ({ children }) => {
   //   setDrawnMarkers((oldArray) => [...oldArray, marker]);
   // };
 
-  const addMarker = (marker, userObj) => {
+  const addMarker = (e, userObj) => {
 
     //create a new geojson and attach stuff
-    const geojson = marker.toGeoJSON()
+    const geojson = e.layer.toGeoJSON()
     const uuid = uuidv4()
-    marker.markerId = uuid
+    e.layer.markerId = uuid
     geojson.properties = {
       markerId: uuid,
       user: {
@@ -96,10 +96,10 @@ const MapContextProvider = ({ children }) => {
   // const markerHasComplexGeometry = (marker) => marker.properties.mapLayerObj.hasOwnProperty("_latlngs");
 
   const highlightMarker = (currentMarker) => {
-    console.log("highlightmarker func")
+    // console.log("highlightmarker func")
     // const markerId = currentMarker.properties.markerId
     if (mapRef) {
-      console.log("inside loop")
+      // console.log("inside loop")
       mapRef.eachLayer(layer => {
         if (layer.markerId === currentMarker.properties.markerId) {
           layer.openPopup()
