@@ -10,6 +10,9 @@ import { useEffect } from 'react';
 import { uuidv4 } from '@firebase/util';
 import { useUserContext } from '../UserContext';
 import { useMapContext } from '../MapContext';
+import { serializeGeoJsonCoords } from '../FireStoreContext_utils';
+import { addDoc, getDocs, query, updateDoc, where } from 'firebase/firestore';
+import { collRef } from '../../firebase-config';
 
 // import { useFireStoreContext } from '../FireStoreContext';
 
@@ -33,24 +36,16 @@ export default function EditControlFC() {
   }, [userFirestoreMarkers])
 
   useEffect(() => {
-    console.log("RERENDER TRIGGERED")
+    console.log("USEFFECT TRIGGERED")
     if (ref.current?.getLayers().length === 0 && userFirestoreMarkers ) {
-      // console.log("GEOJSON OPERATION TRIGGERED, isUpdated===", isUpdated)
-      // const arr: any[]= []
       L.geoJSON(userFirestoreMarkers, {
         onEachFeature: (feature: any, layer: myLayer ) => {
-          // const updatedGeoJson = feature
-          // updatedGeoJson.mapLayerObj = layer
-          // arr.push(updatedGeoJson)
           
           layer.markerId = feature.properties.markerId;
           layer.bindPopup(feature.properties.popupContent.title)
           ref.current?.addLayer(layer);
         }
       })
-      // setisUpdated(true)
-      // setUserFirestoreMarkers(() => [... arr])
-      // setupdatedMarkers(() => [... arr]);
     }
 
   }, [userFirestoreMarkers]);
@@ -74,16 +69,13 @@ export default function EditControlFC() {
   // }, [userFirestoreMarkers]);
 
   // const handleChange = (e: any) => {
-  //   // console.log("newly drawn: ",ref.current)
-  //   console.log("current layer", e.layer.toGeoJSON())
   //   const geo = ref.current?.toGeoJSON();
-  //   console.log(geo);
   //   if (geo?.type === 'FeatureCollection') {
   //     setUserFirestoreMarkers(geo);
   //   }
   // };
 
-  const addMarker = (e: { layer: {
+  const addMarker = async (e: { layer: {
     markerId: string; toGeoJSON: () => any; 
 }; }, userObj: { uid: any; displayName: any; }) => {
 
@@ -100,16 +92,22 @@ export default function EditControlFC() {
       dateCreated: Date.now(),
       popupContent: {title: "default title", text: "default text"},
       // operationIndicator: "drawn in current session",
-      drawnInCurrentSession: true
+      // drawnInCurrentSession: true
     }
 
+    //upload to firestore
+    const markerToUpload = geojson
+    markerToUpload.geometry.coordinates = serializeGeoJsonCoords(geojson);
+    await addDoc(collRef, markerToUpload);
+
     //update local state 
+    console.log("before stat update")
     setUserFirestoreMarkers((oldArray: any) => [...oldArray, geojson]);
   }
 
-  const editMarker = (e: any) => {
+  const editMarker = async (e: any) => {
 
-    //create an array of geojsons reflecting the changed layers
+    //create an array of geojsons containing the edited layers
     const editedLayersArr = e.layers.getLayers().map((layer: any) => {
       // const markerId = layer.feature.properties.markerId
       const geojson = layer.toGeoJSON()
@@ -120,10 +118,21 @@ export default function EditControlFC() {
       return geojson
     })
 
+
+
     // update the userFirestoreMarkers state with the edited layers
     const updatedStateArr = userFirestoreMarkers
 
-    editedLayersArr.forEach((editedLayer: any) => {
+    editedLayersArr.forEach(async (editedLayer: any) => {
+
+      //update the marker at firestore
+      const markerId = editedLayer.properties.markerId
+      const q = query(collRef, where('properties.markerId', '==', markerId));
+      const querySnapshot = await getDocs(q)
+      const docRef = querySnapshot.docs[0].ref;
+      editedLayer.geometry.coordinates = serializeGeoJsonCoords(editedLayer);
+      await updateDoc(docRef, editedLayer)
+
       const currentMarkerId = editedLayer.properties.markerId
       const index = updatedStateArr.findIndex((marker: any) => marker.properties.markerId === currentMarkerId)
       updatedStateArr.splice(index, 1, editedLayer)
