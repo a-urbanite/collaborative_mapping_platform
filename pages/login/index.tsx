@@ -4,7 +4,6 @@ import styles from './login.module.css'
 import { useUserContext } from '../../components/UserContext';
 import { useModalContext } from "../../components/ModalContext";
 import { useFireStoreContext } from "../../components/FireStoreContext";
-import { auth } from "../../firebase-config";
 
 const Login = () => {
   const { defineUserMarkers } = useFireStoreContext();
@@ -19,9 +18,8 @@ const Login = () => {
     event.preventDefault()
     openModalWithSpinner("Logging in...")
     signInWithEmail(logInEmail, logInPassword)
-      .then(() => {
-        console.log(auth.currentUser)
-        defineUserMarkers(auth.currentUser)
+      .then((userObj: any) => {
+        defineUserMarkers(userObj)
         closeModal()
         router.push('/myPlaces')
       })

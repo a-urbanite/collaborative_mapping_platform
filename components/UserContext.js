@@ -1,6 +1,6 @@
 import * as React from "react";
 import { auth } from "../firebase-config";
-import { useState } from "react";
+// import { useState } from "react";
 import {
   signInWithEmailAndPassword,
   signOut,
@@ -11,15 +11,19 @@ import {
 const UserContext = React.createContext();
 
 const UserContextProvider = ({ children }) => {
-  const [isAuth, setisAuth] = useState(false);
+  const [isAuth, setisAuth] = React.useState(false);
 
-  const signInWithEmail = async (logInEmail, logInPassword) => {
-    signInWithEmailAndPassword(auth, logInEmail, logInPassword)
-      .then(() => {
+  const signInWithEmail = (logInEmail, logInPassword) => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        await signInWithEmailAndPassword(auth, logInEmail, logInPassword);
         setisAuth(true);
-        console.log("user logged in");
-      })
-      .catch((err) => console.error(err));
+        resolve(auth.currentUser);
+      } catch (err) {
+        console.error(err);
+        reject(err);
+      }
+    });
   };
 
   const signOutUser = () => {
@@ -50,6 +54,7 @@ const UserContextProvider = ({ children }) => {
     <UserContext.Provider
       value={{
         isAuth,
+        // signInWithEmail, 
         signInWithEmail,
         signOutUser,
         updateUser,
