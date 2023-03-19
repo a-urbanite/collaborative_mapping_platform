@@ -19,8 +19,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         const markerId = marker.properties.markerId
         const q = query(collRef, where('properties.markerId', '==', markerId));
         const querySnapshot = await getDocs(q)
-        const docRef = querySnapshot.docs[0].ref;
-        await updateDoc(docRef, marker)
+        // if it tries to update a marker that doesnt exists it means 
+        // in the frontend it means the layer has been added and edited in the same session
+        try {
+          const docRef = querySnapshot.docs[0].ref;
+          await updateDoc(docRef, marker)
+        } catch (error) {
+          await addDoc(collRef, marker)
+        }
       }
 
       if (marker.properties.operationIndicator === "deleted in current session") {
