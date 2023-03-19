@@ -20,11 +20,13 @@ const Login = () => {
     openModalWithSpinner("Logging in...")
     signInWithEmail(logInEmail, logInPassword)
       .then(() => {
+        console.log(auth.currentUser)
         defineUserMarkers(auth.currentUser)
         closeModal()
         router.push('/myPlaces')
       })
-      .catch(() => {
+      .catch((err: any) => {
+        console.error(err)
         openModalWithError("Unable to connect to Server!")
       })
   }

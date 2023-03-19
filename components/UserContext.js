@@ -39,7 +39,11 @@ const UserContextProvider = ({ children }) => {
   };
 
   const signUpUser = (signupEmail, signupPassword) => {
-    createUserWithEmailAndPassword(auth, signupEmail, signupPassword).catch((e) => handleError(e));
+    createUserWithEmailAndPassword(auth, signupEmail, signupPassword)
+      .then(() => {
+        console.log("user created");
+      })
+      .catch((e) => console.error(e));
   };
 
   return (

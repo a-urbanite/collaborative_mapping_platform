@@ -81,6 +81,7 @@ const FireStoreContextProvider = ({ children }) => {
   }
 
   const defineUserMarkers = (userObj) => {
+    console.log("userObj in defineUsermarkers", userObj)
     const userMarkers = filterUserMarkers(allFirestoreMarkers, userObj)
     setUserFirestoreMarkers(userMarkers)
   }

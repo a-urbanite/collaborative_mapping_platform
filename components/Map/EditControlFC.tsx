@@ -6,6 +6,7 @@ import { EditControl } from "react-leaflet-draw";
 import { useFireStoreContext } from "../FireStoreContext";
 import { useEffect } from "react";
 import { useUserContext } from "../UserContext";
+import { auth } from "../../firebase-config";
 
 interface myLayer extends L.Layer {
   markerId: string;
@@ -18,7 +19,7 @@ export default function EditControlFC() {
     updateMarkersInLocalState,
     deleteMarkersFromLocalState,
   } = useFireStoreContext();
-  const { userObj } = useUserContext();
+  // const { userObj } = useUserContext();
   const ref = React.useRef<L.FeatureGroup>(null);
 
   // useEffect(() => {
@@ -46,7 +47,7 @@ export default function EditControlFC() {
       <EditControl
         position="topright"
         onEdited={(e) => updateMarkersInLocalState(e)}
-        onCreated={(e) => addMarkerToLocalState(e, userObj)}
+        onCreated={(e) => addMarkerToLocalState(e, auth.currentUser)}
         onDeleted={(e) => deleteMarkersFromLocalState(e)}
         draw={{
           rectangle: false,
