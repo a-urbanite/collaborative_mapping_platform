@@ -16,10 +16,8 @@ export default function Home() {
   }, []);
 
   return (
-    <>
-      <div className={styles.homeContainer}>
-        <MapLoader />
-      </div>
-    </>
+    <div className={styles.homeContainer}>
+      <MapLoader />
+    </div>
   );
 }

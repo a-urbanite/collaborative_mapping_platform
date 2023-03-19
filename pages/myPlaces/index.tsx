@@ -1,18 +1,16 @@
 import React from 'react'
-import { useUserContext } from '../../components/UserContext'
 import MapLoader from "../../components/Map/MapLoader";
 import MarkerList from '../../components/MarkerList/MarkerList';
 import styles from './myPlaces.module.scss'
 import { useRouter } from 'next/router';
+import { auth } from "../../firebase-config";
 
 const MyPlaces = () => {
-  const { userObj } = useUserContext();
   const router = useRouter();
 
   React.useEffect(() => {
-    if (!userObj) {
+    if (!auth.currentUser) {
       router.push('/home')
-      return
     }
   }, [])
 

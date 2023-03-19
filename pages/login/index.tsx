@@ -4,22 +4,23 @@ import styles from './login.module.css'
 import { useUserContext } from '../../components/UserContext';
 import { useModalContext } from "../../components/ModalContext";
 import { useFireStoreContext } from "../../components/FireStoreContext";
+import { auth } from "../../firebase-config";
 
 const Login = () => {
   const { defineUserMarkers } = useFireStoreContext();
   const { openModalWithSpinner, openModalWithError, closeModal } = useModalContext();
-  const { signInUser } = useUserContext()
+  const { signInWithEmail } = useUserContext()
   const router = useRouter()
   const [logInEmail, setlogInEmail] = useState<string>("");
   const [logInPassword, setlogInPassword] = useState<string>("");
 
   
-  const signInWithEmail = async(event: React.FormEvent<HTMLFormElement>) => {
+  const signInWithEmailWrapper = async(event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     openModalWithSpinner("Logging in...")
-    signInUser(logInEmail, logInPassword)
-      .then((userObj: any) => {
-        defineUserMarkers(userObj)
+    signInWithEmail(logInEmail, logInPassword)
+      .then(() => {
+        defineUserMarkers(auth.currentUser)
         closeModal()
         router.push('/myPlaces')
       })
@@ -31,7 +32,7 @@ const Login = () => {
   return (
     <div className={styles.loginWrapper}>
       <h1>Sign in</h1>
-      <form className={styles.loginForm} onSubmit={signInWithEmail}>
+      <form className={styles.loginForm} onSubmit={signInWithEmailWrapper}>
         <input 
           className={styles.loginForm__input}
           name='loginMail' 
