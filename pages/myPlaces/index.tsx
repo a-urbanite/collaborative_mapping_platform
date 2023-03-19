@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 
 const MyPlaces = () => {
   const { userObj } = useUserContext();
-  const { filterUserMarkers, setUserFirestoreMarkers, allFirestoreMarkers } = useFireStoreContext();
+  const { defineUserMarkers } = useFireStoreContext();
   const router = useRouter();
 
   useEffect(() => {
@@ -16,8 +16,7 @@ const MyPlaces = () => {
       router.push('/home')
       return
     }
-    const userMarkers = filterUserMarkers(allFirestoreMarkers, userObj)
-    setUserFirestoreMarkers(userMarkers)
+    defineUserMarkers(userObj)
   }, [])
 
   return (

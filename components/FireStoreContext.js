@@ -54,6 +54,37 @@ const FireStoreContextProvider = ({ children }) => {
     setUserFirestoreMarkers((oldArray) => [...updatedStateArr]);
   };
 
+  const fetchAllMarkers = async () => {
+    if (initialFetch || markersUpdated) {
+      fetchMarkersAJAX()
+      .then((markers) => {
+        setmarkersUpdated(false);
+        setinitialFetch(false);
+        setAllFirestoreMarkers(markers);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+    }
+  }
+
+  const uploadEdits = async () => {
+    const markersToUpload = filterMarkersToUpload(userFirestoreMarkers)
+    setmarkersUpdated(true); //cant be in then or it wouldnt trigger before router.push
+    uploadEditsAJAX(markersToUpload)
+      .then((res) => {
+        console.log("server resp: ", res)
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }
+
+  const defineUserMarkers = (userObj) => {
+    const userMarkers = filterUserMarkers(allFirestoreMarkers, userObj)
+    setUserFirestoreMarkers(userMarkers)
+  }
+
   const uploadEditsAJAX = (markersToUpload) => {
     return new Promise(async (resolve, reject) => {
       try {
@@ -106,6 +137,7 @@ const FireStoreContextProvider = ({ children }) => {
         userFirestoreMarkers, setUserFirestoreMarkers,
         markersUpdated, setmarkersUpdated,
         initialFetch, setinitialFetch,
+        fetchAllMarkers, uploadEdits, defineUserMarkers
       }}
     >
       {children}

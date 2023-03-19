@@ -5,35 +5,24 @@ import { useModalContext } from "../../ModalContext";
 import { useRouter } from "next/router";
 
 const UploadButton = () => {
-  const {
-    uploadEditsToFirestore,
-    userFirestoreMarkers,
-    uploadEditsAJAX,
-    setmarkersUpdated,
-    filterMarkersToUpload,
-  } = useFireStoreContext();
+  const { uploadEdits } = useFireStoreContext();
   const { openModalWithSpinner, closeModal, openModalWithError } = useModalContext();
-
   const router = useRouter();
 
-  const uploadEdits = async () => {
+  const uploadEditsWrapper = async () => {
     openModalWithSpinner("Uploading Edits");
-    const markersToUpload = filterMarkersToUpload(userFirestoreMarkers)
-    uploadEditsAJAX(markersToUpload)
-      .then((res: any) => {
-        setmarkersUpdated(true);
-        console.log("response from upload", res);
-        closeModal();
+    uploadEdits()
+      .then(() => {
+        closeModal(500);
         router.push("/home");
       })
-      .catch((err: any) => {
-        console.error(err);
+      .catch(() => {
         openModalWithError();
       });
   };
 
   return (
-    <button className={styles.button} onClick={() => uploadEdits()}>
+    <button className={styles.button} onClick={() => uploadEditsWrapper()}>
       Upload my Edits
     </button>
   );
