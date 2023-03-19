@@ -3,8 +3,10 @@ import { useRouter } from 'next/router';
 import styles from './login.module.css'
 import { useUserContext } from '../../components/UserContext';
 import { useModalContext } from "../../components/ModalContext";
+import { useFireStoreContext } from "../../components/FireStoreContext";
 
 const Login = () => {
+  const { defineUserMarkers } = useFireStoreContext();
   const { openModalWithSpinner, openModalWithError, closeModal } = useModalContext();
   const { signInUser } = useUserContext()
   const router = useRouter()
@@ -14,13 +16,16 @@ const Login = () => {
   
   const signInWithEmail = async(event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    openModalWithSpinner()
+    openModalWithSpinner("Logging in...")
     signInUser(logInEmail, logInPassword)
-      .then(() => {
+      .then((userObj: any) => {
+        defineUserMarkers(userObj)
         closeModal()
         router.push('/myPlaces')
       })
-      .catch(() => openModalWithError("Unable to connect to Server!"))
+      .catch(() => {
+        openModalWithError("Unable to connect to Server!")
+      })
   }
 
   return (

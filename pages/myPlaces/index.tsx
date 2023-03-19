@@ -1,22 +1,19 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { useUserContext } from '../../components/UserContext'
 import MapLoader from "../../components/Map/MapLoader";
 import MarkerList from '../../components/MarkerList/MarkerList';
 import styles from './myPlaces.module.scss'
-import { useFireStoreContext } from "../../components/FireStoreContext";
 import { useRouter } from 'next/router';
 
 const MyPlaces = () => {
   const { userObj } = useUserContext();
-  const { defineUserMarkers } = useFireStoreContext();
   const router = useRouter();
 
-  useEffect(() => {
+  React.useEffect(() => {
     if (!userObj) {
       router.push('/home')
       return
     }
-    defineUserMarkers(userObj)
   }, [])
 
   return (

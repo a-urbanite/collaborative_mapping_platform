@@ -25,7 +25,7 @@ const UserContextProvider = ({ children }) => {
         await signInWithEmailAndPassword(auth, logInEmail, logInPassword);
         setUserObj(auth.currentUser);
         setIsAuth(true);
-        resolve();
+        resolve(auth.currentUser);
       } catch (err) {
         // handleError(err)
         console.error(err);
