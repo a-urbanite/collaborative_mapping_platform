@@ -79,9 +79,7 @@ const FireStoreContextProvider = ({ children }) => {
         let res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/locations`);
         markers = await res.json();
         markers.forEach((marker) => marker.geometry.coordinates = deserializeGeoJsonCoords(marker));
-        setAllFirestoreMarkers(markers);
-        setinitialFetch(false)
-        resolve();
+        resolve(markers);
       } catch (err) {
         console.error(err);
         reject(err);
@@ -109,7 +107,7 @@ const FireStoreContextProvider = ({ children }) => {
         userFirestoreMarkers,
         setUserFirestoreMarkers,
         markersUpdated, setmarkersUpdated,
-        initialFetch
+        initialFetch, setinitialFetch
       }}
     >
       {children}
