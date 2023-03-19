@@ -6,7 +6,7 @@ import { useModalContext } from "../../components/ModalContext";
 
 export default function Home() {
   const {
-    fetchAllFirestoreMarkers,
+    fetchMarkersAJAX,
     setAllFirestoreMarkers,
     markersUpdated,
     setmarkersUpdated,
@@ -17,15 +17,18 @@ export default function Home() {
 
   useEffect(() => {
     if (initialFetch || markersUpdated) {
-      setmarkersUpdated(false);
       openModalWithSpinner("Fetching Markers...");
-      fetchAllFirestoreMarkers()
-        .then((markers: any) => {
-          setAllFirestoreMarkers(markers);
+      fetchMarkersAJAX()
+      .then((markers: any) => {
+        setAllFirestoreMarkers(markers);
+          setmarkersUpdated(false);
           setinitialFetch(false);
           closeModal(500);
         })
-        .catch(() => openModalWithError());
+        .catch((err: any) => {
+          console.error(err);
+          openModalWithError()
+        });
     }
   }, []);
 

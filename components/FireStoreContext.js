@@ -8,7 +8,7 @@ import {
   convertToFirestoreCompatibleGeojson,
   createGeojsonFromLayer,
   createUpdatedGeojsonFromLayer,
-  createGeojsonMarkedForDeletionFromLayer
+  createGeojsonMarkedForDeletionFromLayer,
 } from "./FireStoreContext_utils";
 
 const FireStoreContext = createContext();
@@ -16,98 +16,96 @@ const FireStoreContext = createContext();
 const FireStoreContextProvider = ({ children }) => {
   const [allFirestoreMarkers, setAllFirestoreMarkers] = React.useState([]);
   const [userFirestoreMarkers, setUserFirestoreMarkers] = React.useState([]);
-  const [markersUpdated, setmarkersUpdated] = React.useState(false)
-  const [initialFetch, setinitialFetch] = React.useState(true)
+  const [markersUpdated, setmarkersUpdated] = React.useState(false);
+  const [initialFetch, setinitialFetch] = React.useState(true);
 
   const addMarkerToLocalState = async (e, userObj) => {
-    const geojson = createGeojsonFromLayer(e.layer, userObj)
+    const geojson = createGeojsonFromLayer(e.layer, userObj);
     setUserFirestoreMarkers((oldArray) => [...oldArray, geojson]);
-  }
+  };
 
   const updateMarkersInLocalState = (e) => {
-    const editedLayersArr = e.layers.getLayers().map((layer) => createUpdatedGeojsonFromLayer(layer))
-    const updatedStateArr = userFirestoreMarkers
+    const editedLayersArr = e.layers.getLayers().map((layer) => createUpdatedGeojsonFromLayer(layer));
+    const updatedStateArr = userFirestoreMarkers;
 
     editedLayersArr.forEach((editedLayer) => {
-      const i = updatedStateArr.findIndex((marker) => marker.properties.markerId === editedLayer.properties.markerId)
-      updatedStateArr.splice(i, 1, editedLayer)
+      const i = updatedStateArr.findIndex(
+        (marker) => marker.properties.markerId === editedLayer.properties.markerId
+      );
+      updatedStateArr.splice(i, 1, editedLayer);
     });
 
-    setUserFirestoreMarkers((oldArray) => [...updatedStateArr])
-  }
+    setUserFirestoreMarkers((oldArray) => [...updatedStateArr]);
+  };
 
   const deleteMarkersFromLocalState = (e) => {
-    const deletedLayersArr = e.layers.getLayers().map((layer) => createGeojsonMarkedForDeletionFromLayer(layer))
-    const updatedStateArr = userFirestoreMarkers
+    const deletedLayersArr = e.layers
+      .getLayers()
+      .map((layer) => createGeojsonMarkedForDeletionFromLayer(layer));
+    const updatedStateArr = userFirestoreMarkers;
 
     deletedLayersArr.forEach((deletedLayer) => {
-      const i = updatedStateArr.findIndex((marker) => marker.properties.markerId === deletedLayer.properties.markerId)
-      updatedStateArr.splice(i, 1, deletedLayer)
+      const i = updatedStateArr.findIndex(
+        (marker) => marker.properties.markerId === deletedLayer.properties.markerId
+      );
+      updatedStateArr.splice(i, 1, deletedLayer);
     });
 
-    setUserFirestoreMarkers((oldArray) => [...updatedStateArr])
-  }
+    setUserFirestoreMarkers((oldArray) => [...updatedStateArr]);
+  };
 
-  //called in Markerlist/Uploadbutton
-  const uploadEditsToFirestore = async () => {
-    const markersToUpload = userFirestoreMarkers.filter(
-      (marker) => marker.properties.operationIndicator !== null
-    );
-    if (markersToUpload) {
+  const uploadEditsAJAX = (markersToUpload) => {
+    return new Promise(async (resolve, reject) => {
       try {
-        let res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/uploadLocations`, {
+        let res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/uploadEdits`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify(markersToUpload.map((obj) => JSON.stringify(convertToFirestoreCompatibleGeojson(obj)))),
+          body: JSON.stringify(
+            markersToUpload.map((obj) => JSON.stringify(convertToFirestoreCompatibleGeojson(obj)))
+          ),
         });
         res = await res.json();
-        setmarkersUpdated(true);
-        return res;
+        resolve(res);
       } catch (err) {
-        console.error(err);
-      }
-    }
-  };
-
-  //called in home
-  const fetchAllFirestoreMarkers = () => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        let markers;
-        let res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/locations`);
-        markers = await res.json();
-        markers.forEach((marker) => marker.geometry.coordinates = deserializeGeoJsonCoords(marker));
-        resolve(markers);
-      } catch (err) {
-        console.error(err);
         reject(err);
       }
     });
   };
 
-  //called in myPlaces
-  const filterUserFirestoreMarkers = (userObj) => {
-    const markers = allFirestoreMarkers.filter((marker) => marker.properties.user.uid === userObj.uid);
-    setUserFirestoreMarkers(markers);
+  const fetchMarkersAJAX = () => {
+    return new Promise(async (resolve, reject) => {
+      try {
+        let markers;
+        let res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/locations`);
+        markers = await res.json();
+        markers.forEach((marker) => (marker.geometry.coordinates = deserializeGeoJsonCoords(marker)));
+        resolve(markers);
+      } catch (err) {
+        reject(err);
+      }
+    });
+  };
+
+  const filterMarkersToUpload = (markerArray) => {
+    return markerArray.filter((marker) => marker.properties.operationIndicator !== null);
+  };
+
+  const filterUserMarkers = (markerArray, userObj) => {
+    return markerArray.filter((marker) => marker.properties.user.uid === userObj.uid);
   };
 
   return (
     <FireStoreContext.Provider
       value={{
-        addMarkerToLocalState,
-        updateMarkersInLocalState,
-        deleteMarkersFromLocalState,
-        uploadEditsToFirestore,
-        fetchAllFirestoreMarkers,
-        filterUserFirestoreMarkers,
-        allFirestoreMarkers,
-        setAllFirestoreMarkers,
-        userFirestoreMarkers,
-        setUserFirestoreMarkers,
+        addMarkerToLocalState, updateMarkersInLocalState, deleteMarkersFromLocalState,
+        fetchMarkersAJAX, uploadEditsAJAX,
+        filterUserMarkers, filterMarkersToUpload,
+        allFirestoreMarkers, setAllFirestoreMarkers,
+        userFirestoreMarkers, setUserFirestoreMarkers,
         markersUpdated, setmarkersUpdated,
-        initialFetch, setinitialFetch
+        initialFetch, setinitialFetch,
       }}
     >
       {children}
