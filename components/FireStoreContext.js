@@ -53,7 +53,6 @@ const FireStoreContextProvider = ({ children }) => {
     const markersToUpload = userFirestoreMarkers.filter(
       (marker) => marker.properties.operationIndicator !== null
     );
-    // console.log("markersToUpload: ", markersToUpload);
     if (markersToUpload) {
       try {
         let res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/uploadLocations`, {
@@ -74,7 +73,6 @@ const FireStoreContextProvider = ({ children }) => {
 
   //called in home
   const fetchAllFirestoreMarkers = () => {
-    console.log("fetchAllFirestoreMarkers()")
     return new Promise(async (resolve, reject) => {
       try {
         let markers;

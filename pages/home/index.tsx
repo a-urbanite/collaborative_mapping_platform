@@ -9,14 +9,6 @@ export default function Home() {
   const { openModalWithSpinner, openModalWithError, closeModal } = useModalContext();
 
   useEffect(() => {
-    console.log("markersUpdated: ", markersUpdated)
-  }, [markersUpdated])
-
-  useEffect(() => {
-    console.log("initialFetch: ", initialFetch)
-  }, [initialFetch])
-
-  useEffect(() => {
     if( initialFetch || markersUpdated ) {
       setmarkersUpdated(false)
       openModalWithSpinner("Fetching Markers...");
