@@ -88,6 +88,48 @@ const createGeojsonMarkedForDeletionFromLayer = (layer) => {
   return geojson
 }
 
+const uploadEditsAJAX = (markersToUpload) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/uploadEdits`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(
+          markersToUpload.map((obj) => JSON.stringify(convertToFirestoreCompatibleGeojson(obj)))
+        ),
+      });
+      res = await res.json();
+      resolve(res);
+    } catch (err) {
+      reject(err);
+    }
+  });
+};
+
+const fetchMarkersAJAX = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let markers;
+      let res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/locations`);
+      markers = await res.json();
+      markers.forEach((marker) => (marker.geometry.coordinates = deserializeGeoJsonCoords(marker)));
+      resolve(markers);
+    } catch (err) {
+      reject(err);
+    }
+  });
+};
+
+const filterMarkersToUpload = (markerArray) => {
+  return markerArray.filter((marker) => marker.properties.operationIndicator !== null);
+};
+
+const filterUserMarkers = (markerArray, userObj) => {
+  return markerArray.filter((marker) => marker.properties.user.uid === userObj.uid);
+};
+
 export {
   serializeNestedArrays,
   deSerializeNestedArrays,
@@ -96,5 +138,7 @@ export {
   convertToFirestoreCompatibleGeojson,
   createGeojsonFromLayer,
   createUpdatedGeojsonFromLayer,
-  createGeojsonMarkedForDeletionFromLayer
+  createGeojsonMarkedForDeletionFromLayer,
+  fetchMarkersAJAX, uploadEditsAJAX,
+  filterUserMarkers, filterMarkersToUpload,
 };

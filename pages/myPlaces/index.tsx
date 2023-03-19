@@ -4,14 +4,17 @@ import MarkerList from '../../components/MarkerList/MarkerList';
 import styles from './myPlaces.module.scss'
 import { useRouter } from 'next/router';
 import { auth } from "../../firebase-config";
+import { useFireStoreContext } from '../../components/FireStoreContext';
 
 const MyPlaces = () => {
   const router = useRouter();
+  const { defineUserMarkers } = useFireStoreContext();
 
   React.useEffect(() => {
     if (!auth.currentUser) {
       router.push('/home')
     }
+    defineUserMarkers(auth.currentUser)
   }, [])
 
   return (

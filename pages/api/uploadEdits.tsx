@@ -20,7 +20,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         const q = query(collRef, where('properties.markerId', '==', markerId));
         const querySnapshot = await getDocs(q)
         // if it tries to update a marker that doesnt exists it means 
-        // in the frontend it means the layer has been added and edited in the same session
+        // in the frontend the layer has been added and edited in the same session
         try {
           const docRef = querySnapshot.docs[0].ref;
           await updateDoc(docRef, marker)
@@ -36,7 +36,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     });
 
     res.status(200);
-    res.json({ res: "all good" });
+    res.json({ res: "all Edits uploaded" });
   } catch (err) {
     res.status(500);
     res.json(err);

@@ -19,7 +19,7 @@ const Login = () => {
     openModalWithSpinner("Logging in...")
     signInWithEmail(logInEmail, logInPassword)
       .then((userObj: any) => {
-        defineUserMarkers(userObj)
+        // defineUserMarkers(userObj)
         closeModal()
         router.push('/myPlaces')
       })

@@ -5,7 +5,7 @@ import { useFireStoreContext } from "../../components/FireStoreContext";
 import { useModalContext } from "../../components/ModalContext";
 
 export default function Home() {
-  const { fetchAllMarkers } = useFireStoreContext();
+  const { fetchAllMarkers, initialFetch, markersUpdated } = useFireStoreContext();
   const { openModalWithSpinner, openModalWithError, closeModal } = useModalContext();
 
   useEffect(() => {
