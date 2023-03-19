@@ -5,17 +5,25 @@ import { useFireStoreContext } from "../../components/FireStoreContext";
 import { useModalContext } from "../../components/ModalContext";
 
 export default function Home() {
-  const { fetchAllFirestoreMarkers, allFirestoreMarkers, markersWereUpdated } = useFireStoreContext();
+  const { fetchAllFirestoreMarkers, allFirestoreMarkers, markersUpdated, setmarkersUpdated, initialFetch } = useFireStoreContext();
   const { openModalWithSpinner, openModalWithError, closeModal } = useModalContext();
 
   useEffect(() => {
-    if (allFirestoreMarkers.length > 0 && !markersWereUpdated) {
-      return
+    console.log("markersUpdated: ", markersUpdated)
+  }, [markersUpdated])
+
+  useEffect(() => {
+    console.log("initialFetch: ", initialFetch)
+  }, [initialFetch])
+
+  useEffect(() => {
+    if( initialFetch || markersUpdated ) {
+      setmarkersUpdated(false)
+      openModalWithSpinner("Fetching Markers...");
+      fetchAllFirestoreMarkers()
+        .then(() => closeModal(500))
+        .catch(() => openModalWithError());
     }
-    openModalWithSpinner("Fetching Markers...");
-    fetchAllFirestoreMarkers()
-      .then(() => closeModal(500))
-      .catch(() => openModalWithError());
   }, []);
 
   return (

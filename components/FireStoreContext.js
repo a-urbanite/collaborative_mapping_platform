@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { createContext } from "react";
 import {
   serializeNestedArrays,
@@ -14,9 +14,10 @@ import {
 const FireStoreContext = createContext();
 
 const FireStoreContextProvider = ({ children }) => {
-  const [allFirestoreMarkers, setAllFirestoreMarkers] = useState([]);
-  const [userFirestoreMarkers, setUserFirestoreMarkers] = useState([]);
-  const [markersWereUpdated, setmarkersWereUpdated] = useState(false)
+  const [allFirestoreMarkers, setAllFirestoreMarkers] = React.useState([]);
+  const [userFirestoreMarkers, setUserFirestoreMarkers] = React.useState([]);
+  const [markersUpdated, setmarkersUpdated] = React.useState(false)
+  const [initialFetch, setinitialFetch] = React.useState(true)
 
   const addMarkerToLocalState = async (e, userObj) => {
     const geojson = createGeojsonFromLayer(e.layer, userObj)
@@ -63,12 +64,12 @@ const FireStoreContextProvider = ({ children }) => {
           body: JSON.stringify(markersToUpload.map((obj) => JSON.stringify(convertToFirestoreCompatibleGeojson(obj)))),
         });
         res = await res.json();
+        setmarkersUpdated(true);
         return res;
       } catch (err) {
         console.error(err);
       }
     }
-    setmarkersWereUpdated(true);
   };
 
   //called in home
@@ -81,6 +82,7 @@ const FireStoreContextProvider = ({ children }) => {
         markers = await res.json();
         markers.forEach((marker) => marker.geometry.coordinates = deserializeGeoJsonCoords(marker));
         setAllFirestoreMarkers(markers);
+        setinitialFetch(false)
         resolve();
       } catch (err) {
         console.error(err);
@@ -108,7 +110,8 @@ const FireStoreContextProvider = ({ children }) => {
         setAllFirestoreMarkers,
         userFirestoreMarkers,
         setUserFirestoreMarkers,
-        markersWereUpdated
+        markersUpdated, setmarkersUpdated,
+        initialFetch
       }}
     >
       {children}

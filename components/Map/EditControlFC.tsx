@@ -21,9 +21,9 @@ export default function EditControlFC() {
   const { userObj } = useUserContext();
   const ref = React.useRef<L.FeatureGroup>(null);
 
-  useEffect(() => {
-    console.log("current local state: ", userFirestoreMarkers)
-  }, [userFirestoreMarkers])
+  // useEffect(() => {
+  //   console.log("current local state: ", userFirestoreMarkers)
+  // }, [userFirestoreMarkers])
 
   useEffect(() => {
     if (ref.current?.getLayers().length === 0 && userFirestoreMarkers) {
