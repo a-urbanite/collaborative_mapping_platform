@@ -7,31 +7,36 @@ const MapContextProvider = ({ children }) => {
   const [mapRef, setMapRef] = React.useState(null);
   const { userFirestoreMarkers, setUserFirestoreMarkers, setmarkersUpdated } = useFireStoreContext();
 
-  const editMarkerPopupContent = (currentMarker, title, text) => {
-    // currentMarker.properties.popupContent = { title, text };
-    // console.log("currentmarker: ",currentMarker)
 
-    const i = userFirestoreMarkers.findIndex(
-      (marker) => marker.properties.markerId == currentMarker.properties.markerId
-    );
-    if (i === -1) {
-      console.log("marker not found!");
-      return;
-    }
-    // console.log("indey of marker to change: ", i)
-    const updatedArray = userFirestoreMarkers;
-    updatedArray.splice(i, 1, currentMarker);
-    setUserFirestoreMarkers(updatedArray);
-    setmarkersUpdated(true);
+  // const editMarkerPopupContent = (currentMarker, title, text) => {
+  //   currentMarker.properties.popupContent = { title, text };
+  //   currentMarker.properties.dateUpdated = Date.now()
+  //   currentMarker.properties.operationIndicator = "popup edited in current session"
 
-    // if (mapRef) {
-    //   mapRef.eachLayer((layer) => {
-    //     if (layer.markerId === currentMarker.properties.markerId) {
-    //       layer.bindPopup(generatePopupContent(currentMarker)).openPopup();
-    //     }
-    //   });
-    // }
-  };
+  //   const i = userFirestoreMarkers.findIndex(
+  //     (marker) => marker.properties.markerId == currentMarker.properties.markerId
+  //   );
+  //   if (i === -1) {
+  //     console.log("marker not found!");
+  //     return;
+  //   }
+  //   // console.log("indey of marker to change: ", i)
+  //   const updatedArray = userFirestoreMarkers;
+  //   updatedArray.splice(i, 1, currentMarker);
+  //   setUserFirestoreMarkers(updatedArray);
+  //   setmarkersUpdated(true);
+
+  //   if (mapRef) {
+  //     mapRef.eachLayer((layer) => {
+  //       if (layer.markerId === currentMarker.properties.markerId) {
+  //         layer.openPopup();
+  //       }
+  //     });
+  //   }
+
+  // };
+
+
 
   const highlightMarker = (currentMarker) => {
     if (mapRef) {
@@ -50,7 +55,7 @@ const MapContextProvider = ({ children }) => {
         mapRef,
         // addMarker,
         // drawnMarkers,
-        editMarkerPopupContent,
+        // editMarkerPopupContent,
         // deleteMarker,
         highlightMarker,
         // drawnMarkers, setDrawnMarkers,

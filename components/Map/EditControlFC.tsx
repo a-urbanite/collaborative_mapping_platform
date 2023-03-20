@@ -17,9 +17,11 @@ export default function EditControlFC() {
     addMarkerToLocalState,
     updateMarkersInLocalState,
     deleteMarkersFromLocalState,
-    generatePopupContent
+    generatePopupContent,
   } = useFireStoreContext();
   const ref = React.useRef<L.FeatureGroup>(null);
+
+  const [markerToHighlight, setmarkerToHighlight] = React.useState(null as any);
 
   useEffect(() => {
     if (ref.current?.getLayers().length === 0 && userFirestoreMarkers) {
@@ -30,16 +32,21 @@ export default function EditControlFC() {
               layer.markerId = feature.properties.markerId;
               layer.bindPopup(generatePopupContent(feature));
               ref.current?.addLayer(layer);
-              // if (feature.properties.operationIndicator === "popup edited in current session") {
-              //   console.log("popup was updated, openPopup loop triggered!")
-              //   layer.openPopup()
-              // }
+              if (feature.properties.operationIndicator === "popup edited in current session") {
+                setmarkerToHighlight(layer);
+              }
             },
           });
         }
       });
     }
   }, [userFirestoreMarkers]);
+
+  useEffect(() => {
+    if (markerToHighlight) {
+      markerToHighlight.openPopup();
+    }
+  }, [markerToHighlight]);
 
   return (
     <FeatureGroup ref={ref}>
