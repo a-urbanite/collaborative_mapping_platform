@@ -23,7 +23,7 @@ import L from "leaflet";
 
 
 const Map = () => {
-  const { mapRef, setMapRef } = useMapContext();
+  const { setMapRef } = useMapContext();
   const { allFirestoreMarkers } = useFireStoreContext();
   const router = useRouter();
 

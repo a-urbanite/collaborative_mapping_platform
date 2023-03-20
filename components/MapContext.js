@@ -1,57 +1,43 @@
-import React, { useState, useEffect } from "react";
-import { createContext } from "react";
-// import { v4 as uuidv4 } from "uuid";
+import React from "react";
 import { useFireStoreContext } from "./FireStoreContext";
 
-const MapContext = createContext();
+const MapContext = React.createContext();
 
 const MapContextProvider = ({ children }) => {
-  const [mapRef, setMapRef] = useState(null);
-  // const [drawnMarkers, setDrawnMarkers] = useState([]);
-  // const { userFirestoreMarkers, setUserFirestoreMarkers } = useFireStoreContext();
-  // const router = useRouter();
-
-  // const addMarker = (mapLayerObj, userObj) => {
-  //   const marker = {
-  //     id: uuidv4(),
-  //     mapLayerObj: mapLayerObj,
-  //     user: {
-  //       uid: userObj.uid,
-  //       name: userObj.displayName,
-  //     },
-  //     dateCreated: Date.now(),
-  //     popupContent: {},
-  //   };
-  //   setDrawnMarkers((oldArray) => [...oldArray, marker]);
-  // };
+  const [mapRef, setMapRef] = React.useState(null);
+  const { userFirestoreMarkers, setUserFirestoreMarkers, setmarkersUpdated } = useFireStoreContext();
 
   const editMarkerPopupContent = (currentMarker, title, text) => {
-    currentMarker.popupContent = { title, text };
+    // currentMarker.properties.popupContent = { title, text };
+    // console.log("currentmarker: ",currentMarker)
 
-    const indexOfMarkerToChange = drawnMarkers.findIndex((marker) => marker.id == currentMarker.id);
+    const i = userFirestoreMarkers.findIndex(
+      (marker) => marker.properties.markerId == currentMarker.properties.markerId
+    );
+    if (i === -1) {
+      console.log("marker not found!");
+      return;
+    }
+    // console.log("indey of marker to change: ", i)
+    const updatedArray = userFirestoreMarkers;
+    updatedArray.splice(i, 1, currentMarker);
+    setUserFirestoreMarkers(updatedArray);
+    setmarkersUpdated(true);
 
-    const updatedArray = drawnMarkers;
-    updatedArray.splice(indexOfMarkerToChange, 1, currentMarker);
-    setDrawnMarkers(updatedArray);
-
-    currentMarker.mapLayerObj.bindPopup(`<h4>${title}</h4><p>${text}</p>`).openPopup();
+    // if (mapRef) {
+    //   mapRef.eachLayer((layer) => {
+    //     if (layer.markerId === currentMarker.properties.markerId) {
+    //       layer.bindPopup(generatePopupContent(currentMarker)).openPopup();
+    //     }
+    //   });
+    // }
   };
 
-  // const deleteMarker = (currentMarker) => {
-  //   if (confirm("Delete Marker?")) {
-
-  //     setUserFirestoreMarkers(userFirestoreMarkers.filter((marker) => marker.properties.markerId !== currentMarker.properties.markerId));
-  //   }
-  // };
-
-  // const markerHasComplexGeometry = (marker) => marker.properties.mapLayerObj.hasOwnProperty("_latlngs");
-
   const highlightMarker = (currentMarker) => {
-    // const markerId = currentMarker.properties.markerId
     if (mapRef) {
-      mapRef.eachLayer(layer => {
+      mapRef.eachLayer((layer) => {
         if (layer.markerId === currentMarker.properties.markerId) {
-          layer.openPopup()
+          layer.openPopup();
         }
       });
     }
@@ -68,6 +54,7 @@ const MapContextProvider = ({ children }) => {
         // deleteMarker,
         highlightMarker,
         // drawnMarkers, setDrawnMarkers,
+        // generatePopupContent,
       }}
     >
       {children}

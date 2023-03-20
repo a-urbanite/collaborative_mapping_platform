@@ -14,7 +14,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         await addDoc(collRef, marker);
       }
 
-      if (marker.properties.operationIndicator === "updated in current session") {
+      if (["popup edited in current session", "updated in current session"].includes(marker.properties.operationIndicator)) {
         marker.properties.operationIndicator = null
         const markerId = marker.properties.markerId
         const q = query(collRef, where('properties.markerId', '==', markerId));

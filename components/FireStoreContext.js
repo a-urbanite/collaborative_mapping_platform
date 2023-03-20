@@ -85,6 +85,33 @@ const FireStoreContextProvider = ({ children }) => {
     setUserFirestoreMarkers(userMarkers)
   }
 
+  const generatePopupContent = (marker) => {
+    return `
+        <h2>${marker.properties.popupContent.title}</h2>
+        <p>${marker.properties.popupContent.text}</p>
+      `;
+  };
+
+  const editMarkerPopupContent = (currentMarker, title, text) => {
+    currentMarker.properties.popupContent = { title, text };
+    currentMarker.properties.dateUpdated = Date.now()
+    currentMarker.properties.operationIndicator = "popup edited in current session"
+
+    const i = userFirestoreMarkers.findIndex(
+      (marker) => marker.properties.markerId == currentMarker.properties.markerId
+    );
+    if (i === -1) {
+      console.log("marker not found!");
+      return;
+    }
+    // console.log("indey of marker to change: ", i)
+    const updatedArray = userFirestoreMarkers;
+    updatedArray.splice(i, 1, currentMarker);
+    setUserFirestoreMarkers(updatedArray);
+    setmarkersUpdated(true);
+
+  };
+
   return (
     <FireStoreContext.Provider
       value={{
@@ -93,7 +120,8 @@ const FireStoreContextProvider = ({ children }) => {
         userFirestoreMarkers, setUserFirestoreMarkers,
         markersUpdated, setmarkersUpdated,
         initialFetch, setinitialFetch,
-        fetchAllMarkers, uploadEdits, defineUserMarkers
+        fetchAllMarkers, uploadEdits, defineUserMarkers,
+        editMarkerPopupContent, generatePopupContent
       }}
     >
       {children}

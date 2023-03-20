@@ -5,7 +5,6 @@ import "leaflet-draw/dist/leaflet.draw.css";
 import { EditControl } from "react-leaflet-draw";
 import { useFireStoreContext } from "../FireStoreContext";
 import { useEffect } from "react";
-import { useUserContext } from "../UserContext";
 import { auth } from "../../firebase-config";
 
 interface myLayer extends L.Layer {
@@ -18,13 +17,9 @@ export default function EditControlFC() {
     addMarkerToLocalState,
     updateMarkersInLocalState,
     deleteMarkersFromLocalState,
+    generatePopupContent
   } = useFireStoreContext();
-  // const { userObj } = useUserContext();
   const ref = React.useRef<L.FeatureGroup>(null);
-
-  // useEffect(() => {
-  //   console.log("current local state: ", userFirestoreMarkers)
-  // }, [userFirestoreMarkers])
 
   useEffect(() => {
     if (ref.current?.getLayers().length === 0 && userFirestoreMarkers) {
@@ -33,8 +28,12 @@ export default function EditControlFC() {
           L.geoJSON(marker, {
             onEachFeature: (feature: any, layer: myLayer) => {
               layer.markerId = feature.properties.markerId;
-              layer.bindPopup(feature.properties.popupContent.title);
+              layer.bindPopup(generatePopupContent(feature));
               ref.current?.addLayer(layer);
+              // if (feature.properties.operationIndicator === "popup edited in current session") {
+              //   console.log("popup was updated, openPopup loop triggered!")
+              //   layer.openPopup()
+              // }
             },
           });
         }
