@@ -4,8 +4,10 @@ import {
   createGeojsonFromLayer,
   createUpdatedGeojsonFromLayer,
   createGeojsonMarkedForDeletionFromLayer,
-  fetchMarkersAJAX, uploadEditsAJAX,
-  filterUserMarkers, filterMarkersToUpload,
+  fetchMarkersAJAX,
+  uploadEditsAJAX,
+  filterUserMarkers,
+  filterMarkersToUpload,
 } from "./FireStoreContext_utils";
 
 const FireStoreContext = createContext();
@@ -53,49 +55,56 @@ const FireStoreContextProvider = ({ children }) => {
 
   const fetchAllMarkers = async () => {
     if (initialFetch || markersUpdated) {
-      console.log("fetchAllMarkers()")
+      console.log("fetchAllMarkers()");
       fetchMarkersAJAX()
-      .then((markers) => {
-        setmarkersUpdated(false);
-        setinitialFetch(false);
-        setAllFirestoreMarkers(markers);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
+        .then((markers) => {
+          setmarkersUpdated(false);
+          setinitialFetch(false);
+          setAllFirestoreMarkers(markers);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     }
-  }
+  };
 
   const uploadEdits = async () => {
-    console.log("uploadEdits()")
-    const markersToUpload = filterMarkersToUpload(userFirestoreMarkers)
+    console.log("uploadEdits()");
+    const markersToUpload = filterMarkersToUpload(userFirestoreMarkers);
     setmarkersUpdated(true); //cant be in then or it wouldnt trigger before router.push
     uploadEditsAJAX(markersToUpload)
-    .then((res) => {
-        console.log("server resp: ", res)
+      .then((res) => {
+        console.log("server resp: ", res);
       })
       .catch((err) => {
         console.error(err);
       });
-  }
+  };
 
   const defineUserMarkers = (userObj) => {
-    console.log("defineUserMarkers()")
-    const userMarkers = filterUserMarkers(allFirestoreMarkers, userObj)
-    setUserFirestoreMarkers(userMarkers)
-  }
+    console.log("defineUserMarkers()");
+    const userMarkers = filterUserMarkers(allFirestoreMarkers, userObj);
+    setUserFirestoreMarkers(userMarkers);
+  };
 
   const generatePopupContent = (marker) => {
+    const props = marker.properties
     return `
-        <h2>${marker.properties.popupContent.title}</h2>
-        <p>${marker.properties.popupContent.text}</p>
+        <h2>${props.popupContent.title}</h2>
+        <p>${props.popupContent.text}</p>
+        <div style="display: flex">
+          <p>by: ${props.user.name}</p>
+          <p>@ ${
+            props.dateUpdated ? props.dateUpdated : props.dateCreated
+          }</p>
+        </div>
       `;
   };
 
   const editMarkerPopupContent = (currentMarker, title, text) => {
     currentMarker.properties.popupContent = { title, text };
-    currentMarker.properties.dateUpdated = Date.now()
-    currentMarker.properties.operationIndicator = "popup edited in current session"
+    currentMarker.properties.dateUpdated = Date.now();
+    currentMarker.properties.operationIndicator = "popup edited in current session";
 
     const i = userFirestoreMarkers.findIndex(
       (marker) => marker.properties.markerId == currentMarker.properties.markerId
@@ -109,19 +118,27 @@ const FireStoreContextProvider = ({ children }) => {
     updatedArray.splice(i, 1, currentMarker);
     setUserFirestoreMarkers(updatedArray);
     setmarkersUpdated(true);
-
   };
 
   return (
     <FireStoreContext.Provider
       value={{
-        addMarkerToLocalState, updateMarkersInLocalState, deleteMarkersFromLocalState,
-        allFirestoreMarkers, setAllFirestoreMarkers,
-        userFirestoreMarkers, setUserFirestoreMarkers,
-        markersUpdated, setmarkersUpdated,
-        initialFetch, setinitialFetch,
-        fetchAllMarkers, uploadEdits, defineUserMarkers,
-        editMarkerPopupContent, generatePopupContent
+        addMarkerToLocalState,
+        updateMarkersInLocalState,
+        deleteMarkersFromLocalState,
+        allFirestoreMarkers,
+        setAllFirestoreMarkers,
+        userFirestoreMarkers,
+        setUserFirestoreMarkers,
+        markersUpdated,
+        setmarkersUpdated,
+        initialFetch,
+        setinitialFetch,
+        fetchAllMarkers,
+        uploadEdits,
+        defineUserMarkers,
+        editMarkerPopupContent,
+        generatePopupContent,
       }}
     >
       {children}
