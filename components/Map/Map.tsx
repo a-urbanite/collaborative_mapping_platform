@@ -7,11 +7,37 @@ import { useMapContext } from "../MapContext";
 import { useRouter } from "next/router";
 import EditControlFC from "./EditControlFC";
 import { useFireStoreContext } from "../FireStoreContext";
+import { useEffect } from "react";
+import * as L from "leaflet";
+import MarkerGroup from "./MarkerGroup";
 
 const Map = () => {
-  const { setMapRef } = useMapContext();
-  const { allFirestoreMarkers, generatePopupContent } = useFireStoreContext();
+  const { mapRef,setMapRef } = useMapContext();
   const router = useRouter();
+
+  // useEffect(() => {
+  //   console.log(allFirestoreMarkers)
+  // }, [allFirestoreMarkers])
+
+  // useEffect(() => {
+  //   if (!allFirestoreMarkers) return;
+  //   allFirestoreMarkers.forEach((marker: any) => {
+  //     L.geoJSON(marker, {
+  //       onEachFeature: (feature: any, layer: any) => {
+  //         layer.markerId = feature.properties.markerId;
+  //         layer.bindPopup(generatePopupContent(feature));
+  //         layer.addTo(mapRef)
+  //         // ref.current?.addLayer(layer);
+  //         // if (feature.properties.operationIndicator === "popup edited in current session") {
+  //         //   setmarkerToHighlight(layer);
+  //         // }
+  //       },
+  //     });
+      
+  //   });
+  // }, [allFirestoreMarkers])
+  
+  
   
   return (
     <MapContainer
@@ -25,24 +51,15 @@ const Map = () => {
       }}
     >
 
-      {router.pathname === "/home" && allFirestoreMarkers && 
-        allFirestoreMarkers.map((marker: any, index: any) => {
-          return (
-            <GeoJSON key={index} data={marker}>
-              <Popup>
-                <div dangerouslySetInnerHTML={{ __html: generatePopupContent(marker) }} />
-              </Popup>
-            </GeoJSON>
-          )
-        })
-      }
+      {router.pathname === "/home" && <MarkerGroup/>}
 
+      {router.pathname === "/myPlaces" && <EditControlFC/>}
+      
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
 
-      {router.pathname === "/myPlaces" && <EditControlFC/>}
 
     </MapContainer>
   );

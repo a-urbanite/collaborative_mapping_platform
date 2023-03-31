@@ -5,12 +5,15 @@ import { useFireStoreContext } from "../../FireStoreContext";
 import styles from "./markerCard.module.scss";
 
 const MarkerCard = ({ marker }: any) => {
+  console.log("sdfdsfdsfsdfsdf")
+  console.log("MARKER IN MARKERCARD", marker)
   const { highlightMarker } = useMapContext();
+  const { highlightMarker2 } = useFireStoreContext();
   const { openModalWithMarkerPopupContentForm } = useModalContext();
 
   return (
     <li className={styles.listItem}>
-      <div onMouseOver={() => highlightMarker(marker)} className={styles.container}>
+      <div onMouseOver={() => highlightMarker2(marker)} className={styles.container}>
         <div className={styles.textbar}>{`Feature: ${marker.popupContent?.title || "unnamed"}`}</div>
         <div className={styles.buttonbar}>
           <button

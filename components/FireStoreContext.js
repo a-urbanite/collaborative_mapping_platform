@@ -6,15 +6,17 @@ import {
   createGeojsonMarkedForDeletionFromLayer,
   fetchMarkersAJAX,
   uploadEditsAJAX,
-  filterUserMarkers,
+  // filterUserMarkers,
   filterMarkersToUpload,
 } from "./FireStoreContext_utils";
+// import * as L from "leaflet";
 
 const FireStoreContext = createContext();
 
 const FireStoreContextProvider = ({ children }) => {
-  const [allFirestoreMarkers, setAllFirestoreMarkers] = React.useState([]);
-  const [userFirestoreMarkers, setUserFirestoreMarkers] = React.useState([]);
+  // const [fetchedMarkersArr, setfetchedMarkersArr] = React.useState(new Map())
+  const [allFirestoreMarkers, setAllFirestoreMarkers] = React.useState(new Map());
+  const [userFirestoreMarkers, setUserFirestoreMarkers] = React.useState(new Map());
   const [markersUpdated, setmarkersUpdated] = React.useState(false);
   const [initialFetch, setinitialFetch] = React.useState(true);
 
@@ -60,13 +62,26 @@ const FireStoreContextProvider = ({ children }) => {
         .then((markers) => {
           setmarkersUpdated(false);
           setinitialFetch(false);
-          setAllFirestoreMarkers(markers);
+          const markerMap = new Map();
+
+          markers.forEach(marker => {
+            markerMap.set(marker.properties.markerId, marker)
+          });
+
+          setAllFirestoreMarkers(markerMap);
         })
         .catch((err) => {
           console.error(err);
         });
     }
   };
+
+  const updateMarkerInHashmap = (geojson, layer) => {
+    const key = geojson.properties.markerId
+    const updatedMarker = allFirestoreMarkers.get(key)
+    updatedMarker.mapLayerObj = layer
+    allFirestoreMarkers.set(key, updatedMarker)
+  }
 
   const uploadEdits = async () => {
     console.log("uploadEdits()");
@@ -82,9 +97,18 @@ const FireStoreContextProvider = ({ children }) => {
   };
 
   const defineUserMarkers = (userObj) => {
-    console.log("defineUserMarkers()");
-    const userMarkers = filterUserMarkers(allFirestoreMarkers, userObj);
-    setUserFirestoreMarkers(userMarkers);
+    // console.log("defineUserMarkers()");
+    // console.log("USEROBJ in FUNC", userObj.uid)
+    // const userMarkers = filterUserMarkers(allFirestoreMarkers, userObj);
+
+    const filteredMap = new Map()
+    allFirestoreMarkers.forEach((marker, key) => {
+      if (userObj.uid === marker.properties.user.uid) {
+        filteredMap.set(key, marker)
+      }
+    })
+
+    setUserFirestoreMarkers(filteredMap);
   };
 
   const generatePopupContent = (marker) => {
@@ -113,12 +137,16 @@ const FireStoreContextProvider = ({ children }) => {
       console.log("marker not found!");
       return;
     }
-    // console.log("indey of marker to change: ", i)
     const updatedArray = userFirestoreMarkers;
     updatedArray.splice(i, 1, currentMarker);
     setUserFirestoreMarkers(updatedArray);
     setmarkersUpdated(true);
   };
+
+  const highlightMarker2 = (currentMarker) => {
+    currentMarker.mapLayerObj.openPopup();
+  };
+
 
   return (
     <FireStoreContext.Provider
@@ -139,6 +167,9 @@ const FireStoreContextProvider = ({ children }) => {
         defineUserMarkers,
         editMarkerPopupContent,
         generatePopupContent,
+        // fetchedMarkersArr
+        updateMarkerInHashmap,
+        highlightMarker2
       }}
     >
       {children}

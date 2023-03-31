@@ -126,9 +126,9 @@ const filterMarkersToUpload = (markerArray) => {
   return markerArray.filter((marker) => marker.properties.operationIndicator !== null);
 };
 
-const filterUserMarkers = (markerArray, userObj) => {
-  return markerArray.filter((marker) => marker.properties.user.uid === userObj.uid);
-};
+// const filterUserMarkers = (markerArray, userObj) => {
+//   return markerArray.filter((marker) => marker.properties.user.uid === userObj.uid);
+// };
 
 export {
   serializeNestedArrays,
@@ -140,5 +140,6 @@ export {
   createUpdatedGeojsonFromLayer,
   createGeojsonMarkedForDeletionFromLayer,
   fetchMarkersAJAX, uploadEditsAJAX,
-  filterUserMarkers, filterMarkersToUpload,
+  // filterUserMarkers, 
+  filterMarkersToUpload,
 };

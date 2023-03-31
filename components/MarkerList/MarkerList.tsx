@@ -8,12 +8,25 @@ import { useFireStoreContext } from "../FireStoreContext";
 const MarkerList = () => {
   const { userFirestoreMarkers } = useFireStoreContext();
 
+  useEffect(() => {
+    console.log("usermarkers", userFirestoreMarkers)
+  }, [userFirestoreMarkers])
+  
+  console.log("HERE", Array.from(userFirestoreMarkers, ([name, value]) => ({ name, value })))
+
   return (
     <div className={styles.container}>
       <ul className={styles.list}>
-        {userFirestoreMarkers.map((marker: any, i: any) => {
-          if (marker.properties.operationIndicator !== "deleted in current session") {
-            return <MarkerCard key={i} marker={marker}/>
+        {/* <li>asadsadsad</li> */}
+        {/* Object.values(userFirestoreMarkers).map((marker) */}
+        {Array.from(userFirestoreMarkers, ([name, value]) => ({ name, value })).map((marker: any, index) => {
+          console.log("dsasadsasad", marker.value)
+          if (marker.value.properties.operationIndicator !== "deleted in current session") {
+            console.log("inside loopy loop", marker.value)
+            // console.log("key", key)
+            // return <li key={index}>asadsadsad</li>
+
+            return <MarkerCard key={index} marker={marker.value}/>
           }
           })}
       </ul>

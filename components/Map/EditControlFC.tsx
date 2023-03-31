@@ -18,35 +18,33 @@ export default function EditControlFC() {
     updateMarkersInLocalState,
     deleteMarkersFromLocalState,
     generatePopupContent,
+    updateMarkerInHashmap
   } = useFireStoreContext();
   const ref = React.useRef<L.FeatureGroup>(null);
 
-  const [markerToHighlight, setmarkerToHighlight] = React.useState(null as any);
+  // const [markerToHighlight, setmarkerToHighlight] = React.useState(null as any);
 
   useEffect(() => {
     if (ref.current?.getLayers().length === 0 && userFirestoreMarkers) {
       userFirestoreMarkers.forEach((marker: any) => {
         if (marker.properties.operationIndicator !== "deleted in current session") {
           L.geoJSON(marker, {
-            onEachFeature: (feature: any, layer: myLayer) => {
-              layer.markerId = feature.properties.markerId;
+            onEachFeature: (feature: any, layer: any) => {
               layer.bindPopup(generatePopupContent(feature));
               ref.current?.addLayer(layer);
-              if (feature.properties.operationIndicator === "popup edited in current session") {
-                setmarkerToHighlight(layer);
-              }
+              updateMarkerInHashmap(feature, layer)
             },
-          });
+          }); 
         }
       });
     }
   }, [userFirestoreMarkers]);
 
-  useEffect(() => {
-    if (markerToHighlight) {
-      markerToHighlight.openPopup();
-    }
-  }, [markerToHighlight]);
+  // useEffect(() => {
+  //   if (markerToHighlight) {
+  //     markerToHighlight.openPopup();
+  //   }
+  // }, [markerToHighlight]);
 
   return (
     <FeatureGroup ref={ref}>
