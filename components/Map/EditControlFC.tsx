@@ -30,12 +30,16 @@ export default function EditControlFC() {
             onEachFeature: (feature: any, layer: any) => {
               layer.bindPopup(generatePopupContent(feature));
               ref.current?.addLayer(layer);
-              updateMarkerInHashmap(feature, layer)
+              updateMarkerInHashmap(feature, layer, userFirestoreMarkers)
             },
           }); 
         }
       });
     }
+  }, [userFirestoreMarkers]);
+
+  useEffect(() => {
+    console.log("curent user markers", userFirestoreMarkers)
   }, [userFirestoreMarkers]);
 
   return (

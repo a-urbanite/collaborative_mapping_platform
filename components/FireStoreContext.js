@@ -20,9 +20,26 @@ const FireStoreContextProvider = ({ children }) => {
   const [markersUpdated, setmarkersUpdated] = React.useState(false);
   const [initialFetch, setinitialFetch] = React.useState(true);
 
+  // const updateMap = (k,v) => {
+  //   setMyMap(new Map(myMap.set(k,v)));
+  // }
+
   const addMarkerToLocalState = async (e, userObj) => {
     const geojson = createGeojsonFromLayer(e.layer, userObj);
-    setUserFirestoreMarkers((oldArray) => [...oldArray, geojson]);
+    console.log("GEOJSONOBJ", geojson)
+    // geojson.maplayerObj = e.layer
+    const id = geojson.properties.markerId
+    console.log("ID", id)
+    // const updatedMap = userFirestoreMarkers
+    // updatedMap.set(id, geojson)
+    // console.log("here", updatedMap)
+
+    setUserFirestoreMarkers(new Map(userFirestoreMarkers.set(id, geojson)))
+
+    // const updateMap = (k,v) => {
+    //   setMyMap(new Map(myMap.set(k,v)));
+    // }
+    // setUserFirestoreMarkers((oldArray) => [...oldArray, geojson]);
   };
 
   const updateMarkersInLocalState = (e) => {
@@ -76,11 +93,11 @@ const FireStoreContextProvider = ({ children }) => {
     }
   };
 
-  const updateMarkerInHashmap = (geojson, layer) => {
+  const updateMarkerInHashmap = (geojson, layer, hashmap) => {
     const key = geojson.properties.markerId
-    const updatedMarker = allFirestoreMarkers.get(key)
+    const updatedMarker = hashmap.get(key)
     updatedMarker.mapLayerObj = layer
-    allFirestoreMarkers.set(key, updatedMarker)
+    hashmap.set(key, updatedMarker)
   }
 
   const uploadEdits = async () => {
