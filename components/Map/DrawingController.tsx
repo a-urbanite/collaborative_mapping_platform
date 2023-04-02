@@ -1,13 +1,13 @@
 import { EditControl } from "react-leaflet-draw";
 import "leaflet-draw/dist/leaflet.draw.css";
 // import { FeatureGroup, useMap, useMapEvent } from "react-leaflet";
-import { useMapContext } from "../MapContext";
+// import { useMapContext } from "../MapContext";
 import { useUserContext } from "../UserContext";
 // import { useEffect } from "react";
 // import L from "leaflet";
 
 const DrawingController = () => {
-  const { addMarker, drawnMarkers } = useMapContext();
+  // const { addMarker, drawnMarkers } = useMapContext();
   // const map = useMap()
   const { userObj } = useUserContext();
 
@@ -48,7 +48,7 @@ const DrawingController = () => {
           // console.log(markerGeoJSON)
           // console.log("isAuth in DrawController: ", isAuth)
           // console.log("authObj", auth)
-          addMarker(e.layer, userObj);
+          // addMarker(e.layer, userObj);
           // console.log(map)
         }}
         onMounted={() => {

@@ -1,5 +1,5 @@
 import React from "react";
-import { useMapContext } from "../../MapContext";
+// import { useMapContext } from "../../MapContext";
 import { useModalContext } from "../../ModalContext";
 import { useFireStoreContext } from "../../FireStoreContext";
 import styles from "./markerCard.module.scss";
@@ -7,7 +7,7 @@ import styles from "./markerCard.module.scss";
 const MarkerCard = ({ marker }: any) => {
   console.log("sdfdsfdsfsdfsdf")
   console.log("MARKER IN MARKERCARD", marker)
-  const { highlightMarker } = useMapContext();
+  // const { highlightMarker } = useMapContext();
   const { highlightMarker2 } = useFireStoreContext();
   const { openModalWithMarkerPopupContentForm } = useModalContext();
 
