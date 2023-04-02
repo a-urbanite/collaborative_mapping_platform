@@ -22,8 +22,6 @@ export default function EditControlFC() {
   } = useFireStoreContext();
   const ref = React.useRef<L.FeatureGroup>(null);
 
-  // const [markerToHighlight, setmarkerToHighlight] = React.useState(null as any);
-
   useEffect(() => {
     if (ref.current?.getLayers().length === 0 && userFirestoreMarkers) {
       userFirestoreMarkers.forEach((marker: any) => {
@@ -39,12 +37,6 @@ export default function EditControlFC() {
       });
     }
   }, [userFirestoreMarkers]);
-
-  // useEffect(() => {
-  //   if (markerToHighlight) {
-  //     markerToHighlight.openPopup();
-  //   }
-  // }, [markerToHighlight]);
 
   return (
     <FeatureGroup ref={ref}>
