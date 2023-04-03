@@ -122,8 +122,15 @@ const fetchMarkersAJAX = () => {
   });
 };
 
-const filterMarkersToUpload = (markerArray) => {
-  return markerArray.filter((marker) => marker.properties.operationIndicator !== null);
+const filterMarkersToUpload = (markerMap) => {
+  const markersToUploadArr = [];
+  markerMap.forEach((value, key) => {
+    if (value.properties.operationIndicator !== null) {
+      delete value.mapLayerObj;
+      markersToUploadArr.push(value);
+    }
+  });
+  return markersToUploadArr
 };
 
 // const filterUserMarkers = (markerArray, userObj) => {
