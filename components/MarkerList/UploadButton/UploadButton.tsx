@@ -16,7 +16,8 @@ const UploadButton = () => {
         closeModal(500);
         router.push("/home");
       })
-      .catch(() => {
+      .catch((e: any) => {
+        console.error(e)
         openModalWithError();
       });
   };

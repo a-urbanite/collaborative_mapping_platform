@@ -20,10 +20,7 @@ const FireStoreContextProvider = ({ children }) => {
   const [markersUpdated, setmarkersUpdated] = React.useState(false);
   const [initialFetch, setinitialFetch] = React.useState(true);
 
-  // const updateMap = (k,v) => {
-  //   setMyMap(new Map(myMap.set(k,v)));
-  // }
-
+// marker edit operations, could be merged into one?
   const addMarkerToLocalState = async (e, userObj) => {
     const geojson = createGeojsonFromLayer(e.layer, userObj);
     const id = geojson.properties.markerId
@@ -84,6 +81,40 @@ const FireStoreContextProvider = ({ children }) => {
     // setUserFirestoreMarkers((oldArray) => [...updatedStateArr]);
   };
 
+  const editMarkerPopupContent = (currentMarker, title, text) => {
+    
+    
+    const updatedMap = userFirestoreMarkers
+    
+    const key = currentMarker.properties.markerId
+    
+    const updatedGeojson = currentMarker
+    updatedGeojson.properties.popupContent = { title, text };
+    updatedGeojson.properties.dateUpdated = Date.now();
+    updatedGeojson.properties.operationIndicator = "popup edited in current session";
+    // const updatedGeojson = createUpdatedGeojsonFromLayer(updatedLayer)
+    updatedMap.set(key, updatedGeojson)
+
+    // e.layers.getLayers().forEach((updatedLayer) => {
+      // console.log("updatedLayer", updatedLayer)
+    // });
+
+    setUserFirestoreMarkers(new Map(updatedMap))
+
+    // const i = userFirestoreMarkers.findIndex(
+    //   (marker) => marker.properties.markerId == currentMarker.properties.markerId
+    // );
+    // if (i === -1) {
+    //   console.log("marker not found!");
+    //   return;
+    // }
+    // const updatedArray = userFirestoreMarkers;
+    // updatedArray.splice(i, 1, currentMarker);
+    // setUserFirestoreMarkers(updatedArray);
+    // setmarkersUpdated(true);
+  };
+//merger end
+
   const fetchAllMarkers = async () => {
     if (initialFetch || markersUpdated) {
       console.log("fetchAllMarkers()");
@@ -112,11 +143,44 @@ const FireStoreContextProvider = ({ children }) => {
     hashmap.set(key, updatedMarker)
   }
 
+  // const filterMap = (m) {
+  //   new Map([...m].filter(([k, v])=>k!=='a'))
+
+  // }
+
+  // function filter(map, pred) {
+  //   const result = new Map();
+  //   for (let [k, v] of map) {
+  //     if (pred(k,v)) {
+  //       result.set(k, v);
+  //     }
+  //   }
+  //   return result;
+  // }
+
   const uploadEdits = async () => {
     console.log("uploadEdits()");
-    const markersToUpload = filterMarkersToUpload(userFirestoreMarkers);
+
+    // const filteredMap = new Map()
+    // allFirestoreMarkers.forEach((marker, key) => {
+    //   if (marker.properties.operationIndicator !== null) {
+    //     filteredMap.set(key, marker)
+    //   }
+    // })
+
+    const markersToUploadArr = []
+    userFirestoreMarkers.forEach((value, key) => {
+      if (value.properties.operationIndicator !== null) {
+        delete value.mapLayerObj
+        markersToUploadArr.push(value)
+      }
+    })
+    // .filter(([k, v])=>v.properties.operationIndicator !== null)
+
+    console.log("asdsadsadas", markersToUploadArr);
+    // const markersToUpload = filterMarkersToUpload(userFirestoreMarkers);
     setmarkersUpdated(true); //cant be in then or it wouldnt trigger before router.push
-    uploadEditsAJAX(markersToUpload)
+    uploadEditsAJAX(markersToUploadArr)
       .then((res) => {
         console.log("server resp: ", res);
       })
@@ -154,38 +218,7 @@ const FireStoreContextProvider = ({ children }) => {
       `;
   };
 
-  const editMarkerPopupContent = (currentMarker, title, text) => {
-    
-    
-    const updatedMap = userFirestoreMarkers
-    
-    const key = currentMarker.properties.markerId
-    
-    const updatedGeojson = currentMarker
-    updatedGeojson.properties.popupContent = { title, text };
-    updatedGeojson.properties.dateUpdated = Date.now();
-    updatedGeojson.properties.operationIndicator = "popup edited in current session";
-    // const updatedGeojson = createUpdatedGeojsonFromLayer(updatedLayer)
-    updatedMap.set(key, updatedGeojson)
-
-    // e.layers.getLayers().forEach((updatedLayer) => {
-      // console.log("updatedLayer", updatedLayer)
-    // });
-
-    setUserFirestoreMarkers(new Map(updatedMap))
-
-    // const i = userFirestoreMarkers.findIndex(
-    //   (marker) => marker.properties.markerId == currentMarker.properties.markerId
-    // );
-    // if (i === -1) {
-    //   console.log("marker not found!");
-    //   return;
-    // }
-    // const updatedArray = userFirestoreMarkers;
-    // updatedArray.splice(i, 1, currentMarker);
-    // setUserFirestoreMarkers(updatedArray);
-    // setmarkersUpdated(true);
-  };
+ 
 
   // const highlightMarker2 = (currentMarker) => {
   //   currentMarker.mapLayerObj.openPopup();
