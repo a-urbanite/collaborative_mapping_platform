@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useModalContext } from "../../ModalContext";
-import { useMapContext } from "../../MapContext";
+// import { useMapContext } from "../../MapContext";
 import { useFireStoreContext } from "../../FireStoreContext";
 import styles from "./popupContentForm.module.scss";
 
