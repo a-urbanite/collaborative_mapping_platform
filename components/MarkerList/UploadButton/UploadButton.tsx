@@ -1,30 +1,32 @@
-import React from 'react'
-import styles from './uploadButton.module.scss'
-import { useMapContext } from '../../MapContext'
+import React from "react";
+import styles from "./uploadButton.module.scss";
 import { useFireStoreContext } from "../../FireStoreContext";
-import { useModalContext } from '../../ModalContext';
-import { useRouter } from 'next/router';
+import { useModalContext } from "../../ModalContext";
+import { useRouter } from "next/router";
 
 const UploadButton = () => {
-  // const { drawnMarkers } = useMapContext();
-  const { uploadMarkers, addMarkersToFirestore, updateMarkerAtFirestore, getAllMarkersFromFirestore } = useFireStoreContext();
-  const { openModalWithSpinner, closeModal } = useModalContext();
-
+  const { uploadEdits } = useFireStoreContext();
+  const { openModalWithSpinner, closeModal, openModalWithError } = useModalContext();
   const router = useRouter();
 
-  const uploadDrawnMarkers = async () => {
-    openModalWithSpinner()
-    // const response = await uploadMarkers()
-    addMarkersToFirestore()
-    updateMarkerAtFirestore()
-    // console.log("response from upload", response)
-    // getAllMarkersFromFirestore()
-    closeModal(1000)
-  }
+  const uploadEditsWrapper = async () => {
+    openModalWithSpinner("Uploading Edits");
+    uploadEdits()
+      .then(() => {
+        closeModal(500);
+        router.push("/home");
+      })
+      .catch((e: any) => {
+        console.error(e)
+        openModalWithError();
+      });
+  };
 
   return (
-    <button className={styles.button} onClick={() => uploadDrawnMarkers()}>Upload my Places</button>
-  )
-}
+    <button className={styles.button} onClick={() => uploadEditsWrapper()}>
+      Upload my Edits
+    </button>
+  );
+};
 
-export default UploadButton
+export default UploadButton;

@@ -1,29 +1,30 @@
-import React, { useEffect, useState } from 'react'
-import { useUserContext } from '../../components/UserContext'
+import React from 'react'
 import MapLoader from "../../components/Map/MapLoader";
 import MarkerList from '../../components/MarkerList/MarkerList';
+import UploadButton from '../../components/MarkerList/UploadButton/UploadButton';
 import styles from './myPlaces.module.scss'
-import { useFireStoreContext } from "../../components/FireStoreContext";
 import { useRouter } from 'next/router';
+import { auth } from "../../firebase-config";
+import { useFireStoreContext } from '../../components/FireStoreContext';
 
 const MyPlaces = () => {
-  const { userObj } = useUserContext();
-  const { filterUserFirestoreMarkers, userFirestoreMarkers } = useFireStoreContext();
   const router = useRouter();
+  const { defineUserMarkers } = useFireStoreContext();
 
-  useEffect(() => {
-    // console.log("user markers: ", userFirestoreMarkers)
-    if (!userObj) {
+  React.useEffect(() => {
+    if (!auth.currentUser) {
       router.push('/home')
-      return
     }
-    filterUserFirestoreMarkers(userObj)
+    defineUserMarkers(auth.currentUser)
   }, [])
 
   return (
     <div className={styles.homeContainer}>
       <MapLoader/>
-      <MarkerList />
+      <div className={styles.sidebar}>
+        <MarkerList />
+        <UploadButton/>
+      </div>
     </div>
   )
 }

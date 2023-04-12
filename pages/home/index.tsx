@@ -5,21 +5,19 @@ import { useFireStoreContext } from "../../components/FireStoreContext";
 import { useModalContext } from "../../components/ModalContext";
 
 export default function Home() {
-  const { getAllMarkersFromFirestore } = useFireStoreContext();
+  const { fetchAllMarkers, initialFetch, markersUpdated } = useFireStoreContext();
   const { openModalWithSpinner, openModalWithError, closeModal } = useModalContext();
 
   useEffect(() => {
     openModalWithSpinner("Fetching Markers...");
-    getAllMarkersFromFirestore()
-      .then(() => closeModal(500))
-      .catch(() => openModalWithError());
+    fetchAllMarkers()
+      .then(() => closeModal())
+      .catch(() => openModalWithError())
   }, []);
 
   return (
-    <>
-      <div className={styles.homeContainer}>
-        <MapLoader />
-      </div>
-    </>
+    <div className={styles.homeContainer}>
+      <MapLoader />
+    </div>
   );
 }

@@ -1,3 +1,5 @@
+import { uuidv4 } from '@firebase/util';
+
 const serializeNestedArrays = (arrayOfArrays) => {
   // takes [[1,2,3],[4,5,6],[7,8,9]] returns {0:[1,2,3],1:[4,5,6],2:[7,8,9]}
   let obj = arrayOfArrays.reduce((acc, curr, index) => {
@@ -48,23 +50,112 @@ const deserializeGeoJsonCoords = (geoJsonObj) => {
   return deserializedCoordsObj;
 };
 
-const convertToGeoJsonStr = (obj) => {
-  // const geoJsonObj = obj.mapLayerObj.toGeoJSON();
-  // geoJsonObj.properties = {
-  //   id: obj.id,
-  //   user: obj.user,
-  //   dateCreated: obj.dateCreated,
-  //   popupContent: obj.popupContent,
-  // };
+const convertToFirestoreCompatibleGeojson = (obj) => {
+  const geoJsonStr = obj
   obj.geometry.coordinates = serializeGeoJsonCoords(obj);
-  const geoJsonStr = JSON.stringify(obj);
   return geoJsonStr;
 };
+
+const createNewGeojsonFromLayer = (layer, userObj) => {
+  const geojson = layer.toGeoJSON()
+  const uuid = uuidv4()
+  layer.markerId = uuid
+  geojson.properties = {
+    markerId: uuid,
+    user: {
+      uid: userObj.uid,
+      name: userObj.displayName,
+    },
+    dateCreated: Date.now(),
+    popupContent: {title: "default title", text: "default text"},
+    operationIndicator: "created in current session"
+  }
+  return geojson
+}
+
+const createUpdatedGeojsonFromLayer = (layer) => {
+  const geojson = layer.toGeoJSON()
+  geojson.properties = layer.feature.properties
+  geojson.properties.dateUpdated = Date.now()
+  geojson.properties.operationIndicator = "updated in current session"
+  return geojson
+}
+
+const createGeojsonMarkedForDeletionFromLayer = (layer) => {
+  const geojson = layer.toGeoJSON()
+  geojson.properties = layer.feature.properties
+  geojson.properties.operationIndicator = "deleted in current session"
+  return geojson
+}
+
+const createGeojsonWithUpdatedPopup = (currentMarker, popupContent) => {
+  const updatedGeojson = currentMarker;
+  updatedGeojson.properties.popupContent = popupContent;
+  updatedGeojson.properties.dateUpdated = Date.now();
+  updatedGeojson.properties.operationIndicator = "popup edited in current session";
+  return updatedGeojson
+}
+
+const uploadEditsAJAX = (markersToUpload) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/uploadEdits`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(
+          markersToUpload.map((obj) => JSON.stringify(convertToFirestoreCompatibleGeojson(obj)))
+        ),
+      });
+      res = await res.json();
+      resolve(res);
+    } catch (err) {
+      reject(err);
+    }
+  });
+};
+
+const fetchMarkersAJAX = () => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      let markers;
+      let res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/locations`);
+      markers = await res.json();
+      markers.forEach((marker) => (marker.geometry.coordinates = deserializeGeoJsonCoords(marker)));
+      resolve(markers);
+    } catch (err) {
+      reject(err);
+    }
+  });
+};
+
+const filterMarkersToUpload = (markerMap) => {
+  const markersToUploadArr = [];
+  markerMap.forEach((value, key) => {
+    if (value.properties.operationIndicator !== null) {
+      delete value.mapLayerObj;
+      markersToUploadArr.push(value);
+    }
+  });
+  return markersToUploadArr
+};
+
+// const filterUserMarkers = (markerArray, userObj) => {
+//   return markerArray.filter((marker) => marker.properties.user.uid === userObj.uid);
+// };
 
 export {
   serializeNestedArrays,
   deSerializeNestedArrays,
   serializeGeoJsonCoords,
   deserializeGeoJsonCoords,
-  convertToGeoJsonStr,
+  convertToFirestoreCompatibleGeojson,
+  createNewGeojsonFromLayer,
+  createUpdatedGeojsonFromLayer,
+  createGeojsonMarkedForDeletionFromLayer,
+  createGeojsonWithUpdatedPopup,
+  fetchMarkersAJAX, uploadEditsAJAX,
+  // filterUserMarkers, 
+  filterMarkersToUpload,
 };

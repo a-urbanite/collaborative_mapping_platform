@@ -1,6 +1,6 @@
 import * as React from "react";
 import { auth } from "../firebase-config";
-import { useState } from "react";
+// import { useState } from "react";
 import {
   signInWithEmailAndPassword,
   signOut,
@@ -11,23 +11,15 @@ import {
 const UserContext = React.createContext();
 
 const UserContextProvider = ({ children }) => {
-  const [isAuth, setIsAuth] = useState(false);
-  const [userObj, setUserObj] = useState(null);
+  const [isAuth, setisAuth] = React.useState(false);
 
-  const handleError = (e) => {
-    console.error(e);
-    throw new Error();
-  };
-
-  const signInUser = (logInEmail, logInPassword) => {
+  const signInWithEmail = (logInEmail, logInPassword) => {
     return new Promise(async (resolve, reject) => {
       try {
         await signInWithEmailAndPassword(auth, logInEmail, logInPassword);
-        setUserObj(auth.currentUser);
-        setIsAuth(true);
-        resolve();
+        setisAuth(true);
+        resolve(auth.currentUser);
       } catch (err) {
-        // handleError(err)
         console.error(err);
         reject(err);
       }
@@ -36,25 +28,39 @@ const UserContextProvider = ({ children }) => {
 
   const signOutUser = () => {
     signOut(auth)
-      .catch((e) => handleError(e))
       .then(() => {
-        setUserObj(null);
-        setIsAuth(false);
-      });
+        setisAuth(false);
+      })
+      .catch((e) => console.error(e));
   };
 
   const updateUser = async (name, email) => {
     updateProfile(auth.currentUser, { displayName: name, photoURL: "" })
-      .then(() => setUserObj(auth.currentUser))
-      .catch((e) => handleError(e));
+      .then(() => {
+        console.log("user upadted");
+      })
+      .catch((e) => console.error(e));
   };
 
   const signUpUser = (signupEmail, signupPassword) => {
-    createUserWithEmailAndPassword(auth, signupEmail, signupPassword).catch((e) => handleError(e));
+    createUserWithEmailAndPassword(auth, signupEmail, signupPassword)
+      .then(() => {
+        console.log("user created");
+      })
+      .catch((e) => console.error(e));
   };
 
   return (
-    <UserContext.Provider value={{ isAuth, userObj, signInUser, signOutUser, updateUser, signUpUser }}>
+    <UserContext.Provider
+      value={{
+        isAuth,
+        // signInWithEmail, 
+        signInWithEmail,
+        signOutUser,
+        updateUser,
+        signUpUser,
+      }}
+    >
       {children}
     </UserContext.Provider>
   );

@@ -6,27 +6,29 @@ import { useModalContext } from "../../components/ModalContext";
 
 const Login = () => {
   const { openModalWithSpinner, openModalWithError, closeModal } = useModalContext();
-  const { signInUser } = useUserContext()
+  const { signInWithEmail } = useUserContext()
   const router = useRouter()
   const [logInEmail, setlogInEmail] = useState<string>("");
   const [logInPassword, setlogInPassword] = useState<string>("");
-
   
-  const signInWithEmail = async(event: React.FormEvent<HTMLFormElement>) => {
+  const signInWithEmailWrapper = async(event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    openModalWithSpinner()
-    signInUser(logInEmail, logInPassword)
-      .then(() => {
+    openModalWithSpinner("Logging in...")
+    signInWithEmail(logInEmail, logInPassword)
+      .then((userObj: any) => {
         closeModal()
         router.push('/myPlaces')
       })
-      .catch(() => openModalWithError("Unable to connect to Server!"))
+      .catch((err: any) => {
+        console.error(err)
+        openModalWithError("Unable to connect to Server!")
+      })
   }
 
   return (
     <div className={styles.loginWrapper}>
       <h1>Sign in</h1>
-      <form className={styles.loginForm} onSubmit={signInWithEmail}>
+      <form className={styles.loginForm} onSubmit={signInWithEmailWrapper}>
         <input 
           className={styles.loginForm__input}
           name='loginMail' 

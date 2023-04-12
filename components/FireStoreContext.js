@@ -1,104 +1,128 @@
-import React, { useState } from "react";
+import React from "react";
 import { createContext } from "react";
 import {
-  serializeNestedArrays,
-  deSerializeNestedArrays,
-  serializeGeoJsonCoords,
-  deserializeGeoJsonCoords,
+  createNewGeojsonFromLayer,
+  createUpdatedGeojsonFromLayer,
+  createGeojsonMarkedForDeletionFromLayer,
+  createGeojsonWithUpdatedPopup,
+  fetchMarkersAJAX,
+  uploadEditsAJAX,
+  // filterUserMarkers,
+  filterMarkersToUpload,
 } from "./FireStoreContext_utils";
-import { deleteDoc, doc, getDocs, addDoc, query, where, updateDoc } from "firebase/firestore";
-import { firestore } from "../firebase-config";
-import { collRef } from "../firebase-config";
 
 const FireStoreContext = createContext();
 
 const FireStoreContextProvider = ({ children }) => {
-  const [allFirestoreMarkers, setAllFirestoreMarkers] = useState([]);
-  const [userFirestoreMarkers, setUserFirestoreMarkers] = useState([]);
+  const [allFirestoreMarkers, setAllFirestoreMarkers] = React.useState(new Map());
+  const [userFirestoreMarkers, setUserFirestoreMarkers] = React.useState(new Map());
+  const [markersUpdated, setmarkersUpdated] = React.useState(false);
+  const [initialFetch, setinitialFetch] = React.useState(true);
 
-  const addMarkersToFirestore = () => {
-    userFirestoreMarkers.forEach( async (marker) => {
-      if (marker.properties.drawnInCurrentSession) {
-        marker.properties.drawnInCurrentSession === false
-        marker.geometry.coordinates = serializeGeoJsonCoords(marker);
-        await addDoc(collRef, marker);
+  const processEdits = (updatedLayerProp, addprops) => {
+    const updatedLayers = Array.isArray(updatedLayerProp) ? [...updatedLayerProp] : [updatedLayerProp]
 
-        // setUserFirestoreMarkers(
-        //   userFirestoreMarkers.filter(
-        //     (marker) => marker.properties.markerId !== currentMarker.properties.markerId
-        //   )
-        // );
-      }
-    })
-  };
+    updatedLayers.forEach((updatedLayer) => {
+      let geojson;
 
-  const updateMarkerAtFirestore = () => {
-    userFirestoreMarkers.forEach( async (marker) => {
-      if (marker.properties.updatedInCurrentSession) {
-        marker.properties.updatedInCurrentSession === false
-        const markerId = marker.properties.markerId
-        const q = query(collRef, where('properties.markerId', '==', markerId));
-        const querySnapshot = await getDocs(q)
-        const docRef = querySnapshot.docs[0].ref;
-        marker.geometry.coordinates = serializeGeoJsonCoords(marker);
-        await updateDoc(docRef, marker)
-      }
+      switch (addprops.operation) {
+        case "addMarker":
+          console.log("here")
+          geojson = createNewGeojsonFromLayer(updatedLayer, addprops.userObj);
+          break;
+        case "editMarker":
+          geojson = createUpdatedGeojsonFromLayer(updatedLayer);
+          break;
+        case "deleteMarker":
+          geojson = createGeojsonMarkedForDeletionFromLayer(updatedLayer);
+          break;
+        case "updatePopupContent":
+          geojson = createGeojsonWithUpdatedPopup(updatedLayer, addprops.popupContent);
+          break;
+        }
+
+      const key = geojson.properties.markerId;
+      setUserFirestoreMarkers(new Map(userFirestoreMarkers.set(key, geojson)));
     })
   }
 
-  const deleteMarkerFromFirestore = async (currentMarker) => {
-    if (confirm("Delete Marker?")) {
-      await deleteDoc(doc(firestore, "markers1", currentMarker.properties.firebaseDocID));
+  const fetchAllMarkers = async () => {
+    if (initialFetch || markersUpdated) {
+      // console.log("fetchAllMarkers()");
+      fetchMarkersAJAX()
+        .then((markers) => {
+          setmarkersUpdated(false);
+          setinitialFetch(false);
+          const markerMap = new Map();
 
-      setUserFirestoreMarkers(
-        userFirestoreMarkers.filter(
-          (marker) => marker.properties.markerId !== currentMarker.properties.markerId
-        )
-      );
+          markers.forEach((marker) => {
+            markerMap.set(marker.properties.markerId, marker);
+          });
+
+          setAllFirestoreMarkers(markerMap);
+        })
+        .catch((err) => {
+          console.error(err);
+        });
     }
   };
 
-  const getAllMarkersFromFirestore = () => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const resp = await getDocs(collRef);
-        let markers = resp.docs.map((doc) => {
-          const feature = doc.data();
-          feature.properties.firebaseDocID = doc.id;
-          return feature;
-        });
-        markers.forEach((marker) => {
-          marker.geometry.coordinates = deserializeGeoJsonCoords(marker);
-          marker.properties.drawnInCurrentSession === false
-          marker.properties.updatedInCurrentSession === false
-        });
-        setAllFirestoreMarkers(markers);
-        resolve();
-      } catch (err) {
+  const uploadEdits = async () => {
+
+    const markersToUploadArr = filterMarkersToUpload(userFirestoreMarkers)
+    setmarkersUpdated(true); //cant be in then or it wouldnt trigger before router.push
+    uploadEditsAJAX(markersToUploadArr)
+      .then((res) => {
+        console.log("server resp: ", res);
+      })
+      .catch((err) => {
         console.error(err);
-        reject(err);
-      }
-    });
+      });
   };
 
-  //called in myPlaces
-  const filterUserFirestoreMarkers = (userObj) => {
-    const markers = allFirestoreMarkers.filter((marker) => marker.properties.user.uid === userObj.uid);
-    setUserFirestoreMarkers(markers);
+  const defineUserMarkers = (userObj) => {
+    setUserFirestoreMarkers(
+      new Map([...allFirestoreMarkers].filter(([k, v]) => userObj.uid === v.properties.user.uid))
+    );
   };
+
+  const attachMapLayerObjToMarkerInHashmap = (geojson, layer, hashmap) => {
+    const key = geojson.properties.markerId;
+    const updatedMarker = hashmap.get(key);
+    updatedMarker.mapLayerObj = layer;
+    hashmap.set(key, updatedMarker);
+  };
+
+  const generatePopupContent = (marker) => {
+    const props = marker.properties;
+    return `
+        <h2>${props.popupContent.title}</h2>
+        <p>${props.popupContent.text}</p>
+        <div style="display: flex">
+          <p>by: ${props.user.name}</p>
+          <p>@ ${props.dateUpdated ? props.dateUpdated : props.dateCreated}</p>
+        </div>
+      `;
+  };
+
 
   return (
     <FireStoreContext.Provider
       value={{
-        // uploadMarkers,
-        // fetchAllFirestoreMarkers,
-        getAllMarkersFromFirestore,
-        filterUserFirestoreMarkers,
-        allFirestoreMarkers, setAllFirestoreMarkers,
-        userFirestoreMarkers, setUserFirestoreMarkers,
-        addMarkersToFirestore,
-        updateMarkerAtFirestore,
-        deleteMarkerFromFirestore,
+        allFirestoreMarkers,
+        setAllFirestoreMarkers,
+        userFirestoreMarkers,
+        setUserFirestoreMarkers,
+        markersUpdated,
+        setmarkersUpdated,
+        initialFetch,
+        setinitialFetch,
+        fetchAllMarkers,
+        uploadEdits,
+        defineUserMarkers,
+        generatePopupContent,
+        attachMapLayerObjToMarkerInHashmap,
+        processEdits,
       }}
     >
       {children}
