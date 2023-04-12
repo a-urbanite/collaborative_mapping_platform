@@ -7,9 +7,9 @@ import { useFireStoreContext } from "../FireStoreContext";
 import { useEffect } from "react";
 import { auth } from "../../firebase-config";
 
-interface myLayer extends L.Layer {
-  markerId: string;
-}
+// interface myLayer extends L.Layer {
+//   markerId: string;
+// }
 
 export default function EditControlFC() {
   const {
@@ -18,7 +18,8 @@ export default function EditControlFC() {
     updateMarkersInLocalState,
     deleteMarkersFromLocalState,
     generatePopupContent,
-    updateMarkerInHashmap
+    updateMarkerInHashmap,
+    processEdits
   } = useFireStoreContext();
   const ref = React.useRef<L.FeatureGroup>(null);
 
@@ -38,17 +39,17 @@ export default function EditControlFC() {
     }
   }, [userFirestoreMarkers]);
 
-  useEffect(() => {
-    console.log("curent user markers", userFirestoreMarkers)
-  }, [userFirestoreMarkers]);
+  // useEffect(() => {
+  //   console.log("curent user markers", userFirestoreMarkers)
+  // }, [userFirestoreMarkers]);
 
   return (
     <FeatureGroup ref={ref}>
       <EditControl
         position="topright"
-        onEdited={(e) => updateMarkersInLocalState(e)}
-        onCreated={(e) => addMarkerToLocalState(e, auth.currentUser)}
-        onDeleted={(e) => deleteMarkersFromLocalState(e)}
+        onEdited={(e) => processEdits(e.layers.getLayers(), "editMarker")}
+        onCreated={(e) => processEdits(e.layer, "addMarker" , {userObj: auth.currentUser})}
+        onDeleted={(e) => processEdits(e.layers.getLayers(), "deleteMarker")}
         draw={{
           rectangle: false,
           circle: false,

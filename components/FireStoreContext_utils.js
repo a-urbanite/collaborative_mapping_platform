@@ -56,7 +56,7 @@ const convertToFirestoreCompatibleGeojson = (obj) => {
   return geoJsonStr;
 };
 
-const createGeojsonFromLayer = (layer, userObj) => {
+const createNewGeojsonFromLayer = (layer, userObj) => {
   const geojson = layer.toGeoJSON()
   const uuid = uuidv4()
   layer.markerId = uuid
@@ -86,6 +86,14 @@ const createGeojsonMarkedForDeletionFromLayer = (layer) => {
   geojson.properties = layer.feature.properties
   geojson.properties.operationIndicator = "deleted in current session"
   return geojson
+}
+
+const createGeojsonWithUpdatedPopup = (currentMarker, popupContent) => {
+  const updatedGeojson = currentMarker;
+  updatedGeojson.properties.popupContent = popupContent;
+  updatedGeojson.properties.dateUpdated = Date.now();
+  updatedGeojson.properties.operationIndicator = "popup edited in current session";
+  return updatedGeojson
 }
 
 const uploadEditsAJAX = (markersToUpload) => {
@@ -143,9 +151,10 @@ export {
   serializeGeoJsonCoords,
   deserializeGeoJsonCoords,
   convertToFirestoreCompatibleGeojson,
-  createGeojsonFromLayer,
+  createNewGeojsonFromLayer,
   createUpdatedGeojsonFromLayer,
   createGeojsonMarkedForDeletionFromLayer,
+  createGeojsonWithUpdatedPopup,
   fetchMarkersAJAX, uploadEditsAJAX,
   // filterUserMarkers, 
   filterMarkersToUpload,
