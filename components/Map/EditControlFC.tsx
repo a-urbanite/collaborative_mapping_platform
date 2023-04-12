@@ -44,9 +44,9 @@ export default function EditControlFC() {
     <FeatureGroup ref={ref}>
       <EditControl
         position="topright"
-        onEdited={(e) => processEdits(e.layers.getLayers(), "editMarker")}
-        onCreated={(e) => processEdits(e.layer, "addMarker" , {userObj: auth.currentUser})}
-        onDeleted={(e) => processEdits(e.layers.getLayers(), "deleteMarker")}
+        onEdited={(e) => processEdits(e.layers.getLayers(), {operation: "editMarker"})}
+        onCreated={(e) => processEdits(e.layer,{operation: "addMarker", userObj: auth.currentUser})}
+        onDeleted={(e) => processEdits(e.layers.getLayers(), {operation: "deleteMarker"})}
         draw={{
           rectangle: false,
           circle: false,

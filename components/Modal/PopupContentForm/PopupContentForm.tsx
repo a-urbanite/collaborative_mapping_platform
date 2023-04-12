@@ -6,9 +6,9 @@ import styles from "./popupContentForm.module.scss";
 
 const PopupContentForm = ({ marker }: any) => {
   const { closeModal } = useModalContext();
-  const { 
-    // editMarkerPopupContent, 
-    processEdits ,
+  const {
+    // editMarkerPopupContent,
+    processEdits,
   } = useFireStoreContext();
   const [title, setTitle] = useState(null as unknown as string);
   const [text, setText] = useState(null as unknown as string);
@@ -21,7 +21,8 @@ const PopupContentForm = ({ marker }: any) => {
   const submitForm = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     // editMarkerPopupContent(marker, title || "no title", text || "no text");
-    processEdits(marker, "updatePopupContent", {
+    processEdits(marker, {
+      operation: "updatePopupContent",
       popupContent: { title: title || "no title", text: text || "no text" },
     });
     closeModal();

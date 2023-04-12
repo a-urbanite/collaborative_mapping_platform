@@ -19,14 +19,15 @@ const FireStoreContextProvider = ({ children }) => {
   const [markersUpdated, setmarkersUpdated] = React.useState(false);
   const [initialFetch, setinitialFetch] = React.useState(true);
 
-  const processEdits = (updatedLayerProp, operationIndicator, addprops) => {
+  const processEdits = (updatedLayerProp, addprops) => {
     const updatedLayers = Array.isArray(updatedLayerProp) ? [...updatedLayerProp] : [updatedLayerProp]
 
     updatedLayers.forEach((updatedLayer) => {
       let geojson;
 
-      switch (operationIndicator) {
+      switch (addprops.operation) {
         case "addMarker":
+          console.log("here")
           geojson = createNewGeojsonFromLayer(updatedLayer, addprops.userObj);
           break;
         case "editMarker":
