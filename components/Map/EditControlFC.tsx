@@ -14,11 +14,8 @@ import { auth } from "../../firebase-config";
 export default function EditControlFC() {
   const {
     userFirestoreMarkers,
-    addMarkerToLocalState,
-    updateMarkersInLocalState,
-    deleteMarkersFromLocalState,
     generatePopupContent,
-    updateMarkerInHashmap,
+    attachMapLayerObjToMarkerInHashmap,
     processEdits
   } = useFireStoreContext();
   const ref = React.useRef<L.FeatureGroup>(null);
@@ -31,7 +28,7 @@ export default function EditControlFC() {
             onEachFeature: (feature: any, layer: any) => {
               layer.bindPopup(generatePopupContent(feature));
               ref.current?.addLayer(layer);
-              updateMarkerInHashmap(feature, layer, userFirestoreMarkers)
+              attachMapLayerObjToMarkerInHashmap(feature, layer, userFirestoreMarkers)
             },
           }); 
         }

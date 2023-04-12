@@ -4,7 +4,7 @@ import * as L from "leaflet";
 import { useMap } from "react-leaflet";
 
 const MarkerGroup = () => {
-  const { allFirestoreMarkers, generatePopupContent, setAllFirestoreMarkers, updateMarkerInHashmap } =
+  const { allFirestoreMarkers, generatePopupContent, attachMapLayerObjToMarkerInHashmap } =
     useFireStoreContext();
   const map = useMap();
 
@@ -21,7 +21,7 @@ const MarkerGroup = () => {
         onEachFeature: (feature: any, layer: any) => {
           layer.bindPopup(generatePopupContent(feature));
           myLayerGroup.addLayer(layer);
-          updateMarkerInHashmap(feature, layer, allFirestoreMarkers);
+          attachMapLayerObjToMarkerInHashmap(feature, layer, allFirestoreMarkers);
         },
       });
     });

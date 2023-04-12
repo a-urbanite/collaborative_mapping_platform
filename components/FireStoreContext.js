@@ -85,7 +85,7 @@ const FireStoreContextProvider = ({ children }) => {
     );
   };
 
-  const updateMarkerInHashmap = (geojson, layer, hashmap) => {
+  const attachMapLayerObjToMarkerInHashmap = (geojson, layer, hashmap) => {
     const key = geojson.properties.markerId;
     const updatedMarker = hashmap.get(key);
     updatedMarker.mapLayerObj = layer;
@@ -120,7 +120,7 @@ const FireStoreContextProvider = ({ children }) => {
         uploadEdits,
         defineUserMarkers,
         generatePopupContent,
-        updateMarkerInHashmap,
+        attachMapLayerObjToMarkerInHashmap,
         processEdits,
       }}
     >
