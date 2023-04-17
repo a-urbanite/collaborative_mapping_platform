@@ -21,7 +21,6 @@ const FireStoreContextProvider = ({ children }) => {
 
       switch (addprops.operation) {
         case "addMarker":
-          // console.log("here")
           geojson = createNewGeojsonFromLayer(updatedLayer, addprops.userObj);
           break;
         case "editMarker":

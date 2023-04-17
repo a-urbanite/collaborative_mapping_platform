@@ -8,10 +8,6 @@ const MarkerGroup = () => {
     useFireStoreContext();
   const map = useMap();
 
-  // React.useEffect(() => {
-  //   console.log("allFirestoreMarkers", allFirestoreMarkers);
-  // }, [allFirestoreMarkers]);
-
   React.useEffect(() => {
     const myLayerGroup = L.layerGroup().addTo(map);
 
