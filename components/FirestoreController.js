@@ -140,6 +140,8 @@ const FirestoreControllerProvider = ({ children }) => {
       value={{
         fetchAllMarkers,
         uploadEdits,
+        markersUpdated,
+        initialFetch
       }}
     >
       {children}

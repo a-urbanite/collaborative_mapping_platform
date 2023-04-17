@@ -12,6 +12,7 @@ const MainNav = () => {
       <ul className={styles.list}>
         <MenuPoint href="/home">Home</MenuPoint>
         <MenuPoint href="/contribute">contribute</MenuPoint>
+        <MenuPoint href="/aboutUs">About Us</MenuPoint>
         {isAuth && <MenuPoint href="/myPlaces">My Places</MenuPoint>}
         {!isAuth && <MenuPoint href="/login">Log in</MenuPoint>}
         {isAuth && <MenuPoint href="/home" func={() => signOutUser()}>Log out</MenuPoint>}
