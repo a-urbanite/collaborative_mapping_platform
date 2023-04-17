@@ -16,7 +16,6 @@ const MarkerGroup = () => {
       L.geoJSON(marker, {
         onEachFeature: (feature: any, layer: any) => {
           layer.bindPopup(generatePopupContent(feature));
-          layer.on('click', () => console.log("MARKER CLICKETD"));
           myLayerGroup.addLayer(layer);
           attachMapLayerObjToMarkerInHashmap(feature, layer, allFirestoreMarkers);
         },

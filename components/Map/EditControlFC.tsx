@@ -18,7 +18,12 @@ export default function EditControlFC() {
     attachMapLayerObjToMarkerInHashmap,
     processEdits
   } = useMarkerContext();
+
   const ref = React.useRef<L.FeatureGroup>(null);
+
+  const highlightMarkerCard = () => {
+    console.log("Marker Clicked!")
+  }
 
   useEffect(() => {
     if (ref.current?.getLayers().length === 0 && userFirestoreMarkers) {
@@ -27,6 +32,7 @@ export default function EditControlFC() {
           L.geoJSON(marker, {
             onEachFeature: (feature: any, layer: any) => {
               layer.bindPopup(generatePopupContent(feature));
+              layer.on('click', highlightMarkerCard);
               ref.current?.addLayer(layer);
               attachMapLayerObjToMarkerInHashmap(feature, layer, userFirestoreMarkers)
             },
