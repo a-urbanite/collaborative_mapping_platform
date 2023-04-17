@@ -64,6 +64,11 @@ const MarkerContextProvider = ({ children }) => {
       `;
   };
 
+  const highlightMarkerCard = (e) => {
+    console.log("Marker Clicked!")
+    console.log(e.target.feature.properties.markerId)
+  }
+
 
   return (
     <MarkerContext.Provider
@@ -76,6 +81,7 @@ const MarkerContextProvider = ({ children }) => {
         generatePopupContent,
         attachMapLayerObjToMarkerInHashmap,
         processEdits,
+        highlightMarkerCard
       }}
     >
       {children}

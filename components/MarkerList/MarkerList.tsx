@@ -17,9 +17,8 @@ const MarkerList = () => {
       <ul className={styles.list}>
         {[...userFirestoreMarkers.keys()].map((k) => {
           const marker = userFirestoreMarkers.get(k);
-          if (marker.properties.operationIndicator !== "deleted in current session") {
-            return <MarkerCard key={k} marker={marker} />;
-          }
+          if (marker.properties.operationIndicator == "deleted in current session") { return };
+          return <MarkerCard key={k} marker={marker} />;
         })}
       </ul>
       {userFirestoreMarkers.length > 0 && <UploadButton />}

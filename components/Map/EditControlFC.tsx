@@ -16,14 +16,11 @@ export default function EditControlFC() {
     userFirestoreMarkers,
     generatePopupContent,
     attachMapLayerObjToMarkerInHashmap,
-    processEdits
+    processEdits,
+    highlightMarkerCard
   } = useMarkerContext();
 
   const ref = React.useRef<L.FeatureGroup>(null);
-
-  const highlightMarkerCard = () => {
-    console.log("Marker Clicked!")
-  }
 
   useEffect(() => {
     if (ref.current?.getLayers().length === 0 && userFirestoreMarkers) {
