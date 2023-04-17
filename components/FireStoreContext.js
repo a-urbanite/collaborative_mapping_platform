@@ -4,11 +4,7 @@ import {
   createNewGeojsonFromLayer,
   createUpdatedGeojsonFromLayer,
   createGeojsonMarkedForDeletionFromLayer,
-  createGeojsonWithUpdatedPopup,
-  fetchMarkersAJAX,
-  uploadEditsAJAX,
-  // filterUserMarkers,
-  filterMarkersToUpload,
+  createGeojsonWithUpdatedPopup
 } from "./FireStoreContext_utils";
 
 const FireStoreContext = createContext();
@@ -16,8 +12,6 @@ const FireStoreContext = createContext();
 const FireStoreContextProvider = ({ children }) => {
   const [allFirestoreMarkers, setAllFirestoreMarkers] = React.useState(new Map());
   const [userFirestoreMarkers, setUserFirestoreMarkers] = React.useState(new Map());
-  const [markersUpdated, setmarkersUpdated] = React.useState(false);
-  const [initialFetch, setinitialFetch] = React.useState(true);
 
   const processEdits = (updatedLayerProp, addprops) => {
     const updatedLayers = Array.isArray(updatedLayerProp) ? [...updatedLayerProp] : [updatedLayerProp]
@@ -27,7 +21,7 @@ const FireStoreContextProvider = ({ children }) => {
 
       switch (addprops.operation) {
         case "addMarker":
-          console.log("here")
+          // console.log("here")
           geojson = createNewGeojsonFromLayer(updatedLayer, addprops.userObj);
           break;
         case "editMarker":
@@ -45,40 +39,6 @@ const FireStoreContextProvider = ({ children }) => {
       setUserFirestoreMarkers(new Map(userFirestoreMarkers.set(key, geojson)));
     })
   }
-
-  const fetchAllMarkers = async () => {
-    if (initialFetch || markersUpdated) {
-      // console.log("fetchAllMarkers()");
-      fetchMarkersAJAX()
-        .then((markers) => {
-          setmarkersUpdated(false);
-          setinitialFetch(false);
-          const markerMap = new Map();
-
-          markers.forEach((marker) => {
-            markerMap.set(marker.properties.markerId, marker);
-          });
-
-          setAllFirestoreMarkers(markerMap);
-        })
-        .catch((err) => {
-          console.error(err);
-        });
-    }
-  };
-
-  const uploadEdits = async () => {
-
-    const markersToUploadArr = filterMarkersToUpload(userFirestoreMarkers)
-    setmarkersUpdated(true); //cant be in then or it wouldnt trigger before router.push
-    uploadEditsAJAX(markersToUploadArr)
-      .then((res) => {
-        console.log("server resp: ", res);
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  };
 
   const defineUserMarkers = (userObj) => {
     setUserFirestoreMarkers(
@@ -113,12 +73,6 @@ const FireStoreContextProvider = ({ children }) => {
         setAllFirestoreMarkers,
         userFirestoreMarkers,
         setUserFirestoreMarkers,
-        markersUpdated,
-        setmarkersUpdated,
-        initialFetch,
-        setinitialFetch,
-        fetchAllMarkers,
-        uploadEdits,
         defineUserMarkers,
         generatePopupContent,
         attachMapLayerObjToMarkerInHashmap,

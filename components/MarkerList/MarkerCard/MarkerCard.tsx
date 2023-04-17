@@ -5,7 +5,7 @@ import styles from "./markerCard.module.scss";
 const MarkerCard = ({ marker }: any) => {
   const { openModalWithMarkerPopupContentForm } = useModalContext();
 
-  console.log("marker", marker)
+  // console.log("marker", marker)
 
   return (
     <li className={styles.listItem}>

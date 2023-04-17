@@ -3,8 +3,8 @@ import type { AppProps } from "next/app";
 import MainNav from "../components/MainNav/MainNav";
 import { UserContextProvider } from "../components/UserContext";
 import { ModalContextProvider } from "../components/ModalContext";
-// import { MapContextProvider } from "../components/MapContext";
 import { FireStoreContextProvider } from "../components/FireStoreContext";
+import { FirestoreControllerProvider } from "../components/FirestoreController";
 import Modal from "../components/Modal/Modal";
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -12,13 +12,13 @@ export default function App({ Component, pageProps }: AppProps) {
     <main>
       <FireStoreContextProvider>
         <UserContextProvider>
-          {/* <MapContextProvider> */}
+          <FirestoreControllerProvider>
             <ModalContextProvider>
               <Modal />
               <MainNav />
               <Component {...pageProps} />
             </ModalContextProvider>
-          {/* </MapContextProvider> */}
+          </FirestoreControllerProvider>
         </UserContextProvider>
       </FireStoreContextProvider>
     </main>
