@@ -1,11 +1,11 @@
 import React from "react";
-import { useFireStoreContext } from "../FireStoreContext";
+import { useMarkerContext } from "../MarkerContext";
 import * as L from "leaflet";
 import { useMap } from "react-leaflet";
 
 const MarkerGroup = () => {
   const { allFirestoreMarkers, generatePopupContent, attachMapLayerObjToMarkerInHashmap } =
-    useFireStoreContext();
+    useMarkerContext();
   const map = useMap();
 
   React.useEffect(() => {

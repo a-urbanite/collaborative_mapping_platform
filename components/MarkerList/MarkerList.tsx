@@ -3,10 +3,10 @@ import React, { useEffect } from "react";
 import MarkerCard from "./MarkerCard/MarkerCard";
 import UploadButton from "./UploadButton/UploadButton";
 import styles from "./markerList.module.scss";
-import { useFireStoreContext } from "../FireStoreContext";
+import { useMarkerContext } from "../MarkerContext";
 
 const MarkerList = () => {
-  const { userFirestoreMarkers } = useFireStoreContext();
+  const { userFirestoreMarkers } = useMarkerContext();
 
   useEffect(() => {
     console.log("usermarkers", userFirestoreMarkers);

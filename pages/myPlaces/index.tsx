@@ -5,11 +5,11 @@ import UploadButton from '../../components/MarkerList/UploadButton/UploadButton'
 import styles from './myPlaces.module.scss'
 import { useRouter } from 'next/router';
 import { auth } from "../../firebase-config";
-import { useFireStoreContext } from '../../components/FireStoreContext';
+import { useMarkerContext } from '../../components/MarkerContext';
 
 const MyPlaces = () => {
   const router = useRouter();
-  const { defineUserMarkers } = useFireStoreContext();
+  const { defineUserMarkers } = useMarkerContext();
 
   React.useEffect(() => {
     if (!auth.currentUser) {

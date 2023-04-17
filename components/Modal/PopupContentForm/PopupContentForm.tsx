@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useModalContext } from "../../ModalContext";
-import { useFireStoreContext } from "../../FireStoreContext";
+import { useMarkerContext } from "../../MarkerContext";
 import styles from "./popupContentForm.module.scss";
 
 const PopupContentForm = ({ marker }: any) => {
@@ -8,7 +8,7 @@ const PopupContentForm = ({ marker }: any) => {
   const {
     // editMarkerPopupContent,
     processEdits,
-  } = useFireStoreContext();
+  } = useMarkerContext();
   const [title, setTitle] = useState(null as unknown as string);
   const [text, setText] = useState(null as unknown as string);
 

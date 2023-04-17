@@ -7,9 +7,9 @@ import {
   createGeojsonWithUpdatedPopup
 } from "./FireStoreContext_utils";
 
-const FireStoreContext = createContext();
+const MarkerContext = createContext();
 
-const FireStoreContextProvider = ({ children }) => {
+const MarkerContextProvider = ({ children }) => {
   const [allFirestoreMarkers, setAllFirestoreMarkers] = React.useState(new Map());
   const [userFirestoreMarkers, setUserFirestoreMarkers] = React.useState(new Map());
 
@@ -66,7 +66,7 @@ const FireStoreContextProvider = ({ children }) => {
 
 
   return (
-    <FireStoreContext.Provider
+    <MarkerContext.Provider
       value={{
         allFirestoreMarkers,
         setAllFirestoreMarkers,
@@ -79,10 +79,10 @@ const FireStoreContextProvider = ({ children }) => {
       }}
     >
       {children}
-    </FireStoreContext.Provider>
+    </MarkerContext.Provider>
   );
 };
 
-const useFireStoreContext = () => React.useContext(FireStoreContext);
+const useMarkerContext = () => React.useContext(MarkerContext);
 
-export { FireStoreContextProvider, useFireStoreContext };
+export { MarkerContextProvider, useMarkerContext };

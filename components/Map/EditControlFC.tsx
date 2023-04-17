@@ -3,7 +3,7 @@ import * as L from "leaflet";
 import { FeatureGroup } from "react-leaflet";
 import "leaflet-draw/dist/leaflet.draw.css";
 import { EditControl } from "react-leaflet-draw";
-import { useFireStoreContext } from "../FireStoreContext";
+import { useMarkerContext } from "../MarkerContext";
 import { useEffect } from "react";
 import { auth } from "../../firebase-config";
 
@@ -17,7 +17,7 @@ export default function EditControlFC() {
     generatePopupContent,
     attachMapLayerObjToMarkerInHashmap,
     processEdits
-  } = useFireStoreContext();
+  } = useMarkerContext();
   const ref = React.useRef<L.FeatureGroup>(null);
 
   useEffect(() => {

@@ -1,13 +1,13 @@
 import { useEffect } from "react";
 import MapLoader from "../../components/Map/MapLoader";
 import styles from "./home.module.scss";
-import { useFireStoreContext } from "../../components/FireStoreContext";
+import { useMarkerContext } from "../../components/MarkerContext";
 import { useModalContext } from "../../components/ModalContext";
 import { useFirestoreController } from "../../components/FirestoreController";
 
 export default function Home() {
   const { fetchAllMarkers } = useFirestoreController();
-  const { setAllFirestoreMarkers } = useFireStoreContext();
+  const { setAllFirestoreMarkers } = useMarkerContext();
   const { openModalWithSpinner, openModalWithError, closeModal } = useModalContext();
 
   useEffect(() => {
