@@ -97,19 +97,17 @@ const FirestoreControllerProvider = ({ children }) => {
   };
 
   const fetchAllMarkers = async () => {
-    if (initialFetch || markersUpdated) {
-      try {
-        const markers = await fetchMarkersAJAX();
-        setmarkersUpdated(false);
-        setinitialFetch(false);
-        const markerMap = new Map();
-        markers.forEach((marker) => {
-          markerMap.set(marker.properties.markerId, marker);
-        });
-        return markerMap; 
-      } catch (error) {
-        throw error; 
-      }
+    try {
+      const markers = await fetchMarkersAJAX();
+      setmarkersUpdated(false);
+      setinitialFetch(false);
+      const markerMap = new Map();
+      markers.forEach((marker) => {
+        markerMap.set(marker.properties.markerId, marker);
+      });
+      return markerMap; 
+    } catch (error) {
+      throw error; 
     }
   };
 
