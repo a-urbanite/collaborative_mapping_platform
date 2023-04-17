@@ -15,7 +15,6 @@ export default function Home() {
       openModalWithSpinner("Fetching Markers...");
       fetchAllMarkers()
         .then((markerMap: any) => {
-          // console.log("markerMap", markerMap)
           setAllFirestoreMarkers(markerMap);
           closeModal()
         })

@@ -1,6 +1,5 @@
 import styles from "./MainNav.module.scss";
 import MenuPoint from "./MenuPoint";
-import { useRouter } from "next/router";
 import { AiFillSetting } from "react-icons/ai";
 import { useUserContext } from "../../components/UserContext";
 
