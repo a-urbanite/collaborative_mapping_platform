@@ -14,7 +14,14 @@ export default function EditControlFC({FCref, userObj}: any) {
       <EditControl
         position="topright"
         onEdited={(e) => processEdits(e.layers.getLayers(), { operation: "editMarker" })}
-        onCreated={(e) => processEdits(e.layer, { operation: "addMarker", userObj: userObj })}
+        onCreated={(e) => {
+          // let userObj = auth.currentUser
+          if (router.pathname="/contribute") {
+            //openPopup
+            //set userObj with return value
+          }
+          processEdits(e.layer, { operation: "addMarker", userObj: userObj })
+        }}
         onDeleted={(e) => processEdits(e.layers.getLayers(), { operation: "deleteMarker" })}
         draw={{
           rectangle: false,
