@@ -1,31 +1,58 @@
 import React from "react";
-import { useMarkerContext } from "../MarkerContext";
 import * as L from "leaflet";
-import { useMap } from "react-leaflet";
+import { useMarkerContext } from "../MarkerContext";
+import { useRouter } from "next/router";
 
-const MarkerGroup = () => {
-  const { allFirestoreMarkers, generatePopupContent, attachMapLayerObjToMarkerInHashmap } =
-    useMarkerContext();
-  const map = useMap();
+const MarkerGroup = ({ FCref }: any) => {
+  const {
+    allFirestoreMarkers,
+    userFirestoreMarkers,
+    generatePopupContent,
+    attachMapLayerObjToMarkerInHashmap,
+    highlightMarkerCard,
+  } = useMarkerContext();
+  const router = useRouter();
+
+  let currentMarkerSet: any;
+  switch (router.pathname) {
+    case "/home":
+      currentMarkerSet = allFirestoreMarkers
+      break;
+    case "/myPlaces":
+      currentMarkerSet = userFirestoreMarkers
+      break;
+    case "/contribute":
+      currentMarkerSet = userFirestoreMarkers
+      break;
+  }
 
   React.useEffect(() => {
-    const myLayerGroup = L.layerGroup().addTo(map);
+    // console.log("insie useeffect")
 
-    if (!allFirestoreMarkers) return;
-    allFirestoreMarkers.forEach((marker: any, key: any) => {
+    const featureGroup = FCref.current
+    // if (featureGroup.getLayers().length !== 0) {
+    //   console.log("triggered failsafe")
+    //   return};
+
+    currentMarkerSet.forEach((marker: any) => {
+      // console.log("MERKER ITERATOR STERTET")
+      if (marker.properties.operationIndicator == "deleted in current session") return;
       L.geoJSON(marker, {
         onEachFeature: (feature: any, layer: any) => {
+          // console.log("feature::::", feature)
           layer.bindPopup(generatePopupContent(feature));
-          myLayerGroup.addLayer(layer);
-          attachMapLayerObjToMarkerInHashmap(feature, layer, allFirestoreMarkers);
+          // console.log("dsfdsfdsfsfdsf")
+          layer.on("click", highlightMarkerCard);
+          featureGroup.addLayer(layer);
+          attachMapLayerObjToMarkerInHashmap(feature, layer, currentMarkerSet);
         },
       });
     });
-
     return () => {
-      myLayerGroup.clearLayers();
+      featureGroup.clearLayers();
     };
-  }, [allFirestoreMarkers]);
+
+  }, [allFirestoreMarkers, userFirestoreMarkers]);
 
   return <></>;
 };
