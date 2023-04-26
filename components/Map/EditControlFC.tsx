@@ -17,26 +17,28 @@ export default function EditControlFC() {
     generatePopupContent,
     attachMapLayerObjToMarkerInHashmap,
     processEdits,
-    highlightMarkerCard
+    highlightMarkerCard,
   } = useMarkerContext();
 
   const ref = React.useRef<L.FeatureGroup>(null);
 
   useEffect(() => {
-    if (ref.current?.getLayers().length === 0 && userFirestoreMarkers) {
-      userFirestoreMarkers.forEach((marker: any) => {
-        if (marker.properties.operationIndicator !== "deleted in current session") {
-          L.geoJSON(marker, {
-            onEachFeature: (feature: any, layer: any) => {
-              layer.bindPopup(generatePopupContent(feature));
-              layer.on('click', highlightMarkerCard);
-              ref.current?.addLayer(layer);
-              attachMapLayerObjToMarkerInHashmap(feature, layer, userFirestoreMarkers)
-            },
-          }); 
-        }
-      });
+    if (ref.current?.getLayers().length !== 0 || !userFirestoreMarkers) {
+      return;
     }
+    userFirestoreMarkers.forEach((marker: any) => {
+      if (marker.properties.operationIndicator == "deleted in current session") {
+        return;
+      }
+      L.geoJSON(marker, {
+        onEachFeature: (feature: any, layer: any) => {
+          layer.bindPopup(generatePopupContent(feature));
+          layer.on("click", highlightMarkerCard);
+          ref.current?.addLayer(layer);
+          attachMapLayerObjToMarkerInHashmap(feature, layer, userFirestoreMarkers);
+        },
+      });
+    });
   }, [userFirestoreMarkers]);
 
   // useEffect(() => {
@@ -47,9 +49,9 @@ export default function EditControlFC() {
     <FeatureGroup ref={ref}>
       <EditControl
         position="topright"
-        onEdited={(e) => processEdits(e.layers.getLayers(), {operation: "editMarker"})}
-        onCreated={(e) => processEdits(e.layer,{operation: "addMarker", userObj: auth.currentUser})}
-        onDeleted={(e) => processEdits(e.layers.getLayers(), {operation: "deleteMarker"})}
+        onEdited={(e) => processEdits(e.layers.getLayers(), { operation: "editMarker" })}
+        onCreated={(e) => processEdits(e.layer, { operation: "addMarker", userObj: auth.currentUser })}
+        onDeleted={(e) => processEdits(e.layers.getLayers(), { operation: "deleteMarker" })}
         draw={{
           rectangle: false,
           circle: false,
