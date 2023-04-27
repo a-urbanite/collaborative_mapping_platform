@@ -3,14 +3,19 @@ import { FeatureGroup } from "react-leaflet";
 import "leaflet-draw/dist/leaflet.draw.css";
 import { EditControl } from "react-leaflet-draw";
 import { useMarkerContext } from "../MarkerContext";
+import { useModalContext } from "../ModalContext";
 import { useRouter } from "next/router";
+import { auth } from "../../firebase-config";
+import { uuidv4 } from '@firebase/util';
 
-export default function EditControlFC({FCref, userObj}: any) {
+export default function EditControlFC({FGref}: any) {
   const router = useRouter();
   const { processEdits } = useMarkerContext();
+  const userObj = router.pathname === "/myPlaces" ? auth.currentUser : { uid: uuidv4(), displayName: "anon" };
+
 
   return (
-    <FeatureGroup ref={FCref}>
+    <FeatureGroup ref={FGref}>
       <EditControl
         position="topright"
         onEdited={(e) => processEdits(e.layers.getLayers(), { operation: "editMarker" })}

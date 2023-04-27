@@ -3,7 +3,7 @@ import * as L from "leaflet";
 import { useMarkerContext } from "../MarkerContext";
 import { useRouter } from "next/router";
 
-const MarkerGroup = ({ FCref }: any) => {
+const MarkerGroup = ({ FGref }: any) => {
   const {
     allFirestoreMarkers,
     userFirestoreMarkers,
@@ -13,23 +13,25 @@ const MarkerGroup = ({ FCref }: any) => {
   } = useMarkerContext();
   const router = useRouter();
 
-  let currentMarkerSet: any;
-  switch (router.pathname) {
-    case "/home":
-      currentMarkerSet = allFirestoreMarkers
-      break;
-    case "/myPlaces":
-      currentMarkerSet = userFirestoreMarkers
-      break;
-    case "/contribute":
-      currentMarkerSet = userFirestoreMarkers
-      break;
-  }
+  // let currentMarkerSet: any;
+  // switch (router.pathname) {
+  //   case "/home":
+  //     currentMarkerSet = allFirestoreMarkers
+  //     break;
+  //   case "/myPlaces":
+  //     currentMarkerSet = userFirestoreMarkers
+  //     break;
+  //   case "/contribute":
+  //     currentMarkerSet = userFirestoreMarkers
+  //     break;
+  // }
+
+  const currentMarkerSet = router.pathname === "/home" ? allFirestoreMarkers : userFirestoreMarkers
 
   React.useEffect(() => {
     // console.log("insie useeffect")
 
-    const featureGroup = FCref.current
+    const featureGroup = FGref.current
     // if (featureGroup.getLayers().length !== 0) {
     //   console.log("triggered failsafe")
     //   return};
