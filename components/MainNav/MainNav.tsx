@@ -5,18 +5,18 @@ import { useUserContext } from "../../components/UserContext";
 import { useMarkerContext } from "../MarkerContext";
 
 const MainNav = () => {
-  const { isAuth, signOutUser } = useUserContext();
+  const { isLoggedIn, signOutUser } = useUserContext();
   const { setUserFirestoreMarkers } = useMarkerContext();
 
   return (
     <nav className={styles.mainNav}>
       <ul className={styles.list}>
         <MenuPoint href="/home">Home</MenuPoint>
-        {!isAuth && <MenuPoint href="/contribute">contribute</MenuPoint>}
+        {!isLoggedIn && <MenuPoint href="/contribute">contribute</MenuPoint>}
         <MenuPoint href="/aboutUs">About Us</MenuPoint>
-        {isAuth && <MenuPoint href="/myPlaces">My Places</MenuPoint>}
-        {!isAuth && <MenuPoint href="/login">Log in</MenuPoint>}
-        {isAuth && (
+        {isLoggedIn && <MenuPoint href="/myPlaces">My Places</MenuPoint>}
+        {!isLoggedIn && <MenuPoint href="/login">Log in</MenuPoint>}
+        {isLoggedIn && (
           <MenuPoint
             href="/home"
             func={() => {
@@ -27,7 +27,7 @@ const MainNav = () => {
             Log out
           </MenuPoint>
         )}
-        {isAuth && (
+        {isLoggedIn && (
           <MenuPoint href="/settings">
             <AiFillSetting />
           </MenuPoint>

@@ -11,13 +11,13 @@ import {
 const UserContext = React.createContext();
 
 const UserContextProvider = ({ children }) => {
-  const [isAuth, setisAuth] = React.useState(false);
+  const [isLoggedIn, setIsLoggedIn] = React.useState(false);
 
   const signInWithEmail = (logInEmail, logInPassword) => {
     return new Promise(async (resolve, reject) => {
       try {
         await signInWithEmailAndPassword(auth, logInEmail, logInPassword);
-        setisAuth(true);
+        setIsLoggedIn(true);
         resolve(auth.currentUser);
       } catch (err) {
         console.error(err);
@@ -29,7 +29,7 @@ const UserContextProvider = ({ children }) => {
   const signOutUser = () => {
     signOut(auth)
       .then(() => {
-        setisAuth(false);
+        setIsLoggedIn(false);
       })
       .catch((e) => console.error(e));
   };
@@ -53,7 +53,7 @@ const UserContextProvider = ({ children }) => {
   return (
     <UserContext.Provider
       value={{
-        isAuth,
+        isLoggedIn,
         // signInWithEmail, 
         signInWithEmail,
         signOutUser,
