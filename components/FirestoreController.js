@@ -62,38 +62,33 @@ const FirestoreControllerProvider = ({ children }) => {
     return geoJsonStr;
   };
 
-  const uploadEditsAJAX = (markersToUpload) => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        let res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/uploadEdits`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(
-            markersToUpload.map((obj) => JSON.stringify(convertToFirestoreCompatibleGeojson(obj)))
-          ),
-        });
-        res = await res.json();
-        resolve(res);
-      } catch (err) {
-        reject(err);
-      }
+  const uploadEditsAJAX = async (markersToUpload) => {
+    let res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/uploadEdits`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(
+        markersToUpload.map((obj) => JSON.stringify(convertToFirestoreCompatibleGeojson(obj)))
+      ),
     });
+    if (!res.ok) {
+      throw new Error(`HTTP error: ${response.status}`);
+    }
+    res = await res.json();
+    return res;
   };
 
-  const fetchMarkersAJAX = () => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        let markers;
-        let res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/locations`);
-        markers = await res.json();
-        markers.forEach((marker) => (marker.geometry.coordinates = deserializeGeoJsonCoords(marker)));
-        resolve(markers);
-      } catch (err) {
-        reject(err);
-      }
-    });
+  const fetchMarkersAJAX = async () => {
+    let markers;
+    let res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/locations`);
+    if (!res.ok) {
+      throw new Error(`HTTP error: ${response.status}`);
+    }
+    console.log("RES FROM INITAL FETCH: ", res);
+    markers = await res.json();
+    markers.forEach((marker) => (marker.geometry.coordinates = deserializeGeoJsonCoords(marker)));
+    return markers;
   };
 
   const fetchAllMarkers = async () => {
@@ -105,9 +100,9 @@ const FirestoreControllerProvider = ({ children }) => {
       markers.forEach((marker) => {
         markerMap.set(marker.properties.markerId, marker);
       });
-      return markerMap; 
+      return markerMap;
     } catch (error) {
-      throw error; 
+      throw error;
     }
   };
 
@@ -119,17 +114,17 @@ const FirestoreControllerProvider = ({ children }) => {
         markersToUploadArr.push(value);
       }
     });
-    return markersToUploadArr
+    return markersToUploadArr;
   };
 
   const uploadEdits = async (userFirestoreMarkers) => {
     try {
       const markersToUploadArr = filterMarkersToUpload(userFirestoreMarkers);
-      const res = await uploadEditsAJAX(markersToUploadArr)
+      const res = await uploadEditsAJAX(markersToUploadArr);
       setmarkersUpdated(true);
-      return res
+      return res;
     } catch (error) {
-      throw error; 
+      throw error;
     }
   };
 
@@ -139,7 +134,7 @@ const FirestoreControllerProvider = ({ children }) => {
         fetchAllMarkers,
         uploadEdits,
         markersUpdated,
-        initialFetch
+        initialFetch,
       }}
     >
       {children}
