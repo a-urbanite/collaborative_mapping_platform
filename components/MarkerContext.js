@@ -5,7 +5,7 @@ import {
   createUpdatedGeojsonFromLayer,
   createGeojsonMarkedForDeletionFromLayer,
   createGeojsonWithUpdatedPopup
-} from "./FireStoreContext_utils";
+} from "./MarkerContext_utils";
 
 const MarkerContext = createContext();
 
