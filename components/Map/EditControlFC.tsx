@@ -7,11 +7,13 @@ import { useModalContext } from "../ModalContext";
 import { useRouter } from "next/router";
 import { auth } from "../../firebase-config";
 import { uuidv4 } from '@firebase/util';
+import { User } from "firebase/auth";
 
 export default function EditControlFC({FGref}: any) {
   const router = useRouter();
   const { processEdits } = useMarkerContext();
-  const userObj = router.pathname === "/myPlaces" ? auth.currentUser : { uid: uuidv4(), displayName: "anon" };
+  const { openModalWithNameForm, userName } = useModalContext();
+  // const userObj = router.pathname === "/myPlaces" ? auth.currentUser : { uid: uuidv4(), displayName: "anon" };
 
 
   return (
@@ -20,12 +22,12 @@ export default function EditControlFC({FGref}: any) {
         position="topright"
         onEdited={(e) => processEdits(e.layers.getLayers(), { operation: "editMarker" })}
         onCreated={(e) => {
-          // let userObj = auth.currentUser
+          let userObj = auth.currentUser
           if (router.pathname="/contribute") {
-            //openPopup
-            //set userObj with return value
+            openModalWithNameForm(e.layer)
+          } else {
+            processEdits(e.layer, { operation: "addMarker", userObj: userObj })
           }
-          processEdits(e.layer, { operation: "addMarker", userObj: userObj })
         }}
         onDeleted={(e) => processEdits(e.layers.getLayers(), { operation: "deleteMarker" })}
         draw={{

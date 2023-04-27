@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from "react";
-import { createContext } from "react";
+import * as React from "react";
+// import { createContext } from "react";
 
-const ModalContext = createContext();
+const ModalContext = React.createContext();
 
 const ModalContextProvider = ({ children }) => {
-  const [modal, setModal] = useState({
+  const [modal, setModal] = React.useState({
     isOpen: false,
     context: null,
     payload: null,
   });
+  const [userName, setUserName] = React.useState("anon")
 
   const openModalWithSpinner = (text = "Wait a minute...") => {
     setModal({ isOpen: true, context: "spinner", payload: text });
@@ -21,6 +22,10 @@ const ModalContextProvider = ({ children }) => {
   const openModalWithError = (text = "Something went wrong...") => {
     setModal({ isOpen: true, context: "error", payload: text });
   };
+
+  const openModalWithNameForm = (currentMarker) => {
+    setModal({ isOpen: true, context: "nameForm", payload: currentMarker });
+  }
 
   const closeModal = (delay = 0) => {
     setTimeout(() => {
@@ -36,6 +41,8 @@ const ModalContextProvider = ({ children }) => {
         openModalWithSpinner,
         openModalWithError,
         openModalWithMarkerPopupContentForm,
+        openModalWithNameForm,
+        userName, setUserName
       }}
     >
       {children}

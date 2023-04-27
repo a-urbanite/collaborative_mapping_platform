@@ -2,12 +2,13 @@ import { useModalContext } from "../ModalContext";
 import styles from "./modal.module.scss";
 import { Dialog } from "@headlessui/react";
 import PopupContentForm from "./PopupContentForm/PopupContentForm";
+import UserNameForm from "./UserNameForm/UserNameForm";
 import LoadingSpin from "react-loading-spin";
 import { useRouter } from "next/router";
 import { RxCross1 } from "react-icons/rx";
 
 const Modal = () => {
-  const { modal, closeModal } = useModalContext();
+  const { modal, closeModal, userName, setUserName } = useModalContext();
   const router = useRouter();
 
   return (
@@ -36,6 +37,17 @@ const Modal = () => {
                 Here you can enter text and images that tell your spatial story
               </Dialog.Description>
               <PopupContentForm marker={modal.payload} />
+              <button onClick={() => closeModal()}>Cancel</button>
+            </>
+          )}
+
+          {modal.context === "nameForm" && (
+            <>
+              <Dialog.Title>Tell us your name maybe?</Dialog.Title>
+              <Dialog.Description>
+                If you want you can share your name but you dont have to
+              </Dialog.Description>
+              <UserNameForm marker={modal.payload} />
               <button onClick={() => closeModal()}>Cancel</button>
             </>
           )}
