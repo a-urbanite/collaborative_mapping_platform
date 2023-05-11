@@ -21,12 +21,22 @@ export default function EditControlFC({FGref}: any) {
       <EditControl
         position="topright"
         onEdited={(e) => processEdits(e.layers.getLayers(), { operation: "editMarker" })}
-        onCreated={(e) => {
-          let userObj = auth.currentUser
-          if (router.pathname="/contribute") {
-            openModalWithNameForm(e.layer)
+        // onCreated={(e) => {
+        //   let userObj = auth.currentUser
+        //   if (router.pathname="/contribute") {
+        //     openModalWithNameForm(e.layer)
+        //   } else {
+        //     processEdits(e.layer, { operation: "addMarker", userObj: userObj })
+        //   }
+        // }}
+        onCreated={ async (e) => {
+
+          console.log("ROUTER.PATHNAME: ", router.pathname)
+          if (router.pathname === "/contribute") {
+            const userName = await openModalWithNameForm(e.layer)
+            console.log(userName)
           } else {
-            processEdits(e.layer, { operation: "addMarker", userObj: userObj })
+            processEdits(e.layer, { operation: "addMarker", userObj: auth.currentUser })
           }
         }}
         onDeleted={(e) => processEdits(e.layers.getLayers(), { operation: "deleteMarker" })}
