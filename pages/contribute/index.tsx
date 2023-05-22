@@ -3,22 +3,23 @@ import MapLoader from '../../components/Map/MapLoader'
 import MarkerList from '../../components/MarkerList/MarkerList'
 import UploadButton from '../../components/MarkerList/UploadButton/UploadButton'
 import styles from './contribute.module.scss'
-import Modal2 from '../../components/Modal/Modal2'
+// import useModal2 from '../../components/Modal2/Modal2Hook'
+import { useModal2 } from '../../components/Modal2/Modal2Context'
 
 const Contribute = () => {
-  const modalRef = React.useRef(null as any);
+  const { openModal } = useModal2();
+  // const {Modal2, modalRef} = useModal2();
+  // const first = useRef(second)
 
   const handleButtonClick = async () => {
-    const modalPromise = modalRef.current.openModal();
-    const submittedName = await modalPromise;
+    const submittedName = await openModal();
     console.log("Submitted name:", submittedName);
-    // Do something with the submitted name
   };
 
   return (
     <>
       <button onClick={handleButtonClick}>Open Modal</button>
-      <Modal2 ref={modalRef} />
+      {/* <Modal2 /> */}
       <p>Contribute</p>
       <div className={styles.homeContainer}>
       <MapLoader/>

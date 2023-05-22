@@ -1,0 +1,32 @@
+.modalBackground {
+  // display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed; /* Stay in place */
+  z-index: 7; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0, 0, 0); /* Fallback color */
+  background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+}
+
+.modalContent {
+  background-color: blue;
+  position: fixed;
+
+  display: flex;
+  flex-direction: column;
+  // justify-content: center;
+  align-items: center;
+
+  padding: 3rem;
+  // height: 50%;
+  width: 50%; /* Could be more or less, depending on screen size */
+}
+
+.contentTitle {
+  margin-bottom: 2rem;
+}
