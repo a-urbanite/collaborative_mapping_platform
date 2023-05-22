@@ -1,7 +1,11 @@
 import React, {FormEvent} from "react";
 import styles from './userNameForm.module.scss'
 
-const UserNameForm = ({returnResults} : any) => {
+interface UserNameFormProps {
+  returnResults: (name: string) => void,
+}
+
+const UserNameForm = ({returnResults} : UserNameFormProps) => {
   
   const [name, setname] = React.useState("")
   

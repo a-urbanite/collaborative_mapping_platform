@@ -4,6 +4,7 @@ import UserNameForm from "./UserNameForm/UserNameForm";
 
 interface ModalState {
   isOpen: boolean;
+  context: string;
 }
 
 // this is realised as a class component because only class components can have a Ref
@@ -16,10 +17,11 @@ class Modal2 extends Component {
 
   state: ModalState = {
     isOpen: false,
+    context: "",
   };
 
-  openModal = () => {
-    this.setState({ isOpen: true });
+  openModal = (context: string) => {
+    this.setState({ isOpen: true, context: context });
     return new Promise<string>((resolve) => {
       this.resolveModal = resolve;
     });
@@ -58,9 +60,9 @@ class Modal2 extends Component {
         style={this.state.isOpen ? { display: "flex" } : { display: "none" }}
       >
         <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-          <UserNameForm
+          {this.state.context === "userNameForm" && <UserNameForm
             returnResults={this.returnResults}
-          />
+          />}
         </div>
       </div>
     );

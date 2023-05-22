@@ -34,7 +34,7 @@ export default function EditControlFC({ FGref }: any) {
         onCreated={async (e) => {
           let userObj;
           if ( !auth.currentUser && router.pathname === "/contribute") {
-            const userName = await openModal();
+            const userName = await openModal("userNameForm");
             userObj = { uid: uuidv4(), displayName: userName };
           } else {
             userObj = auth.currentUser;

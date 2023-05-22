@@ -36,9 +36,9 @@ function useModal2() {
   const { modalRef } = context;
 
   return {
-    openModal: async () => {
+    openModal: async (context: string) => {
       if (modalRef.current) {
-        return await modalRef.current.openModal();
+        return await modalRef.current.openModal(context);
       }
     },
   };
