@@ -34,7 +34,7 @@ class Modal2 extends Component {
   // When resolveModal() is called later on the promise will resolve with the submitted name value.
 
   closeModal = () => {
-    this.setState({ isOpen: false });
+    this.setState({ isOpen: false, context: "" });
     this.resolveModal = null;
   };
 
@@ -53,16 +53,18 @@ class Modal2 extends Component {
   // 3) After resolving, the modal is closed and all states plus resolveModal are reset
 
   render() {
+    const { isOpen, context} = this.state;
+    
     return (
       <div
         className={styles.modalBackground}
         onClick={this.closeModal}
-        style={this.state.isOpen ? { display: "flex" } : { display: "none" }}
+        style={isOpen ? { display: "flex" } : { display: "none" }}
       >
         <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-          {this.state.context === "userNameForm" && <UserNameForm returnResults={this.returnResults} />}
+          {context === "userNameForm" && <UserNameForm returnResults={this.returnResults} />}
 
-          {this.state.context === "test" && <h1>test</h1>}
+          {context === "test" && <h1>test</h1>}
         </div>
       </div>
     );

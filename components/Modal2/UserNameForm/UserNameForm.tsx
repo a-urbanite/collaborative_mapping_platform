@@ -7,11 +7,7 @@ interface UserNameFormProps {
 
 const UserNameForm = ({returnResults} : UserNameFormProps) => {
   
-  const [name, setname] = React.useState("")
-  
-    React.useEffect(() => {
-      console.log("name: ", name)
-    }, [name])
+  const [name, setname] = React.useState<string>("");
 
   const handleSubmit = (event: FormEvent) => {
     event.preventDefault();
