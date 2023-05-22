@@ -1,23 +1,21 @@
 import React, { Component, FormEvent } from "react";
 import styles from "./modal2.module.scss";
+import UserNameForm from "./UserNameForm/UserNameForm";
 
 interface ModalState {
   isOpen: boolean;
-  name: string;
 }
 
 // this is realised as a class component because only class components can have a Ref
-// which exposed the components methods to parent components. 
+// which exposed the components methods to parent components.
 // So, with a Ref assigned the Modal can be called inside a function like ModalRef.openModal()
 
 class Modal2 extends Component {
-
-  private resolveModal: ((name: string) => void) | null = null;
+  private resolveModal: ((payload: any) => void) | null = null;
   //its own variable instead of state to avoid rerenders on change
 
   state: ModalState = {
     isOpen: false,
-    name: "",
   };
 
   openModal = () => {
@@ -34,53 +32,35 @@ class Modal2 extends Component {
   // When resolveModal() is called later on the promise will resolve with the submitted name value.
 
   closeModal = () => {
-    this.setState({ isOpen: false, name: "" });
+    this.setState({ isOpen: false });
     this.resolveModal = null;
   };
 
-  handleSubmit = (event: FormEvent) => {
-    event.preventDefault();
-    const { name } = this.state;
+  returnResults = (value: any) => {
     if (this.resolveModal) {
-      this.resolveModal(name);
+      this.resolveModal(value);
       this.closeModal();
     }
   };
 
-  // 1) extracts the name from the form submit event object
-  // 2) checks if resolveModal exists, indicating that  openModal() was called and a
+  // 1) checks if resolveModal exists, indicating that openModal() was called and a
   // promise is waiting to be resolved.
-  // 3) calls the function stored in resolveModal with the current name value.
+  // 2) calls the function stored in resolveModal with the current name value.
   // This resolves the promise, passing the submitted name value to the code that is waiting
   // for the promise to be resolved.
-  // 4) After resolving, the modal is closed and all states plus resolveModal are reset
-
-  handleNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    this.setState({ name: event.target.value });
-  };
+  // 3) After resolving, the modal is closed and all states plus resolveModal are reset
 
   render() {
-    const { isOpen, name } = this.state;
-
-    // if (!isOpen) {
-    //   return null;
-    // }
-
     return (
       <div
         className={styles.modalBackground}
         onClick={this.closeModal}
-        style={isOpen ? { display: "flex" } : { display: "none" }}
+        style={this.state.isOpen ? { display: "flex" } : { display: "none" }}
       >
         <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-          <h1 className={styles.contentTitle}>Tell us your name, maybe?</h1>
-          <form onSubmit={this.handleSubmit}>
-            <label>
-              Name:
-              <input type="text" value={name} onChange={this.handleNameChange} />
-            </label>
-            <button type="submit">Submit</button>
-          </form>
+          <UserNameForm
+            returnResults={this.returnResults}
+          />
         </div>
       </div>
     );

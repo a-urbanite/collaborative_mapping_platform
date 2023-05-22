@@ -53,7 +53,7 @@ const MarkerContextProvider = ({ children }) => {
   };
 
   const generatePopupContent = (marker) => {
-    console.log("INSIDE GENERATEPOPUPCONTENT")
+    // console.log("INSIDE GENERATEPOPUPCONTENT")
     const props = marker.properties;
     return `
         <h2>${props.popupContent.title}</h2>
