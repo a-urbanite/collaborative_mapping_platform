@@ -60,9 +60,9 @@ class Modal2 extends Component {
         style={this.state.isOpen ? { display: "flex" } : { display: "none" }}
       >
         <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
-          {this.state.context === "userNameForm" && <UserNameForm
-            returnResults={this.returnResults}
-          />}
+          {this.state.context === "userNameForm" && <UserNameForm returnResults={this.returnResults} />}
+
+          {this.state.context === "test" && <h1>test</h1>}
         </div>
       </div>
     );

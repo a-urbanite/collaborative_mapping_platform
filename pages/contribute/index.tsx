@@ -12,7 +12,7 @@ const Contribute = () => {
   // const first = useRef(second)
 
   const handleButtonClick = async () => {
-    const submittedName = await openModal();
+    const submittedName = await openModal("test");
     console.log("Submitted name:", submittedName);
   };
 
