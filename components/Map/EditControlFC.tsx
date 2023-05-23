@@ -11,7 +11,7 @@ import { uuidv4 } from "@firebase/util";
 import { useModal2 } from "../../components/Modal2/Modal2Context";
 
 export default function EditControlFC({ FGref }: any) {
-  const { openModal } = useModal2();
+  const { openModalWithNameForm } = useModal2();
   // const {Modal2, modalRef} = useModal2();
   const router = useRouter();
   const { processEdits } = useMarkerContext();
@@ -26,7 +26,7 @@ export default function EditControlFC({ FGref }: any) {
         onCreated={async (e) => {
           const userObj =
             router.pathname === "/contribute"
-              ? { uid: uuidv4(), displayName: await openModal("userNameForm") }
+              ? { uid: uuidv4(), displayName: await openModalWithNameForm() }
               : auth.currentUser;
           processEdits(e.layer, { operation: "addMarker", userObj: userObj });
         }}

@@ -36,11 +36,29 @@ function useModal2() {
   const { modalRef } = context;
 
   return {
-    openModal: async (context: string) => {
+    openModalWithNameForm: async () => {
       if (modalRef.current) {
-        return await modalRef.current.openModal(context);
+        return await modalRef.current.openModal("userNameForm");
       }
     },
+
+    openModalWithSpinner: async (message: string = "") => {
+      if (modalRef.current) {
+        return await modalRef.current.openModal("spinner", message);
+      }
+    },
+
+    openModalWithError: async (message: string = "") => {
+      if (modalRef.current) {
+        return await modalRef.current.openModal("error", message);
+      }
+    },
+
+    closeModal: async () => {
+      if (modalRef.current) {
+        await modalRef.current.closeModal();
+      }
+    }
   };
 }
 

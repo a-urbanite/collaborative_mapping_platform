@@ -7,19 +7,16 @@ import styles from './contribute.module.scss'
 import { useModal2 } from '../../components/Modal2/Modal2Context'
 
 const Contribute = () => {
-  const { openModal } = useModal2();
-  // const {Modal2, modalRef} = useModal2();
-  // const first = useRef(second)
+  const { openModalWithNameForm, openModalWithSpinner, openModalWithError } = useModal2();
 
   const handleButtonClick = async () => {
-    const submittedName = await openModal("test");
+    const submittedName = await openModalWithError("asdsad");
     console.log("Submitted name:", submittedName);
   };
 
   return (
     <>
       <button onClick={handleButtonClick}>Open Modal</button>
-      {/* <Modal2 /> */}
       <p>Contribute</p>
       <div className={styles.homeContainer}>
       <MapLoader/>

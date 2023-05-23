@@ -1,10 +1,13 @@
 import React, { Component, FormEvent } from "react";
 import styles from "./modal2.module.scss";
 import UserNameForm from "./UserNameForm/UserNameForm";
+import LoadingSpinner from "./LoadingSpinner/LoadingSpinner";
+import ErrorMessage from "./ErrorMessage/ErrorMessage";
 
 interface ModalState {
   isOpen: boolean;
   context: string;
+  message: string;
 }
 
 // this is realised as a class component because only class components can have a Ref
@@ -18,10 +21,11 @@ class Modal2 extends Component {
   state: ModalState = {
     isOpen: false,
     context: "",
+    message: "",
   };
 
-  openModal = (context: string) => {
-    this.setState({ isOpen: true, context: context });
+  openModal = (context: string, message: string) => {
+    this.setState({ isOpen: true, context, message });
     return new Promise<string>((resolve) => {
       this.resolveModal = resolve;
     });
@@ -53,8 +57,8 @@ class Modal2 extends Component {
   // 3) After resolving, the modal is closed and all states plus resolveModal are reset
 
   render() {
-    const { isOpen, context} = this.state;
-    
+    const { isOpen, context, message } = this.state;
+
     return (
       <div
         className={styles.modalBackground}
@@ -64,7 +68,9 @@ class Modal2 extends Component {
         <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
           {context === "userNameForm" && <UserNameForm returnResults={this.returnResults} />}
 
-          {context === "test" && <h1>test</h1>}
+          {context === "spinner" && <LoadingSpinner message={message} />}
+
+          {context === "error" && <ErrorMessage message={message} />}
         </div>
       </div>
     );
