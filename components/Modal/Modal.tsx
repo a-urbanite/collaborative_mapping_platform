@@ -69,7 +69,7 @@ class Modal extends Component {
     return (
       <div
         className={styles.modalBackground}
-        onClick={this.closeModal}
+        onClick={() => this.closeModal}
         style={isOpen ? { display: "flex" } : { display: "none" }}
       >
         <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>

@@ -108,10 +108,10 @@ const FirestoreControllerProvider = ({ children }) => {
 
   const filterMarkersToUpload = (markerMap) => {
     const markersToUploadArr = [];
-    markerMap.forEach((value, key) => {
-      if (value.properties.operationIndicator !== null) {
-        delete value.mapLayerObj;
-        markersToUploadArr.push(value);
+    markerMap.forEach((marker) => {
+      if (marker.properties.operationIndicator !== null) {
+        delete marker.mapLayerObj;
+        markersToUploadArr.push(marker);
       }
     });
     return markersToUploadArr;
