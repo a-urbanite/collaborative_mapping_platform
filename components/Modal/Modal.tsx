@@ -40,14 +40,14 @@ class Modal extends Component {
   // 3) this promise's resolve function is stored in the private resolveModal variable.
   // When resolveModal() is called later on the promise will resolve with the submitted name value.
 
-
-
   closeModal = (delay: number = 0) => {
-    console.log("delay in closemodal: ", delay)
-    setTimeout(() => {
-      this.setState({ isOpen: false, context: "" });
-      this.resolveModal = null;
-    }, delay);
+    return new Promise<void>((resolve) => {
+      setTimeout(() => {
+        this.setState({ isOpen: false, context: "" });
+        this.resolveModal = null;
+        resolve();
+      }, delay);
+    });
   };
 
   returnResults = (value: any) => {
