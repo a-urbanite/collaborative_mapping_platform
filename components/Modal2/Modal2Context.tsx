@@ -60,9 +60,9 @@ function useModal2() {
       }
     },
 
-    closeModal: async () => {
+    closeModal: async (delay: number) => {
       if (modalRef.current) {
-        await modalRef.current.closeModal();
+          await modalRef.current.closeModal(delay);
       }
     }
   };
