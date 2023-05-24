@@ -1,7 +1,6 @@
 import React, { ReactNode } from "react";
 import { serializeGeoJsonCoords } from "./Serialisation";
 import { deserializeGeoJsonCoords } from "./Deserialisation";
-import { GeoJsonObject } from "./Types";
 
 interface ContextProps {
   fetchAllMarkers: () => Promise<Map<any, any>>;
@@ -64,7 +63,7 @@ const FirestoreControllerProvider = ({ children }: ProviderProps) => {
     if (!res.ok) {
       throw new Error(`HTTP error: ${res.status}`);
     }
-    console.log("RES FETCH: ", res);
+    // console.log("RES FETCH: ", res);
     markers = await res.json();
     markers.forEach((marker: any) => (marker.geometry.coordinates = deserializeGeoJsonCoords(marker)));
     return markers;

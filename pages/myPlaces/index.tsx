@@ -6,19 +6,15 @@ import styles from './myPlaces.module.scss'
 import { useRouter } from 'next/router';
 import { auth } from "../../firebase-config";
 import { useMarkerContext } from '../../components/MarkerContext';
-import { useFirestoreController } from '../../components/FirestoreController/FirestoreController';
 
 const MyPlaces = () => {
   const router = useRouter();
   const { userMarkers, defineUserMarkers, allMarkers } = useMarkerContext();
-  const { initialFetch, markersUpdated  } = useFirestoreController();
 
   React.useEffect(() => {
-    console.log("MYPALCES initial render")
     if (!auth.currentUser) {
       router.push('/home')
     }
-    console.log("initialFetch: ", initialFetch, ", markersUpdated: ", markersUpdated)
     defineUserMarkers(allMarkers, auth.currentUser)
   }, [])
 
