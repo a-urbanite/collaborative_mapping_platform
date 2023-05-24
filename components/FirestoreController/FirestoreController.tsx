@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
-import { serializeGeoJsonCoords } from './Serialisation'
-import { deserializeGeoJsonCoords } from './Deserialisation'
-import {GeoJsonObject} from './Types'
+import { serializeGeoJsonCoords } from "./Serialisation";
+import { deserializeGeoJsonCoords } from "./Deserialisation";
+import { GeoJsonObject } from "./Types";
 
 interface ContextProps {
   fetchAllMarkers: () => Promise<Map<any, any>>;
@@ -11,7 +11,7 @@ interface ContextProps {
 }
 
 interface ProviderProps {
-  children: ReactNode
+  children: ReactNode;
 }
 
 const FirestoreController = React.createContext(null as unknown as ContextProps);
@@ -74,14 +74,15 @@ const FirestoreControllerProvider = ({ children }: ProviderProps) => {
     try {
       setmarkersUpdated(false);
       setinitialFetch(false);
-      const markerMap = new Map();
+
       const markers = await fetchMarkersAJAX();
-      markers.forEach((marker: { properties: { markerId: any; }; }) => {
+      if (markers.length === 0) throw new Error("fetched data contains no marker");
+
+      const markerMap = new Map();
+      markers.forEach((marker: { properties: { markerId: string } }) => {
         markerMap.set(marker.properties.markerId, marker);
       });
-      if (markerMap.size === 0) {
-        throw new Error("fetched data contains no marker");
-      }
+
       return markerMap;
     } catch (error) {
       throw error;

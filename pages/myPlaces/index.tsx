@@ -19,10 +19,7 @@ const MyPlaces = () => {
       router.push('/home')
     }
     console.log("initialFetch: ", initialFetch, ", markersUpdated: ", markersUpdated)
-    if (initialFetch || markersUpdated) {
-      console.log("defineUserMarkers tirggered")
-      defineUserMarkers(allMarkers, auth.currentUser)
-    };
+    defineUserMarkers(allMarkers, auth.currentUser)
   }, [])
 
   return (
