@@ -61,8 +61,6 @@ function useModal() {
     },
 
     closeModal: async (delay: number = 0) => {
-      const stackTrace = new Error().stack;
-      console.log("Function called from:", stackTrace);
       if (modalRef.current) {
         await modalRef.current.closeModal(delay);
       }

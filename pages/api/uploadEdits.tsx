@@ -5,9 +5,8 @@ import { collRef, firestore } from "../../firebase-config";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
-    const markersArr = req.body.map((str: string) => JSON.parse(str))
 
-    markersArr.forEach(async (marker: any) => {
+    req.body.forEach(async (marker: any) => {
 
       if (marker.properties.operationIndicator === "created in current session") {
         marker.properties.operationIndicator = null
@@ -38,6 +37,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     res.status(200);
     res.json({ res: "all Edits uploaded" });
   } catch (err) {
+    console.error(err)
     res.status(500);
     res.json(err);
   }

@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import MapLoader from "../../components/Map/MapLoader";
 import styles from "./home.module.scss";
 import { useMarkerContext } from "../../components/MarkerContext";
-import { useFirestoreController } from "../../components/FirestoreController";
+import { useFirestoreController } from "../../components/FirestoreController/FirestoreController";
 import { useModal } from "../../components/Modal/ModalContext";
 
 export default function Home() {

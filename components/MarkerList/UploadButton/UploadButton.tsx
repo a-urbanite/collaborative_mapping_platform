@@ -2,7 +2,7 @@ import React from "react";
 import styles from "./uploadButton.module.scss";
 import { useMarkerContext } from "../../MarkerContext";
 import { useModal } from "../../Modal/ModalContext";
-import { useFirestoreController } from "../../FirestoreController";
+import { useFirestoreController } from "../../FirestoreController/FirestoreController";
 import { useRouter } from "next/router";
 
 const UploadButton = () => {

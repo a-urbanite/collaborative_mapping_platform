@@ -40,6 +40,7 @@ const MarkerContextProvider = ({ children }) => {
   }
 
   const defineUserMarkers = (markerMap, userObj) => {
+    console.log("defineUserMarkers tirggered")
     setUserMarkers(
       new Map([...markerMap].filter(([k, v]) => userObj.uid === v.properties.user.uid))
     );
