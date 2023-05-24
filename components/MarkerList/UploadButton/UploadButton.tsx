@@ -15,7 +15,7 @@ const UploadButton = () => {
     try {
       openModalWithSpinner("Uploading Edits");
       await uploadEdits(userMarkers)
-      await closeModal(3500);
+      await closeModal(500);
       router.push("/home");
     } catch (e: any) {
       console.error(e)

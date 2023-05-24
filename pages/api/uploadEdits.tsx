@@ -7,14 +7,14 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {
 
     req.body.forEach(async (marker: any) => {
+      const status = marker.properties.operationIndicator;
+      marker.properties.operationIndicator = null
 
-      if (marker.properties.operationIndicator === "created in current session") {
-        marker.properties.operationIndicator = null
+      if (status === "created in current session") {
         await addDoc(collRef, marker);
       }
 
-      if (["popup edited in current session", "updated in current session"].includes(marker.properties.operationIndicator)) {
-        marker.properties.operationIndicator = null
+      if (["popup edited in current session", "updated in current session"].includes(status)) {
         const markerId = marker.properties.markerId
         const q = query(collRef, where('properties.markerId', '==', markerId));
         const querySnapshot = await getDocs(q)
@@ -28,7 +28,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
         }
       }
 
-      if (marker.properties.operationIndicator === "deleted in current session") {
+      if (status === "deleted in current session") {
         await deleteDoc(doc(firestore, "markers1", marker.properties.firebaseDocID))
       }
 
