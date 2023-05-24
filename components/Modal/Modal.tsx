@@ -43,6 +43,7 @@ class Modal extends Component {
 
 
   closeModal = (delay: number = 0) => {
+    console.log("delay in closemodal: ", delay)
     setTimeout(() => {
       this.setState({ isOpen: false, context: "" });
       this.resolveModal = null;
@@ -69,7 +70,7 @@ class Modal extends Component {
     return (
       <div
         className={styles.modalBackground}
-        onClick={() => this.closeModal}
+        onClick={() => this.closeModal()}
         style={isOpen ? { display: "flex" } : { display: "none" }}
       >
         <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>

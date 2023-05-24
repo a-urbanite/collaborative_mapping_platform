@@ -1,5 +1,5 @@
-import React from 'react';
-import Modal from './Modal';
+import React from "react";
+import Modal from "./Modal";
 
 interface ModalContextValue {
   modalRef: React.RefObject<any>;
@@ -14,12 +14,12 @@ const ModalContext = React.createContext<ModalContextValue | null>(null);
 function ModalProvider({ children }: ModalProviderProps) {
   const modalRef = React.useRef<any>(null);
 
-  const contextValue: ModalContextValue = {
-    modalRef,
-  };
-
   return (
-    <ModalContext.Provider value={contextValue}>
+    <ModalContext.Provider
+      value={{
+        modalRef,
+      }}
+    >
       {children}
       <Modal ref={modalRef} />
     </ModalContext.Provider>
@@ -30,7 +30,7 @@ function useModal() {
   const context = React.useContext(ModalContext);
 
   if (!context) {
-    throw new Error('useModal2 must be used within a ModalProvider');
+    throw new Error("useModal2 must be used within a ModalProvider");
   }
 
   const { modalRef } = context;
@@ -56,15 +56,15 @@ function useModal() {
 
     openModalWithPopupContentForm: async (marker: any) => {
       if (modalRef.current) {
-        return await modalRef.current.openModal("popupContentForm", "" , marker);
+        return await modalRef.current.openModal("popupContentForm", "", marker);
       }
     },
 
     closeModal: async (delay: number = 0) => {
       if (modalRef.current) {
-          await modalRef.current.closeModal(delay);
+        await modalRef.current.closeModal(delay);
       }
-    }
+    },
   };
 }
 

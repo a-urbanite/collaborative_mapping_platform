@@ -8,9 +8,9 @@ import { useMarkerContext } from "../MarkerContext";
 const MarkerList = () => {
   const { userMarkers } = useMarkerContext();
 
-  useEffect(() => {
-    console.log("usermarkers", userMarkers);
-  }, [userMarkers]);
+  // useEffect(() => {
+  //   console.log("usermarkers", userMarkers);
+  // }, [userMarkers]);
 
   return (
     <div className={styles.container}>

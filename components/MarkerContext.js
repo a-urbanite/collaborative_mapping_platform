@@ -66,8 +66,8 @@ const MarkerContextProvider = ({ children }) => {
   };
 
   const highlightMarkerCard = (e) => {
-    console.log("Marker Clicked!")
-    console.log(e.target.feature.properties.markerId)
+    // console.log("Marker Clicked!")
+    // console.log(e.target.feature.properties.markerId)
   }
 
 
