@@ -2,10 +2,10 @@ import { useState } from "react";
 import { useRouter } from 'next/router';
 import styles from './login.module.css'
 import { useUserContext } from '../../components/UserContext';
-import { useModal2 } from "../../components/Modal2/Modal2Context";
+import { useModal } from "../../components/Modal/ModalContext";
 
 const Login = () => {
-  const { openModalWithSpinner, openModalWithError, closeModal } = useModal2();
+  const { openModalWithSpinner, openModalWithError, closeModal } = useModal();
   const { signInWithEmail } = useUserContext()
   const router = useRouter()
   const [logInEmail, setlogInEmail] = useState<string>("");

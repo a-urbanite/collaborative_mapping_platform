@@ -1,14 +1,14 @@
 import React from "react";
 import styles from "./uploadButton.module.scss";
 import { useMarkerContext } from "../../MarkerContext";
-import { useModal2 } from "../../Modal2/Modal2Context";
+import { useModal } from "../../Modal/ModalContext";
 import { useFirestoreController } from "../../FirestoreController";
 import { useRouter } from "next/router";
 
 const UploadButton = () => {
   const { userFirestoreMarkers } = useMarkerContext();
   const { uploadEdits } = useFirestoreController();
-  const { openModalWithSpinner, closeModal, openModalWithError } = useModal2();
+  const { openModalWithSpinner, closeModal, openModalWithError } = useModal();
   const router = useRouter();
 
   const uploadEditsWrapper = async () => {

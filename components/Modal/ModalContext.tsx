@@ -1,5 +1,5 @@
 import React from 'react';
-import Modal2 from './Modal2';
+import Modal from './Modal';
 
 interface ModalContextValue {
   modalRef: React.RefObject<any>;
@@ -21,12 +21,12 @@ function ModalProvider({ children }: ModalProviderProps) {
   return (
     <ModalContext.Provider value={contextValue}>
       {children}
-      <Modal2 ref={modalRef} />
+      <Modal ref={modalRef} />
     </ModalContext.Provider>
   );
 }
 
-function useModal2() {
+function useModal() {
   const context = React.useContext(ModalContext);
 
   if (!context) {
@@ -68,4 +68,4 @@ function useModal2() {
   };
 }
 
-export { ModalProvider, useModal2 };
+export { ModalProvider, useModal };

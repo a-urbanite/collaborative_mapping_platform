@@ -3,11 +3,10 @@ import MapLoader from '../../components/Map/MapLoader'
 import MarkerList from '../../components/MarkerList/MarkerList'
 import UploadButton from '../../components/MarkerList/UploadButton/UploadButton'
 import styles from './contribute.module.scss'
-// import useModal2 from '../../components/Modal2/Modal2Hook'
-import { useModal2 } from '../../components/Modal2/Modal2Context'
+import { useModal } from '../../components/Modal/ModalContext'
 
 const Contribute = () => {
-  const { openModalWithNameForm, openModalWithSpinner, openModalWithError } = useModal2();
+  const { openModalWithError } = useModal();
 
   const handleButtonClick = async () => {
     const submittedName = await openModalWithError("asdsad");

@@ -2,15 +2,13 @@ import { useEffect } from "react";
 import MapLoader from "../../components/Map/MapLoader";
 import styles from "./home.module.scss";
 import { useMarkerContext } from "../../components/MarkerContext";
-import { useModalContext } from "../../components/ModalContext";
 import { useFirestoreController } from "../../components/FirestoreController";
-import { useModal2 } from "../../components/Modal2/Modal2Context";
+import { useModal } from "../../components/Modal/ModalContext";
 
 export default function Home() {
-  const { openModalWithSpinner, openModalWithError, closeModal } = useModal2();
+  const { openModalWithSpinner, openModalWithError, closeModal } = useModal();
   const { fetchAllMarkers, markersUpdated, initialFetch } = useFirestoreController();
   const { setAllFirestoreMarkers } = useMarkerContext();
-  // const { openModalWithSpinner, openModalWithError, closeModal } = useModalContext();
 
   useEffect(() => {
     if (initialFetch || markersUpdated) {

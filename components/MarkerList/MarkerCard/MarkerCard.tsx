@@ -1,13 +1,13 @@
 import React from "react";
 // import { useModalContext } from "../../ModalContext";
 import styles from "./markerCard.module.scss";
-import { useModal2 } from "../../Modal2/Modal2Context";
+import { useModal } from "../../Modal/ModalContext";
 import { useMarkerContext } from "../../MarkerContext";
 
 const MarkerCard = ({ marker }: any) => {
   // const { openModalWithMarkerPopupContentForm } = useModalContext();
   const { processEdits } = useMarkerContext();
-  const { openModalWithPopupContentForm } = useModal2();
+  const { openModalWithPopupContentForm } = useModal();
 
   const processPopupContentEdits = async (marker: any) => {
     const updatedContents = await openModalWithPopupContentForm(marker);

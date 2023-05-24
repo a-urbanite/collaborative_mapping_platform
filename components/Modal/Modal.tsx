@@ -1,5 +1,5 @@
 import React, { Component, FormEvent } from "react";
-import styles from "./modal2.module.scss";
+import styles from "./modal.module.scss";
 import UserNameForm from "./UserNameForm/UserNameForm";
 import LoadingSpinner from "./LoadingSpinner/LoadingSpinner";
 import ErrorMessage from "./ErrorMessage/ErrorMessage";
@@ -16,7 +16,7 @@ interface ModalState {
 // which exposed the components methods to parent components.
 // So, with a Ref assigned the Modal can be called inside a function like ModalRef.openModal()
 
-class Modal2 extends Component {
+class Modal extends Component {
   private resolveModal: ((payload: any) => void) | null = null;
   //its own variable instead of state to avoid rerenders on change
 
@@ -88,4 +88,4 @@ class Modal2 extends Component {
   }
 }
 
-export default Modal2;
+export default Modal;

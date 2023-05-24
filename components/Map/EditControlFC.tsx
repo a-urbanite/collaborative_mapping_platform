@@ -3,15 +3,13 @@ import { FeatureGroup } from "react-leaflet";
 import "leaflet-draw/dist/leaflet.draw.css";
 import { EditControl } from "react-leaflet-draw";
 import { useMarkerContext } from "../MarkerContext";
-import { useModalContext } from "../ModalContext";
 import { useRouter } from "next/router";
 import { auth } from "../../firebase-config";
 import { uuidv4 } from "@firebase/util";
-// import useModal2 from "../Modal2/Modal2Hook";
-import { useModal2 } from "../../components/Modal2/Modal2Context";
+import { useModal } from "../Modal/ModalContext";
 
 export default function EditControlFC({ FGref }: any) {
-  const { openModalWithNameForm } = useModal2();
+  const { openModalWithNameForm } = useModal();
   // const {Modal2, modalRef} = useModal2();
   const router = useRouter();
   const { processEdits } = useMarkerContext();
