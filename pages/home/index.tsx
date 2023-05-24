@@ -11,19 +11,21 @@ export default function Home() {
   const { setAllFirestoreMarkers } = useMarkerContext();
 
   useEffect(() => {
-    if (initialFetch || markersUpdated) {
-      openModalWithSpinner("Fetching Markers...");
-      fetchAllMarkers()
-        .then((markerMap: any) => {
-          if (markerMap.length === 0) {throw new Error("fetched data contains no marker")}
-          setAllFirestoreMarkers(markerMap);
-          closeModal()
-        })
-        .catch((e: any) => {
-          console.error(e)
-          openModalWithError(`Error connecting to Server (message: ${e.message})`)
-        })
-    }
+    if (!initialFetch && !markersUpdated) return;
+
+    openModalWithSpinner("Fetching Markers...");
+    fetchAllMarkers()
+      .then((markerMap: any) => {
+        if (markerMap.length === 0) {
+          throw new Error("fetched data contains no marker");
+        }
+        setAllFirestoreMarkers(markerMap);
+        closeModal();
+      })
+      .catch((e: any) => {
+        console.error(e);
+        openModalWithError(`Error connecting to Server (message: ${e.message})`);
+      });
   }, []);
 
   return (

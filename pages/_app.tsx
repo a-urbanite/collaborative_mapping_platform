@@ -4,7 +4,6 @@ import MainNav from "../components/MainNav/MainNav";
 import { UserContextProvider } from "../components/UserContext";
 import { MarkerContextProvider } from "../components/MarkerContext";
 import { FirestoreControllerProvider } from "../components/FirestoreController";
-// import Modal from "../components/Modal/Modal";
 import { ModalProvider } from "../components/Modal/ModalContext";
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -14,7 +13,6 @@ export default function App({ Component, pageProps }: AppProps) {
         <UserContextProvider>
           <FirestoreControllerProvider>
               <ModalProvider>
-                {/* <Modal /> */}
                 <MainNav />
                 <Component {...pageProps} />
               </ModalProvider>
