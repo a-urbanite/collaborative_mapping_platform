@@ -9,7 +9,7 @@ import { useMarkerContext } from '../../components/MarkerContext';
 
 const MyPlaces = () => {
   const router = useRouter();
-  const { defineUserMarkers } = useMarkerContext();
+  const { defineUserMarkers, userMarkers } = useMarkerContext();
 
   React.useEffect(() => {
     if (!auth.currentUser) {
@@ -20,7 +20,7 @@ const MyPlaces = () => {
 
   return (
     <div className={styles.homeContainer}>
-      <MapLoader/>
+      <MapLoader markers={userMarkers}/>
       <div className={styles.sidebar}>
         <MarkerList />
         <UploadButton/>

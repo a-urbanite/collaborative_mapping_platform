@@ -1,7 +1,7 @@
 import React from 'react'
 import dynamic from 'next/dynamic'
 
-const MapLoader = () => {
+const MapLoader = ({markers}: any) => {
 
   const Map = dynamic(
     () => import('./Map'),
@@ -12,7 +12,7 @@ const MapLoader = () => {
   )
 
   return (
-    <Map/>
+    <Map markers={markers} />
   )
 }
 

@@ -8,7 +8,7 @@ import { useModal } from "../../components/Modal/ModalContext";
 export default function Home() {
   const { openModalWithSpinner, openModalWithError, closeModal } = useModal();
   const { fetchAllMarkers, markersUpdated, initialFetch } = useFirestoreController();
-  const { setAllMarkers } = useMarkerContext();
+  const { setAllMarkers, allMarkers } = useMarkerContext();
 
   useEffect(() => {
     if (!initialFetch && !markersUpdated) return;
@@ -16,9 +16,6 @@ export default function Home() {
     openModalWithSpinner("Fetching Markers...");
     fetchAllMarkers()
       .then((markerMap: any) => {
-        if (markerMap.length === 0) {
-          throw new Error("fetched data contains no marker");
-        }
         setAllMarkers(markerMap);
         closeModal();
       })
@@ -30,7 +27,7 @@ export default function Home() {
 
   return (
     <div className={styles.homeContainer}>
-      <MapLoader />
+      <MapLoader markers={allMarkers}/>
     </div>
   );
 }

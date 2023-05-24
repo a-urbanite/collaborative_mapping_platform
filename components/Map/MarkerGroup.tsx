@@ -1,40 +1,29 @@
 import React from "react";
 import * as L from "leaflet";
 import { useMarkerContext } from "../MarkerContext";
-import { useRouter } from "next/router";
 
-const MarkerGroup = ({ FGref }: any) => {
-  const {
-    allMarkers,
-    userMarkers,
-    generatePopupContent,
-    attachMapLayerObjToMarkerInHashmap,
-    highlightMarkerCard,
-  } = useMarkerContext();
-  const router = useRouter();
-
-  const currentMarkerSet = router.pathname === "/home" ? allMarkers : userMarkers
+const MarkerGroup = ({ FGref, markers }: any) => {
+  const { generatePopupContent, attachMapLayerObjToMarkerInHashmap, highlightMarkerCard } =
+    useMarkerContext();
 
   React.useEffect(() => {
+    const featureGroup = FGref.current;
 
-    const featureGroup = FGref.current
-
-    currentMarkerSet.forEach((marker: any) => {
+    markers.forEach((marker: any) => {
       if (marker.properties.operationIndicator == "deleted in current session") return;
       L.geoJSON(marker, {
         onEachFeature: (feature: any, layer: any) => {
           layer.bindPopup(generatePopupContent(feature));
           layer.on("click", highlightMarkerCard);
           featureGroup.addLayer(layer);
-          attachMapLayerObjToMarkerInHashmap(feature, layer, currentMarkerSet);
+          attachMapLayerObjToMarkerInHashmap(feature, layer, markers);
         },
       });
     });
     return () => {
       featureGroup.clearLayers();
     };
-
-  }, [allMarkers, userMarkers]);
+  }, [markers]);
 
   return <></>;
 };

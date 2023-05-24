@@ -7,7 +7,7 @@ import EditControlFC from "./EditControlFC";
 import MarkerGroup from "./MarkerGroup";
 import React from "react";
 
-const Map = () => {
+const Map = ({markers}: any) => {
   const FGref = React.useRef<L.FeatureGroup>(null);
 
   return (
@@ -20,7 +20,7 @@ const Map = () => {
         console.log("MAPLOAD");
       }}
     >
-      <MarkerGroup FGref={FGref} />
+      <MarkerGroup FGref={FGref} markers={markers}/>
 
       <EditControlFC FGref={FGref} />
 

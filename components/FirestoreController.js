@@ -93,13 +93,16 @@ const FirestoreControllerProvider = ({ children }) => {
 
   const fetchAllMarkers = async () => {
     try {
-      const markers = await fetchMarkersAJAX();
       setmarkersUpdated(false);
       setinitialFetch(false);
       const markerMap = new Map();
+      const markers = await fetchMarkersAJAX();
       markers.forEach((marker) => {
         markerMap.set(marker.properties.markerId, marker);
       });
+      if (markerMap.length === 0) {
+        throw new Error("fetched data contains no marker");
+      }
       return markerMap;
     } catch (error) {
       throw error;
