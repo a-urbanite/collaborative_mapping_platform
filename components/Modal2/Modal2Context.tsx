@@ -60,7 +60,7 @@ function useModal2() {
       }
     },
 
-    closeModal: async (delay: number) => {
+    closeModal: async (delay: number = 0) => {
       if (modalRef.current) {
           await modalRef.current.closeModal(delay);
       }

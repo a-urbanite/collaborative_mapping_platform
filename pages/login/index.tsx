@@ -2,27 +2,26 @@ import { useState } from "react";
 import { useRouter } from 'next/router';
 import styles from './login.module.css'
 import { useUserContext } from '../../components/UserContext';
-import { useModalContext } from "../../components/ModalContext";
+import { useModal2 } from "../../components/Modal2/Modal2Context";
 
 const Login = () => {
-  const { openModalWithSpinner, openModalWithError, closeModal } = useModalContext();
+  const { openModalWithSpinner, openModalWithError, closeModal } = useModal2();
   const { signInWithEmail } = useUserContext()
   const router = useRouter()
   const [logInEmail, setlogInEmail] = useState<string>("");
   const [logInPassword, setlogInPassword] = useState<string>("");
   
   const signInWithEmailWrapper = async(event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    openModalWithSpinner("Logging in...")
-    signInWithEmail(logInEmail, logInPassword)
-      .then((userObj: any) => {
-        closeModal()
-        router.push('/myPlaces')
-      })
-      .catch((err: any) => {
-        console.error(err)
-        openModalWithError("Unable to connect to Server!")
-      })
+    try {
+      event.preventDefault()
+      openModalWithSpinner("Logging in...")
+      await signInWithEmail(logInEmail, logInPassword)
+      closeModal()
+      router.push('/myPlaces')
+    } catch (e: any) {
+      console.error(e)
+      openModalWithError("Unable to connect to Server! " + e.message)
+    }
   }
 
   return (
