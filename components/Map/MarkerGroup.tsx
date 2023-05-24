@@ -5,8 +5,8 @@ import { useRouter } from "next/router";
 
 const MarkerGroup = ({ FGref }: any) => {
   const {
-    allFirestoreMarkers,
-    userFirestoreMarkers,
+    allMarkers,
+    userMarkers,
     generatePopupContent,
     attachMapLayerObjToMarkerInHashmap,
     highlightMarkerCard,
@@ -16,17 +16,17 @@ const MarkerGroup = ({ FGref }: any) => {
   // let currentMarkerSet: any;
   // switch (router.pathname) {
   //   case "/home":
-  //     currentMarkerSet = allFirestoreMarkers
+  //     currentMarkerSet = allMarkers
   //     break;
   //   case "/myPlaces":
-  //     currentMarkerSet = userFirestoreMarkers
+  //     currentMarkerSet = userMarkers
   //     break;
   //   case "/contribute":
-  //     currentMarkerSet = userFirestoreMarkers
+  //     currentMarkerSet = userMarkers
   //     break;
   // }
 
-  const currentMarkerSet = router.pathname === "/home" ? allFirestoreMarkers : userFirestoreMarkers
+  const currentMarkerSet = router.pathname === "/home" ? allMarkers : userMarkers
 
   React.useEffect(() => {
     // console.log("insie useeffect")
@@ -54,7 +54,7 @@ const MarkerGroup = ({ FGref }: any) => {
       featureGroup.clearLayers();
     };
 
-  }, [allFirestoreMarkers, userFirestoreMarkers]);
+  }, [allMarkers, userMarkers]);
 
   return <></>;
 };

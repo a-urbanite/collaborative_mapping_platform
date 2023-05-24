@@ -10,8 +10,8 @@ import {
 const MarkerContext = createContext();
 
 const MarkerContextProvider = ({ children }) => {
-  const [allFirestoreMarkers, setAllFirestoreMarkers] = React.useState(new Map());
-  const [userFirestoreMarkers, setUserFirestoreMarkers] = React.useState(new Map());
+  const [allMarkers, setAllMarkers] = React.useState(new Map());
+  const [userMarkers, setUserMarkers] = React.useState(new Map());
 
   const processEdits = (updatedLayerProp, addprops) => {
     const updatedLayers = Array.isArray(updatedLayerProp) ? [...updatedLayerProp] : [updatedLayerProp]
@@ -35,13 +35,13 @@ const MarkerContextProvider = ({ children }) => {
         }
 
       const key = geojson.properties.markerId;
-      setUserFirestoreMarkers(new Map(userFirestoreMarkers.set(key, geojson)));
+      setUserMarkers(new Map(userMarkers.set(key, geojson)));
     })
   }
 
   const defineUserMarkers = (userObj) => {
-    setUserFirestoreMarkers(
-      new Map([...allFirestoreMarkers].filter(([k, v]) => userObj.uid === v.properties.user.uid))
+    setUserMarkers(
+      new Map([...allMarkers].filter(([k, v]) => userObj.uid === v.properties.user.uid))
     );
   };
 
@@ -74,10 +74,10 @@ const MarkerContextProvider = ({ children }) => {
   return (
     <MarkerContext.Provider
       value={{
-        allFirestoreMarkers,
-        setAllFirestoreMarkers,
-        userFirestoreMarkers,
-        setUserFirestoreMarkers,
+        allMarkers,
+        setAllMarkers,
+        userMarkers,
+        setUserMarkers,
         defineUserMarkers,
         generatePopupContent,
         attachMapLayerObjToMarkerInHashmap,

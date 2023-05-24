@@ -6,7 +6,7 @@ import { useFirestoreController } from "../../FirestoreController";
 import { useRouter } from "next/router";
 
 const UploadButton = () => {
-  const { userFirestoreMarkers } = useMarkerContext();
+  const { userMarkers } = useMarkerContext();
   const { uploadEdits } = useFirestoreController();
   const { openModalWithSpinner, closeModal, openModalWithError } = useModal();
   const router = useRouter();
@@ -14,7 +14,7 @@ const UploadButton = () => {
   const uploadEditsWrapper = async () => {
     try {
       openModalWithSpinner("Uploading Edits");
-      await uploadEdits(userFirestoreMarkers)
+      await uploadEdits(userMarkers)
       closeModal(500);
       router.push("/home");
     } catch (e: any) {
