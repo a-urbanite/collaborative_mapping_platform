@@ -54,6 +54,12 @@ function useModal2() {
       }
     },
 
+    openModalWithPopupContentForm: async (marker: any) => {
+      if (modalRef.current) {
+        return await modalRef.current.openModal("popupContentForm", "" , marker);
+      }
+    },
+
     closeModal: async () => {
       if (modalRef.current) {
         await modalRef.current.closeModal();

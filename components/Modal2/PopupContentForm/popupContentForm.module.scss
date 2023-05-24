@@ -1,0 +1,18 @@
+.form {
+  // background-color: red;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  gap: 1rem;
+}
+
+.input {
+  height: 2rem;
+}
+
+.textarea {
+  resize: vertical;
+  height: 10rem;
+}

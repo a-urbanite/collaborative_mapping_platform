@@ -3,11 +3,13 @@ import styles from "./modal2.module.scss";
 import UserNameForm from "./UserNameForm/UserNameForm";
 import LoadingSpinner from "./LoadingSpinner/LoadingSpinner";
 import ErrorMessage from "./ErrorMessage/ErrorMessage";
+import PopupContentForm from "./PopupContentForm/PopupContentForm";
 
 interface ModalState {
   isOpen: boolean;
   context: string;
   message: string;
+  marker: any;
 }
 
 // this is realised as a class component because only class components can have a Ref
@@ -22,10 +24,11 @@ class Modal2 extends Component {
     isOpen: false,
     context: "",
     message: "",
+    marker: null,
   };
 
-  openModal = (context: string, message: string) => {
-    this.setState({ isOpen: true, context, message });
+  openModal = (context: string, message: string, marker: any) => {
+    this.setState({ isOpen: true, context, message, marker });
     return new Promise<string>((resolve) => {
       this.resolveModal = resolve;
     });
@@ -57,7 +60,7 @@ class Modal2 extends Component {
   // 3) After resolving, the modal is closed and all states plus resolveModal are reset
 
   render() {
-    const { isOpen, context, message } = this.state;
+    const { isOpen, context, message, marker } = this.state;
 
     return (
       <div
@@ -71,6 +74,10 @@ class Modal2 extends Component {
           {context === "spinner" && <LoadingSpinner message={message} />}
 
           {context === "error" && <ErrorMessage message={message} />}
+
+          {context === "popupContentForm" && (
+            <PopupContentForm returnResults={this.returnResults} marker={marker} />
+          )}
         </div>
       </div>
     );
