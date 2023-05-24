@@ -18,7 +18,7 @@ const Contribute = () => {
       <button onClick={handleButtonClick}>Open Modal</button>
       <p>Contribute</p>
       <div className={styles.homeContainer}>
-      <MapLoader/>
+      <MapLoader markers={[]}/>
       <div className={styles.sidebar}>
         <MarkerList />
         <UploadButton/>
