@@ -6,7 +6,7 @@ import { useMarkerContext } from "../MarkerContext";
 
 const MainNav = () => {
   const { isLoggedIn, signOutUser } = useUserContext();
-  const { setUserFirestoreMarkers } = useMarkerContext();
+  const { setUserMarkers } = useMarkerContext();
 
   return (
     <nav className={styles.mainNav}>
@@ -21,7 +21,7 @@ const MainNav = () => {
             href="/home"
             func={() => {
               signOutUser();
-              setUserFirestoreMarkers(new Map());
+              setUserMarkers(new Map());
             }}
           >
             Log out

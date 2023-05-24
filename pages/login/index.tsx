@@ -3,9 +3,12 @@ import { useRouter } from 'next/router';
 import styles from './login.module.css'
 import { useUserContext } from '../../components/UserContext';
 import { useModal } from "../../components/Modal/ModalContext";
+import { useMarkerContext } from "../../components/MarkerContext";
+import { auth } from "../../firebase-config";
 
 const Login = () => {
   const { openModalWithSpinner, openModalWithError, closeModal } = useModal();
+  const { allMarkers, defineUserMarkers } = useMarkerContext();
   const { signInWithEmail } = useUserContext()
   const router = useRouter()
   const [logInEmail, setlogInEmail] = useState<string>("");
@@ -15,7 +18,8 @@ const Login = () => {
     try {
       event.preventDefault()
       openModalWithSpinner("Logging in...")
-      await signInWithEmail(logInEmail, logInPassword)
+      const res = await signInWithEmail(logInEmail, logInPassword)
+      defineUserMarkers(allMarkers, res.auth.currentUser)
       closeModal()
       router.push('/myPlaces')
     } catch (e: any) {

@@ -9,13 +9,12 @@ import { useMarkerContext } from '../../components/MarkerContext';
 
 const MyPlaces = () => {
   const router = useRouter();
-  const { defineUserMarkers, userMarkers } = useMarkerContext();
+  const { userMarkers } = useMarkerContext();
 
   React.useEffect(() => {
     if (!auth.currentUser) {
       router.push('/home')
     }
-    defineUserMarkers(auth.currentUser)
   }, [])
 
   return (
