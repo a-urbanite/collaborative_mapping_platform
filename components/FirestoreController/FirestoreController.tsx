@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react";
 import { serializeGeoJsonCoords } from "./Serialisation";
 import { deserializeGeoJsonCoords } from "./Deserialisation";
+import { FirestoreMarker } from "./Types";
 
 interface ContextProps {
   fetchAllMarkers: () => Promise<Map<any, any>>;
@@ -12,6 +13,7 @@ interface ContextProps {
 interface ProviderProps {
   children: ReactNode;
 }
+
 
 const FirestoreController = React.createContext(null as unknown as ContextProps);
 
@@ -30,16 +32,6 @@ const FirestoreControllerProvider = ({ children }: ProviderProps) => {
     });
     return markersToUploadArr;
   };
-
-  // const prepareMarkersToUpload = (markerMap: any[]): any[] => {
-  //   return markerMap
-  //     .filter((marker) => marker.properties.operationIndicator !== null)
-  //     .map((marker) => {
-  //       delete marker.mapLayerObj;
-  //       marker.geometry.coordinates = serializeGeoJsonCoords(marker);
-  //       return marker;
-  //     });
-  // };
   
 
   const uploadEditsAJAX = async (preparedArr: any[]) => {
@@ -73,7 +65,8 @@ const FirestoreControllerProvider = ({ children }: ProviderProps) => {
       const body = await res.json();
   
       const markerMap = new Map();
-      body.forEach((marker: any) => {
+      body.forEach((marker: FirestoreMarker) => {
+        console.log(JSON.stringify(marker))
         marker.geometry.coordinates = deserializeGeoJsonCoords(marker)
         markerMap.set(marker.properties.markerId, marker);
       });
