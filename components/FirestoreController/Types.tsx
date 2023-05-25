@@ -1,3 +1,5 @@
+import * as L from 'leaflet'
+
 export interface nonSerialised_GeoJsonPoint {
   type: "Point";
   coordinates: [number, number];
@@ -18,7 +20,7 @@ export type GeoJsonObject = {
 };
 
 export type MarkerMap = Map<string, FirestoreMarker>;
-
+export type LeafletLayer = L.Layer
 
 export type FirestoreMarker = {
   type: string;
