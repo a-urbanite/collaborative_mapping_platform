@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { createContext } from "react";
 import {
   createNewGeojsonFromLayer,
@@ -6,14 +6,38 @@ import {
   createGeojsonMarkedForDeletionFromLayer,
   createGeojsonWithUpdatedPopup
 } from "./MarkerContext_utils";
+import { FirestoreMarker, User, PopupContent, MarkerMap } from "./FirestoreController/Types";
+import * as L from 'leaflet'
 
-const MarkerContext = createContext();
+interface MarkerContextValue {
+  allMarkers: MarkerMap;
+  setAllMarkers: Dispatch<SetStateAction<Map<any, any>>>
+  userMarkers: MarkerMap;
+  setUserMarkers: Dispatch<SetStateAction<Map<any, any>>>
+  defineUserMarkers: (markerMap: MarkerMap, userObj: User) => void;
+  generatePopupContent: (marker: any) => string;
+  attachMapLayerObjToMarkerInHashmap: (geojson: FirestoreMarker, layer: L.Layer, hashmap: MarkerMap) => void;
+  processEdits: (updatedLayerProp: any, addprops: any) => void;
+  highlightMarkerCard: (e: any) => void;
+}
 
-const MarkerContextProvider = ({ children }) => {
+interface addProps {
+  operation: string;
+  userObj: User; 
+  popupContent: PopupContent; 
+}
+
+interface MarkerProviderProps {
+  children: React.ReactNode;
+}
+
+const MarkerContext = createContext(null as unknown as MarkerContextValue);
+
+const MarkerContextProvider = ({ children }: MarkerProviderProps) => {
   const [allMarkers, setAllMarkers] = React.useState(new Map());
   const [userMarkers, setUserMarkers] = React.useState(new Map());
 
-  const processEdits = (updatedLayerProp, addprops) => {
+  const processEdits = (updatedLayerProp: any, addprops: addProps) => {
     const updatedLayers = Array.isArray(updatedLayerProp) ? [...updatedLayerProp] : [updatedLayerProp]
 
     updatedLayers.forEach((updatedLayer) => {
@@ -39,21 +63,22 @@ const MarkerContextProvider = ({ children }) => {
     })
   }
 
-  const defineUserMarkers = (markerMap, userObj) => {
+  const defineUserMarkers = (markerMap: MarkerMap, userObj: User) => {
     setUserMarkers(
       new Map([...markerMap].filter(([k, v]) => userObj.uid === v.properties.user.uid))
     );
   };
 
-  const attachMapLayerObjToMarkerInHashmap = (geojson, layer, hashmap) => {
+  const attachMapLayerObjToMarkerInHashmap = (geojson: FirestoreMarker, layer: L.Layer, hashmap: MarkerMap) => {
     const key = geojson.properties.markerId;
     const updatedMarker = hashmap.get(key);
-    updatedMarker.mapLayerObj = layer;
-    hashmap.set(key, updatedMarker);
+    if (updatedMarker) {
+      updatedMarker.mapLayerObj = layer;
+      hashmap.set(key, updatedMarker);
+    }
   };
 
-  const generatePopupContent = (marker) => {
-    // console.log("INSIDE GENERATEPOPUPCONTENT")
+  const generatePopupContent = (marker: FirestoreMarker) => {
     const props = marker.properties;
     return `
         <h2>${props.popupContent.title}</h2>
@@ -65,7 +90,7 @@ const MarkerContextProvider = ({ children }) => {
       `;
   };
 
-  const highlightMarkerCard = (e) => {
+  const highlightMarkerCard = (e: any) => {
     // console.log("Marker Clicked!")
     // console.log(e.target.feature.properties.markerId)
   }

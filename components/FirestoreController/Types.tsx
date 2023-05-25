@@ -17,16 +17,21 @@ export type GeoJsonObject = {
   geometry: nonSerialised_GeoJsonPoint | nonSerialised_GeoJsonLineString | nonSerialised_GeoJsonPolygon;
 };
 
+export type MarkerMap = Map<string, FirestoreMarker>;
+
+
 export type FirestoreMarker = {
   type: string;
   geometry: nonSerialised_GeoJsonPoint | nonSerialised_GeoJsonLineString | nonSerialised_GeoJsonPolygon;
   properties: Properties;
+  mapLayerObj?: L.Layer
 };
 
 export interface Properties {
   user: User;
   popupContent: PopupContent;
   dateCreated: number;
+  dateUpdated?: number;
   operationIndicator?: null;
   markerId: string;
   firebaseDocID: string;
