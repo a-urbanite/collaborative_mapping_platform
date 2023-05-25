@@ -28,15 +28,15 @@ export type FirestoreMarker = {
 };
 
 export interface Properties {
-  user: User;
+  user: UserObj;
   popupContent: PopupContent;
   dateCreated: number;
   dateUpdated?: number;
-  operationIndicator?: null;
+  operationIndicator?: null | string;
   markerId: string;
   firebaseDocID: string;
 }
-export interface User {
+export interface UserObj {
   uid: string;
   name: string;
 }

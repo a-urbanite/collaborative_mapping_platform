@@ -15,7 +15,9 @@ const MyPlaces = () => {
     if (!auth.currentUser) {
       router.push('/home')
     }
-    defineUserMarkers(allMarkers, auth.currentUser)
+    if (auth.currentUser) {
+      defineUserMarkers(allMarkers, auth.currentUser)
+    }
   }, [])
 
   return (

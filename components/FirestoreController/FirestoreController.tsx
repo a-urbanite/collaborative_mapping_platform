@@ -66,7 +66,7 @@ const FirestoreControllerProvider = ({ children }: ProviderProps) => {
   
       const markerMap = new Map();
       body.forEach((marker: FirestoreMarker) => {
-        console.log(JSON.stringify(marker))
+        // console.log(JSON.stringify(marker))
         marker.geometry.coordinates = deserializeGeoJsonCoords(marker)
         markerMap.set(marker.properties.markerId, marker);
       });

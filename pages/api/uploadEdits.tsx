@@ -8,7 +8,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
     req.body.forEach(async (marker: any) => {
       const status = marker.properties.operationIndicator;
-      marker.properties.operationIndicator = null
+      delete marker.properties.operationIndicator
 
       if (status === "created in current session") {
         await addDoc(collRef, marker);
