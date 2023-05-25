@@ -4,12 +4,30 @@ import { useMarkerContext } from "../../MarkerContext";
 import { useModal } from "../../Modal/ModalContext";
 import { useFirestoreController } from "../../FirestoreController/FirestoreController";
 import { useRouter } from "next/router";
+import { MarkerMap } from "../../FirestoreController/Types";
 
 const UploadButton = () => {
   const { userMarkers } = useMarkerContext();
   const { uploadEdits } = useFirestoreController();
   const { openModalWithSpinner, closeModal, openModalWithError } = useModal();
   const router = useRouter();
+
+  const [allDeleted, setallDeleted] = React.useState(null as unknown as boolean)
+
+  function checkAllDeleted(userMarkers: MarkerMap) {
+    for (const entry of userMarkers.values()) {
+      if (!entry.properties || entry.properties.operationIndicator !== "deleted in current session") {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  React.useEffect(() => {
+    const allDeleted = checkAllDeleted(userMarkers)
+    setallDeleted(allDeleted)
+  }, [userMarkers])
+  
 
   const uploadEditsWrapper = async () => {
     try {
@@ -23,6 +41,9 @@ const UploadButton = () => {
     }
   };
 
+
+  if (userMarkers.size === 0 || allDeleted ) return <></>;
+  
   return (
     <button className={styles.button} onClick={() => uploadEditsWrapper()}>
       Upload my Edits

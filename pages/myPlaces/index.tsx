@@ -25,7 +25,7 @@ const MyPlaces = () => {
       <MapLoader markers={userMarkers}/>
       <div className={styles.sidebar}>
         <MarkerList />
-        <UploadButton/>
+        <UploadButton />
       </div>
     </div>
   )
