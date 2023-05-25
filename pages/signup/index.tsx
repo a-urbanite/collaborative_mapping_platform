@@ -5,6 +5,7 @@ import styles from "../login/login.module.css";
 import { useModal } from "../../components/Modal/ModalContext";
 
 const SignUp = () => {
+  const { openModalWithSpinner, closeModal, openModalWithError } = useModal();
   const { signUpUser } = useUserContext();
   const router = useRouter();
 
@@ -14,21 +15,16 @@ const SignUp = () => {
   const signupWithEmailWrapper = async (event: React.FormEvent<HTMLFormElement>) => {
     try {
       event.preventDefault();
-      openModalWithSpinner("Logging in...");
-      const user = await signInWithEmail(logInEmail, logInPassword);
-      defineUserMarkers(allMarkers, user);
-      closeModal();
+      openModalWithSpinner("Signing Up...");
+      const user = await signUpUser(signupEmail, signupPassword);
+      // defineUserMarkers(allMarkers, user);
+      await closeModal(1000);
       router.push("/myPlaces");
     } catch (e: any) {
       console.error(e);
-      openModalWithError("Unable to connect to Server! " + e.message);
+      openModalWithError("Something went wrong! " + e.message);
     }
   };
-
-  // const signupWithEmailWrapper = async () => {
-  //   await signUpUser(signupEmail, signupPassword);
-  //   router.push("/login");
-  // };
 
   return (
     <div className={styles.loginWrapper}>

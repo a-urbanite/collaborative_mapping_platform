@@ -13,7 +13,7 @@ interface UserContextValue {
   signInWithEmail: (logInEmail: string, logInPassword: string) => Promise<FirebaseUser>;
   signOutUser: () => void;
   updateUser: (name: string, email: string) => void;
-  signUpUser: (signupEmail: string, signupPassword: string) => void;
+  signUpUser: (signupEmail: string, signupPassword: string) => Promise<FirebaseUser>;
 }
 
 interface UserProviderProps {
@@ -28,7 +28,6 @@ const UserContextProvider = ({ children }: UserProviderProps) => {
   const signInWithEmail = async (logInEmail: string, logInPassword: string): Promise<FirebaseUser> => {
     try {
       const res = await signInWithEmailAndPassword(auth, logInEmail, logInPassword);
-      console.log("RES: ", res)
       setIsLoggedIn(true);
       return res.user;
     } catch (err) {
@@ -53,12 +52,15 @@ const UserContextProvider = ({ children }: UserProviderProps) => {
       .catch((e) => console.error(e));
   };
 
-  const signUpUser = (signupEmail: string, signupPassword: string) => {
-    createUserWithEmailAndPassword(auth, signupEmail, signupPassword)
-      .then(() => {
-        console.log("user created");
-      })
-      .catch((e) => console.error(e));
+  const signUpUser = async (signupEmail: string, signupPassword: string) => {
+    try {
+      const res = await createUserWithEmailAndPassword(auth, signupEmail, signupPassword)
+      setIsLoggedIn(true);
+      return res.user;
+    } catch (err) {
+      console.error(err);
+      throw new Error("Auth Server Error", {cause: err})
+    }
   };
 
   return (
