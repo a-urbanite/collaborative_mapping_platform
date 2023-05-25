@@ -18,8 +18,8 @@ const Login = () => {
     try {
       event.preventDefault()
       openModalWithSpinner("Logging in...")
-      const res = await signInWithEmail(logInEmail, logInPassword)
-      defineUserMarkers(allMarkers, res.auth.currentUser)
+      const user = await signInWithEmail(logInEmail, logInPassword)
+      defineUserMarkers(allMarkers, user)
       closeModal()
       router.push('/myPlaces')
     } catch (e: any) {

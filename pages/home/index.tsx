@@ -14,8 +14,8 @@ export default function Home() {
     if (!initialFetch && !markersUpdated) return;
 
     openModalWithSpinner("Fetching Markers...");
-    fetchAllMarkers().then(async (markers) => {
-      await setAllMarkers(markers);
+    fetchAllMarkers().then((markers) => {
+      setAllMarkers(markers);
       closeModal();
     }).catch((e) => {
       openModalWithError(`Error connecting to Server (${e.cause})`);
