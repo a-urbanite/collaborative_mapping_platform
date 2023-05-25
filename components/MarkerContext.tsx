@@ -85,7 +85,7 @@ const MarkerContextProvider = ({ children }: MarkerProviderProps) => {
         <p>${props.popupContent.text}</p>
         <div style="display: flex">
           <p>by: ${props.user.name}</p>
-          <p>@ ${props.dateUpdated ? props.dateUpdated : props.dateCreated}</p>
+          <p>@ ${new Date(props.dateUpdated ? props.dateUpdated : props.dateCreated).toLocaleDateString()}</p>
         </div>
       `;
   };
