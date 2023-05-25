@@ -1,14 +1,16 @@
 import { uuidv4 } from '@firebase/util';
+import { LeafletMarker, CustomLeafletMarker, UserObj, FirebaseUser, FirestoreMarker, PopupContentObj } from './FirestoreController/Types';
 
-const createNewGeojsonFromLayer = (layer, userObj) => {
-  const geojson = layer.toGeoJSON()
-  const uuid = uuidv4()
-  layer.markerId = uuid
+const createNewGeojsonFromLayer = (layer: LeafletMarker, userObj: FirebaseUser | UserObj) => {
+  console.log("inside createNewGSONfromLayer")
+  const geojson = layer.toGeoJSON();
+  const uuid = uuidv4();
+  (layer as CustomLeafletMarker).markerId = uuid;
   geojson.properties = {
     markerId: uuid,
     user: {
       uid: userObj.uid,
-      name: userObj.displayName,
+      displayName: userObj.displayName,
     },
     dateCreated: Date.now(),
     popupContent: {title: "default title", text: "default text"},
@@ -17,22 +19,22 @@ const createNewGeojsonFromLayer = (layer, userObj) => {
   return geojson
 }
 
-const createUpdatedGeojsonFromLayer = (layer) => {
+const createUpdatedGeojsonFromLayer = (layer: LeafletMarker) => {
   const geojson = layer.toGeoJSON()
-  geojson.properties = layer.feature.properties
+  geojson.properties = layer.feature!.properties
   geojson.properties.dateUpdated = Date.now()
   geojson.properties.operationIndicator = "updated in current session"
   return geojson
 }
 
-const createGeojsonMarkedForDeletionFromLayer = (layer) => {
+const createGeojsonMarkedForDeletionFromLayer = (layer: LeafletMarker) => {
   const geojson = layer.toGeoJSON()
-  geojson.properties = layer.feature.properties
+  geojson.properties = layer.feature!.properties
   geojson.properties.operationIndicator = "deleted in current session"
   return geojson
 }
 
-const createGeojsonWithUpdatedPopup = (currentMarker, popupContent) => {
+const createGeojsonWithUpdatedPopup = (currentMarker: FirestoreMarker, popupContent: PopupContentObj) => {
   const updatedGeojson = currentMarker;
   updatedGeojson.properties.popupContent = popupContent;
   updatedGeojson.properties.dateUpdated = Date.now();

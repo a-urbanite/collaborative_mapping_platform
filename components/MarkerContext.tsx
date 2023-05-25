@@ -6,7 +6,7 @@ import {
   createGeojsonMarkedForDeletionFromLayer,
   createGeojsonWithUpdatedPopup,
 } from "./MarkerContext_utils";
-import { FirestoreMarker, PopupContent, UserObj, MarkerMap, LeafletLayer } from "./FirestoreController/Types";
+import { FirestoreMarker, PopupContentObj, UserObj, MarkerMap, LeafletMarker, GeoJsonObject } from "./FirestoreController/Types";
 import { User as FirebaseUser } from "firebase/auth";
 
 interface MarkerContextValue {
@@ -18,7 +18,7 @@ interface MarkerContextValue {
   generatePopupContent: (marker: any) => string;
   attachMapLayerObjToMarkerInHashmap: (
     geojson: FirestoreMarker,
-    layer: LeafletLayer,
+    layer: LeafletMarker,
     hashmap: MarkerMap
   ) => void;
   processEdits: (updatedLayerProp: any, addprops: any) => void;
@@ -28,7 +28,7 @@ interface MarkerContextValue {
 interface addProps {
   operation: string;
   userObj: UserObj;
-  popupContent: PopupContent;
+  popupContent: PopupContentObj;
 }
 
 interface MarkerProviderProps {
@@ -62,7 +62,8 @@ const MarkerContextProvider = ({ children }: MarkerProviderProps) => {
           break;
       }
 
-      const key = geojson.properties.markerId;
+      console.log("after geojson generation")
+      const key = (geojson as FirestoreMarker).properties.markerId;
       setUserMarkers(new Map(userMarkers.set(key, geojson)));
     });
   };
@@ -73,9 +74,10 @@ const MarkerContextProvider = ({ children }: MarkerProviderProps) => {
 
   const attachMapLayerObjToMarkerInHashmap = (
     geojson: FirestoreMarker,
-    layer: LeafletLayer,
+    layer: LeafletMarker,
     hashmap: MarkerMap
   ) => {
+    console.log("inside AttachMapLayerObjToHashMap")
     const key = geojson.properties.markerId;
     const updatedMarker = hashmap.get(key);
     if (updatedMarker) {
@@ -90,7 +92,7 @@ const MarkerContextProvider = ({ children }: MarkerProviderProps) => {
         <h2>${props.popupContent.title}</h2>
         <p>${props.popupContent.text}</p>
         <div style="display: flex">
-          <p>by: ${props.user.name}</p>
+          <p>by: ${props.user.displayName}</p>
           <p>@ ${new Date(props.dateUpdated ? props.dateUpdated : props.dateCreated).toLocaleDateString()}</p>
         </div>
       `;

@@ -1,11 +1,9 @@
 import React from "react";
-// import { useModalContext } from "../../ModalContext";
 import styles from "./markerCard.module.scss";
 import { useModal } from "../../Modal/ModalContext";
 import { useMarkerContext } from "../../MarkerContext";
 
 const MarkerCard = ({ marker }: any) => {
-  // const { openModalWithMarkerPopupContentForm } = useModalContext();
   const { processEdits } = useMarkerContext();
   const { openModalWithPopupContentForm } = useModal();
 
@@ -19,7 +17,10 @@ const MarkerCard = ({ marker }: any) => {
 
   return (
     <li className={styles.listItem}>
-      <div onMouseOver={() => marker.mapLayerObj.openPopup()} className={styles.container}>
+      <div onMouseOver={() => {
+        console.log("MARKER", marker)
+        marker.mapLayerObj.openPopup()
+        }} className={styles.container}>
         <div className={styles.textbar}>{`Feature: ${
           marker.properties.popupContent?.title || "unnamed"
         }`}</div>
