@@ -31,60 +31,57 @@ const FirestoreControllerProvider = ({ children }: ProviderProps) => {
     return markersToUploadArr;
   };
 
+  // const prepareMarkersToUpload = (markerMap: any[]): any[] => {
+  //   return markerMap
+  //     .filter((marker) => marker.properties.operationIndicator !== null)
+  //     .map((marker) => {
+  //       delete marker.mapLayerObj;
+  //       marker.geometry.coordinates = serializeGeoJsonCoords(marker);
+  //       return marker;
+  //     });
+  // };
+  
+
   const uploadEditsAJAX = async (preparedArr: any[]) => {
-    let res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/uploadEdits`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/uploadEdits`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify(preparedArr),
     });
-    if (!res.ok) {
-      throw new Error(`HTTP error: ${res.status}`);
-    }
-    res = await res.json();
-    return res;
+    if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
+    const body = await res.json();
+    return body;
   };
 
   const uploadEdits = async (userFirestoreMarkers: any[]) => {
-    try {
-      const markersToUpload = prepareMarkersToUpload(userFirestoreMarkers);
-      const res = await uploadEditsAJAX(markersToUpload);
-      setmarkersUpdated(true);
-      return res;
-    } catch (error) {
-      throw error;
-    }
-  };
-
-  const fetchMarkersAJAX = async () => {
-    let markers;
-    let res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/locations`);
-    if (!res.ok) {
-      throw new Error(`HTTP error: ${res.status}`);
-    }
-    // console.log("RES FETCH: ", res);
-    markers = await res.json();
-    markers.forEach((marker: any) => (marker.geometry.coordinates = deserializeGeoJsonCoords(marker)));
-    return markers;
+    const markersToUpload = prepareMarkersToUpload(userFirestoreMarkers);
+    const res = await uploadEditsAJAX(markersToUpload);
+    setmarkersUpdated(true);
+    return res;
   };
 
   const fetchAllMarkers = async () => {
+
     try {
       setmarkersUpdated(false);
       setinitialFetch(false);
-
-      const markers = await fetchMarkersAJAX();
-      if (markers.length === 0) throw new Error("fetched data contains no marker");
-
+  
+      const res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/locations`);
+      if (!res.ok) throw new Error(`HTTP error: ${res.status}, ${res.statusText}`);
+      const body = await res.json();
+  
       const markerMap = new Map();
-      markers.forEach((marker: { properties: { markerId: string } }) => {
+      body.forEach((marker: any) => {
+        marker.geometry.coordinates = deserializeGeoJsonCoords(marker)
         markerMap.set(marker.properties.markerId, marker);
       });
-
+  
       return markerMap;
-    } catch (error) {
-      throw error;
+
+    } catch (err) {
+        throw new Error("Fetch Error", { cause: err });
     }
   };
 

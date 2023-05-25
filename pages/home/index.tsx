@@ -10,22 +10,17 @@ export default function Home() {
   const { fetchAllMarkers, markersUpdated, initialFetch } = useFirestoreController();
   const { setAllMarkers, allMarkers } = useMarkerContext();
 
-  const dataFetch = async () => {
-    const markerMap = await fetchAllMarkers();
-    await setAllMarkers(markerMap);
-  };
-
   useEffect(() => {
     if (!initialFetch && !markersUpdated) return;
 
-    try {
-      openModalWithSpinner("Fetching Markers...");
-      dataFetch();
+    openModalWithSpinner("Fetching Markers...");
+    fetchAllMarkers().then(async (markers) => {
+      await setAllMarkers(markers);
       closeModal();
-    } catch (e: any) {
-      console.error(e);
-      openModalWithError(`Error connecting to Server (message: ${e.message})`);
-    }
+    }).catch((e) => {
+      openModalWithError(`Error connecting to Server (${e.cause})`);
+    })
+
   }, []);
 
   return (
