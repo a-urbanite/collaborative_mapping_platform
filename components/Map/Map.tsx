@@ -6,9 +6,11 @@ import { MapContainer, TileLayer } from "react-leaflet";
 import EditControlFC from "./EditControlFC";
 import MarkerGroup from "./MarkerGroup";
 import React from "react";
+import CustomMarker from "./CustomMarker";
+import { FirestoreMarker } from "../FirestoreController/Types";
 
-const Map = ({markers}: any) => {
-  const FGref = React.useRef<L.FeatureGroup>(null);
+const Map = ({ markers }: any) => {
+  const FGref = React.useRef<L.FeatureGroup | null>(null);
 
   return (
     <MapContainer
@@ -21,6 +23,10 @@ const Map = ({markers}: any) => {
       }}
     >
       <MarkerGroup FGref={FGref} markers={markers}/>
+
+      {/* {(Array.from(markers.values()) as FirestoreMarker[]).map((marker: FirestoreMarker, index: number) => (
+        <CustomMarker key={index} marker={marker} FGref={FGref}/>
+      ))} */}
 
       <EditControlFC FGref={FGref} />
 

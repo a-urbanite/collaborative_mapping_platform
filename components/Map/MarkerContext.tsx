@@ -15,7 +15,7 @@ interface MarkerContextValue {
   userMarkers: MarkerMap;
   setUserMarkers: Dispatch<SetStateAction<Map<any, any>>>;
   defineUserMarkers: (markerMap: MarkerMap, userObj: FirebaseUser) => void;
-  generatePopupContent: (marker: any) => string;
+  generatePopupContent: (marker: FirestoreMarker) => string;
   attachMapLayerObjToMarkerInHashmap: (
     geojson: FirestoreMarker,
     layer: LeafletMarker,
@@ -62,7 +62,6 @@ const MarkerContextProvider = ({ children }: MarkerProviderProps) => {
           break;
       }
 
-      console.log("after geojson generation")
       const key = (geojson as FirestoreMarker).properties.markerId;
       setUserMarkers(new Map(userMarkers.set(key, geojson)));
     });
@@ -77,7 +76,6 @@ const MarkerContextProvider = ({ children }: MarkerProviderProps) => {
     layer: LeafletMarker,
     hashmap: MarkerMap
   ) => {
-    console.log("inside AttachMapLayerObjToHashMap")
     const key = geojson.properties.markerId;
     const updatedMarker = hashmap.get(key);
     if (updatedMarker) {
@@ -86,7 +84,7 @@ const MarkerContextProvider = ({ children }: MarkerProviderProps) => {
     }
   };
 
-  const generatePopupContent = (marker: FirestoreMarker) => {
+  const generatePopupContent = (marker: FirestoreMarker): string => {
     const props = marker.properties;
     return `
         <h2>${props.popupContent.title}</h2>
@@ -95,11 +93,12 @@ const MarkerContextProvider = ({ children }: MarkerProviderProps) => {
           <p>by: ${props.user.displayName}</p>
           <p>@ ${new Date(props.dateUpdated ? props.dateUpdated : props.dateCreated).toLocaleDateString()}</p>
         </div>
+        <button onclick="window.location.href = '/story/${marker.properties.firebaseDocID}'"}>story</button>
       `;
   };
 
   const highlightMarkerCard = (e: any) => {
-    // console.log("Marker Clicked!")
+    console.log("Marker Clicked!")
     // console.log(e.target.feature.properties.markerId)
   };
 
