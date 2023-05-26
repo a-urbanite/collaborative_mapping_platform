@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import styles from "./login.module.css";
 import { useUserContext } from "../../components/UserContext";
 import { useModal } from "../../components/Modal/ModalContext";
-import { useMarkerContext } from "../../components/MarkerContext";
+import { useMarkerContext } from "../../components/Map/MarkerContext";
 
 const Login = () => {
   const { openModalWithSpinner, openModalWithError, closeModal } = useModal();

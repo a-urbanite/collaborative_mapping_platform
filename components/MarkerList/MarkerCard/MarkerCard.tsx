@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "./markerCard.module.scss";
 import { useModal } from "../../Modal/ModalContext";
-import { useMarkerContext } from "../../MarkerContext";
+import { useMarkerContext } from "../../Map/MarkerContext";
 
 const MarkerCard = ({ marker }: any) => {
   const { processEdits } = useMarkerContext();

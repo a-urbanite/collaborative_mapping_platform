@@ -1,6 +1,6 @@
 import React from "react";
 import * as L from "leaflet";
-import { useMarkerContext } from "../MarkerContext";
+import { useMarkerContext } from "./MarkerContext";
 
 const MarkerGroup = ({ FGref, markers }: any) => {
   const { generatePopupContent, attachMapLayerObjToMarkerInHashmap, highlightMarkerCard } =

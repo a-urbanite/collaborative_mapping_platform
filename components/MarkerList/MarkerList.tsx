@@ -1,7 +1,7 @@
 import React from "react";
 import MarkerCard from "./MarkerCard/MarkerCard";
 import styles from "./markerList.module.scss";
-import { useMarkerContext } from "../MarkerContext";
+import { useMarkerContext } from "../Map/MarkerContext";
 
 const MarkerList = () => {
   const { userMarkers } = useMarkerContext();

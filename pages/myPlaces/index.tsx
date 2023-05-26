@@ -5,7 +5,7 @@ import UploadButton from '../../components/MarkerList/UploadButton/UploadButton'
 import styles from './myPlaces.module.scss'
 import { useRouter } from 'next/router';
 import { auth } from "../../firebase-config";
-import { useMarkerContext } from '../../components/MarkerContext';
+import { useMarkerContext } from '../../components/Map/MarkerContext';
 
 const MyPlaces = () => {
   const router = useRouter();

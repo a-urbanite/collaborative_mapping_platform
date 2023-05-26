@@ -3,7 +3,7 @@ import MapLoader from "../../components/Map/MapLoader";
 import MarkerList from "../../components/MarkerList/MarkerList";
 import UploadButton from "../../components/MarkerList/UploadButton/UploadButton";
 import styles from "./contribute.module.scss";
-import { useMarkerContext } from "../../components/MarkerContext";
+import { useMarkerContext } from "../../components/Map/MarkerContext";
 
 const Contribute = () => {
   const { userMarkers } = useMarkerContext();

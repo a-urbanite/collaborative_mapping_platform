@@ -2,7 +2,7 @@ import * as React from "react";
 import { FeatureGroup } from "react-leaflet";
 import "leaflet-draw/dist/leaflet.draw.css";
 import { EditControl } from "react-leaflet-draw";
-import { useMarkerContext } from "../MarkerContext";
+import { useMarkerContext } from "./MarkerContext";
 import { useRouter } from "next/router";
 import { auth } from "../../firebase-config";
 import { uuidv4 } from "@firebase/util";

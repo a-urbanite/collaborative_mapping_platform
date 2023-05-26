@@ -2,7 +2,7 @@ import styles from "./MainNav.module.scss";
 import MenuPoint from "./MenuPoint";
 import { AiFillSetting } from "react-icons/ai";
 import { useUserContext } from "../../components/UserContext";
-import { useMarkerContext } from "../MarkerContext";
+import { useMarkerContext } from "../Map/MarkerContext";
 
 const MainNav = () => {
   const { isLoggedIn, signOutUser } = useUserContext();

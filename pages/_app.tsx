@@ -2,7 +2,7 @@ import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import MainNav from "../components/MainNav/MainNav";
 import { UserContextProvider } from "../components/UserContext";
-import { MarkerContextProvider } from "../components/MarkerContext";
+import { MarkerContextProvider } from "../components/Map/MarkerContext";
 import { FirestoreControllerProvider } from "../components/FirestoreController/FirestoreController";
 import { ModalProvider } from "../components/Modal/ModalContext";
 

@@ -6,7 +6,7 @@ import {
   createGeojsonMarkedForDeletionFromLayer,
   createGeojsonWithUpdatedPopup,
 } from "./MarkerContext_utils";
-import { FirestoreMarker, PopupContentObj, UserObj, MarkerMap, LeafletMarker, GeoJsonObject } from "./FirestoreController/Types";
+import { FirestoreMarker, PopupContentObj, UserObj, MarkerMap, LeafletMarker, GeoJsonObject } from "../FirestoreController/Types";
 import { User as FirebaseUser } from "firebase/auth";
 
 interface MarkerContextValue {
