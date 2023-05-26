@@ -5,19 +5,22 @@ export type FirebaseUser = User;
 
 export type MarkerMap = Map<string, FirestoreMarker>;
 
+export interface FirestoreMarker extends GeoJsonObject {
+  type: string;
+  properties: GeojsonProperties;
+  mapLayerObj?: LeafletMarker
+};
+
+export type GeoJsonObject = {
+  geometry: nonSerialised_GeoJsonPoint | nonSerialised_GeoJsonLineString | nonSerialised_GeoJsonPolygon;
+};
+
 export type LeafletMarker = L.Marker
 export interface CustomLeafletMarker extends LeafletMarker {
   markerId: string
 }
 
-export type FirestoreMarker = {
-  type: string;
-  geometry: nonSerialised_GeoJsonPoint | nonSerialised_GeoJsonLineString | nonSerialised_GeoJsonPolygon;
-  properties: Properties;
-  mapLayerObj?: L.Marker
-};
-
-export interface Properties {
+export interface GeojsonProperties {
   user: UserObj;
   popupContent: PopupContentObj;
   dateCreated: number;
@@ -26,30 +29,29 @@ export interface Properties {
   markerId: string;
   firebaseDocID: string;
 }
-export interface UserObj {
-  uid: string;
-  displayName: string;
-}
-export interface PopupContentObj {
-  title: string;
-  text: string;
-}
+  export interface UserObj {
+    uid: string;
+    displayName: string;
+  }
+  export interface PopupContentObj {
+    title: string;
+    text: string;
+  }
 
-export interface nonSerialised_GeoJsonPoint {
-  type: "Point";
-  coordinates: [number, number];
-}
 
-export interface nonSerialised_GeoJsonLineString {
-  type: "LineString";
-  coordinates: [number, number][];
-}
 
-export interface nonSerialised_GeoJsonPolygon {
-  type: "Polygon";
-  coordinates: [number, number][][];
-}
+  export interface nonSerialised_GeoJsonPoint {
+    type: "Point";
+    coordinates: [number, number];
+  }
 
-export type GeoJsonObject = {
-  geometry: nonSerialised_GeoJsonPoint | nonSerialised_GeoJsonLineString | nonSerialised_GeoJsonPolygon;
-};
+  export interface nonSerialised_GeoJsonLineString {
+    type: "LineString";
+    coordinates: [number, number][];
+  }
+
+  export interface nonSerialised_GeoJsonPolygon {
+    type: "Polygon";
+    coordinates: [number, number][][];
+  }
+

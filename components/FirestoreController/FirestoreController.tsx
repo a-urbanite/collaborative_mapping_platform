@@ -1,11 +1,11 @@
 import React, { ReactNode } from "react";
 import { serializeGeoJsonCoords } from "./Serialisation";
 import { deserializeGeoJsonCoords } from "./Deserialisation";
-import { FirestoreMarker } from "./Types";
+import { FirestoreMarker, MarkerMap } from "./Types";
 
 interface ContextProps {
-  fetchAllMarkers: () => Promise<Map<any, any>>;
-  uploadEdits: (userFirestoreMarkers: any) => Promise<Response>;
+  fetchAllMarkers: () => Promise<MarkerMap>;
+  uploadEdits: (userFirestoreMarkers: MarkerMap) => Promise<Response>;
   markersUpdated: boolean;
   initialFetch: boolean;
 }
@@ -21,8 +21,12 @@ const FirestoreControllerProvider = ({ children }: ProviderProps) => {
   const [markersUpdated, setmarkersUpdated] = React.useState<boolean>(false);
   const [initialFetch, setinitialFetch] = React.useState<boolean>(true);
 
-  const prepareMarkersToUpload = (markerMap: any[]) => {
-    const markersToUploadArr: any[] = [];
+  //forms map into array
+  //filters out non-changed markers
+  //reshapes the geojson to fit firestorestandards
+
+  const prepareMarkersToUpload = (markerMap: MarkerMap) => {
+    const markersToUploadArr: FirestoreMarker[] = [];
     markerMap.forEach((marker) => {
       if (marker.properties.operationIndicator !== null) {
         delete marker.mapLayerObj;
@@ -32,26 +36,27 @@ const FirestoreControllerProvider = ({ children }: ProviderProps) => {
     });
     return markersToUploadArr;
   };
+
+  const uploadEdits = async (userFirestoreMarkers: MarkerMap) => {
+    try {
+      const markersToUpload = prepareMarkersToUpload(userFirestoreMarkers);
   
+      const res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/uploadEdits`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(markersToUpload),
+      });
+      if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
+      const body = await res.json();
+  
+      setmarkersUpdated(true);
+      return body;
 
-  const uploadEditsAJAX = async (preparedArr: any[]) => {
-    const res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/uploadEdits`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(preparedArr),
-    });
-    if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
-    const body = await res.json();
-    return body;
-  };
-
-  const uploadEdits = async (userFirestoreMarkers: any[]) => {
-    const markersToUpload = prepareMarkersToUpload(userFirestoreMarkers);
-    const res = await uploadEditsAJAX(markersToUpload);
-    setmarkersUpdated(true);
-    return res;
+    } catch (err) {
+        throw new Error("Upload Error", { cause: err }); 
+    }
   };
 
   const fetchAllMarkers = async () => {
@@ -66,7 +71,6 @@ const FirestoreControllerProvider = ({ children }: ProviderProps) => {
   
       const markerMap = new Map();
       body.forEach((marker: FirestoreMarker) => {
-        // console.log(JSON.stringify(marker))
         marker.geometry.coordinates = deserializeGeoJsonCoords(marker)
         markerMap.set(marker.properties.markerId, marker);
       });
