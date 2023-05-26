@@ -20,9 +20,9 @@ const FirestoreControllerProvider = ({ children }: ProviderProps) => {
   const [markersUpdated, setmarkersUpdated] = React.useState<boolean>(false);
   const [initialFetch, setinitialFetch] = React.useState<boolean>(true);
 
-  const uploadEdits = async (userFirestoreMarkers: MarkerMap): Promise<Response> => {
+  const uploadEdits = async (userMarkers: MarkerMap): Promise<Response> => {
     try {
-      const reshapedGeoJsonArr = Array.from(userFirestoreMarkers.values())
+      const reshapedGeoJsonArr = Array.from(userMarkers.values())
         .filter((marker) => marker.properties.operationIndicator !== null)
         .map((marker) => ({
           ...marker,
