@@ -6,7 +6,7 @@ import { useModal } from "../../components/Modal/ModalContext";
 import { useMarkerContext } from "../../components/Map/MarkerContext";
 
 const Login = () => {
-  const { openModalWithSpinner, openModalWithError, closeModal, openModalWithNotification } = useModal();
+  const { openModalWithSpinner, openModalWithError, closeModal } = useModal();
   const { allMarkers, defineUserMarkers } = useMarkerContext();
   const { signInWithEmail } = useUserContext();
   const router = useRouter();
@@ -30,7 +30,6 @@ const Login = () => {
 
   return (
     <div className={styles.loginWrapper}>
-      <button onClick={() => openModalWithNotification()}>here</button>
       <h1>Sign in</h1>
       <form className={styles.loginForm} onSubmit={signInWithEmailWrapper}>
         <input
