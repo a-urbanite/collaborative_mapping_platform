@@ -20,7 +20,7 @@ const FirestoreControllerProvider = ({ children }: ProviderProps) => {
   const [markersUpdated, setmarkersUpdated] = React.useState<boolean>(false);
   const [initialFetch, setinitialFetch] = React.useState<boolean>(true);
 
-  const uploadEdits = async (userFirestoreMarkers: MarkerMap) => {
+  const uploadEdits = async (userFirestoreMarkers: MarkerMap): Promise<Response> => {
     try {
       const reshapedGeoJsonArr = Array.from(userFirestoreMarkers.values())
         .filter((marker) => marker.properties.operationIndicator !== null)
@@ -50,7 +50,7 @@ const FirestoreControllerProvider = ({ children }: ProviderProps) => {
     }
   };
 
-  const fetchAllMarkers = async () => {
+  const fetchAllMarkers = async (): Promise<MarkerMap> => {
     try {
       setmarkersUpdated(false);
       setinitialFetch(false);
@@ -59,11 +59,16 @@ const FirestoreControllerProvider = ({ children }: ProviderProps) => {
       if (!res.ok) throw new Error(`HTTP error: ${res.status}, ${res.statusText}`);
       const body = await res.json();
 
-      const markerMap = new Map();
-      body.forEach((marker: FirestoreMarker) => {
-        marker.geometry.coordinates = deserializeGeoJsonCoords(marker);
-        markerMap.set(marker.properties.markerId, marker);
-      });
+      const preppedMarkerArr = body.map((marker: FirestoreMarker) => ({
+        ...marker,
+        geometry: {
+          type: marker.geometry.type,
+          coordinates: deserializeGeoJsonCoords(marker),
+        },
+      }));
+      const markerMap: MarkerMap = new Map(
+        preppedMarkerArr.map((marker: FirestoreMarker) => [marker.properties.markerId, marker])
+      );
 
       return markerMap;
     } catch (err) {
