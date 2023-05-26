@@ -6,7 +6,7 @@ import { useModal } from "../../components/Modal/ModalContext";
 import { useMarkerContext } from "../../components/Map/MarkerContext";
 
 const Login = () => {
-  const { openModalWithSpinner, openModalWithError, closeModal } = useModal();
+  const { openModalWithSpinner, openModalWithError, closeModal, openModalWithNotification } = useModal();
   const { allMarkers, defineUserMarkers } = useMarkerContext();
   const { signInWithEmail } = useUserContext();
   const router = useRouter();
@@ -20,7 +20,7 @@ const Login = () => {
       openModalWithSpinner("Logging in...");
       const user = await signInWithEmail(logInEmail, logInPassword);
       defineUserMarkers(allMarkers, user);
-      closeModal();
+      await closeModal();
       router.push("/myPlaces");
     } catch (e: any) {
       console.error(e);
@@ -30,6 +30,7 @@ const Login = () => {
 
   return (
     <div className={styles.loginWrapper}>
+      <button onClick={() => openModalWithNotification()}>here</button>
       <h1>Sign in</h1>
       <form className={styles.loginForm} onSubmit={signInWithEmailWrapper}>
         <input

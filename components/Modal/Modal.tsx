@@ -4,6 +4,7 @@ import UserNameForm from "./UserNameForm/UserNameForm";
 import LoadingSpinner from "./LoadingSpinner/LoadingSpinner";
 import ErrorMessage from "./ErrorMessage/ErrorMessage";
 import PopupContentForm from "./PopupContentForm/PopupContentForm";
+import Notification from "./Notification/Notification";
 
 interface ModalState {
   isOpen: boolean;
@@ -74,6 +75,8 @@ class Modal extends Component {
         style={isOpen ? { display: "flex" } : { display: "none" }}
       >
         <div className={styles.modalContent} onClick={(e) => e.stopPropagation()}>
+          {context === "notification" && <Notification closeModal={this.closeModal} message={message}/>}
+
           {context === "userNameForm" && <UserNameForm returnResults={this.returnResults} />}
 
           {context === "spinner" && <LoadingSpinner message={message} />}

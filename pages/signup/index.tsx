@@ -5,7 +5,7 @@ import styles from "../login/login.module.css";
 import { useModal } from "../../components/Modal/ModalContext";
 
 const SignUp = () => {
-  const { openModalWithSpinner, closeModal, openModalWithError } = useModal();
+  const { openModalWithSpinner, closeModal, openModalWithError, openModalWithNotification } = useModal();
   const { signUpUser } = useUserContext();
   const router = useRouter();
 
@@ -18,7 +18,9 @@ const SignUp = () => {
       openModalWithSpinner("Signing Up...");
       const user = await signUpUser(signupEmail, signupPassword);
       // defineUserMarkers(allMarkers, user);
-      await closeModal(1000);
+      await closeModal()
+      openModalWithNotification("Registration successfull! you will be redirected shortly...")
+      await closeModal(5000);
       router.push("/myPlaces");
     } catch (e: any) {
       console.error(e);
