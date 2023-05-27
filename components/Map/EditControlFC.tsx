@@ -1,5 +1,4 @@
 import * as React from "react";
-import { FeatureGroup } from "react-leaflet";
 import "leaflet-draw/dist/leaflet.draw.css";
 import { EditControl } from "react-leaflet-draw";
 import { useMarkerContext } from "./MarkerContext";
@@ -8,16 +7,12 @@ import { auth } from "../../firebase-config";
 import { uuidv4 } from "@firebase/util";
 import { useModal } from "../Modal/ModalContext";
 
-export default function EditControlFC({ FGref }: any) {
+export default function EditControlFC() {
   const { openModalWithNameForm } = useModal();
-  // const {Modal2, modalRef} = useModal2();
   const router = useRouter();
   const { processEdits } = useMarkerContext();
-  // const { openModalWithNameForm, userName } = useModalContext();
-  // const userObj = router.pathname === "/myPlaces" ? auth.currentUser : { uid: uuidv4(), displayName: "anon" };
-
+  
   return (
-    <FeatureGroup ref={FGref}>
       <EditControl
         position="topright"
         onEdited={(e) => processEdits(e.layers.getLayers(), { operation: "editMarker" })}
@@ -32,17 +27,11 @@ export default function EditControlFC({ FGref }: any) {
         draw={{
           rectangle: false,
           circle: false,
-          polyline:
-            router.pathname === "/home"
-              ? false
-              : {
+          polyline:{
                   showLength: true,
                   metric: true,
                 },
-          polygon:
-            router.pathname === "/home"
-              ? false
-              : {
+          polygon:{
                   allowIntersection: false, // Restricts shapes to simple polygons
                   drawError: {
                     color: "red",
@@ -50,14 +39,13 @@ export default function EditControlFC({ FGref }: any) {
                   },
                   // shapeOptions: {color: '#97009c'}
                 },
-          marker: router.pathname === "/home" ? false : true,
+          marker: true,
           circlemarker: false,
         }}
         edit={{
-          remove: router.pathname === "/home" ? false : true,
-          edit: router.pathname === "/home" ? false : true,
+          remove: true,
+          edit: true,
         }}
       />
-    </FeatureGroup>
   );
 }

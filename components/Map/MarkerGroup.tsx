@@ -25,7 +25,7 @@ const MarkerGroup = ({ FGref, markers }: any) => {
     };
   }, [markers]);
 
-  return <></>;
+  return null;
 };
 
 export default React.memo(MarkerGroup);

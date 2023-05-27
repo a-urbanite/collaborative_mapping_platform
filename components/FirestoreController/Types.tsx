@@ -6,7 +6,7 @@ export type FirebaseUser = User;
 export type MarkerMap = Map<string, FirestoreMarker>;
 
 export interface FirestoreMarker extends GeoJsonObject {
-  type: string;
+  type: "Feature" | "FeatureCollection" | "Point" | "MultiPoint" | "LineString" | "MultiLineString" | "Polygon" | "MultiPolygon" | "GeometryCollection";
   properties: GeojsonProperties;
   mapLayerObj?: LeafletMarker
 };

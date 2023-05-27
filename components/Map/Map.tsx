@@ -2,14 +2,14 @@ import "leaflet/dist/leaflet.css";
 import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility.webpack.css";
 import "leaflet-defaulticon-compatibility";
 import styles from "./map.module.scss";
-import { MapContainer, TileLayer } from "react-leaflet";
+import { FeatureGroup, MapContainer, TileLayer } from "react-leaflet";
 import EditControlFC from "./EditControlFC";
 import MarkerGroup from "./MarkerGroup";
 import React from "react";
-import CustomMarker from "./CustomMarker";
-import { FirestoreMarker } from "../FirestoreController/Types";
+import { useRouter } from "next/router";
 
 const Map = ({ markers }: any) => {
+  const router = useRouter();
   const FGref = React.useRef<L.FeatureGroup | null>(null);
 
   return (
@@ -18,17 +18,14 @@ const Map = ({ markers }: any) => {
       zoom={13}
       scrollWheelZoom={false}
       className={styles.mapContainer}
-      whenReady={() => {
-        console.log("MAPLOAD");
-      }}
+      // whenReady={() => {
+      //   console.log("MAPLOAD");
+      // }}
     >
-      <MarkerGroup FGref={FGref} markers={markers}/>
-
-      {/* {(Array.from(markers.values()) as FirestoreMarker[]).map((marker: FirestoreMarker, index: number) => (
-        <CustomMarker key={index} marker={marker} FGref={FGref}/>
-      ))} */}
-
-      <EditControlFC FGref={FGref} />
+      <FeatureGroup ref={FGref}>
+        <MarkerGroup FGref={FGref} markers={markers} />
+        {router.pathname !== "/home" && <EditControlFC />}
+      </FeatureGroup>
 
       <TileLayer
         attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'

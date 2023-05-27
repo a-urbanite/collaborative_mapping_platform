@@ -11,9 +11,9 @@ import { User as FirebaseUser } from "firebase/auth";
 
 interface MarkerContextValue {
   allMarkers: MarkerMap;
-  setAllMarkers: Dispatch<SetStateAction<Map<any, any>>>;
+  setAllMarkers: Dispatch<SetStateAction<MarkerMap>>;
   userMarkers: MarkerMap;
-  setUserMarkers: Dispatch<SetStateAction<Map<any, any>>>;
+  setUserMarkers: Dispatch<SetStateAction<MarkerMap>>;
   defineUserMarkers: (markerMap: MarkerMap, userObj: FirebaseUser) => void;
   generatePopupContent: (marker: FirestoreMarker) => string;
   attachMapLayerObjToMarkerInHashmap: (
@@ -76,6 +76,7 @@ const MarkerContextProvider = ({ children }: MarkerProviderProps) => {
     layer: LeafletMarker,
     hashmap: MarkerMap
   ) => {
+    console.log("GEOJSON IN ATTACH FUNC: ", geojson)
     const key = geojson.properties.markerId;
     const updatedMarker = hashmap.get(key);
     if (updatedMarker) {
