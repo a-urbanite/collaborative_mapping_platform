@@ -1,12 +1,12 @@
-##Intro
+## Intro
 
 I am passionate about maps and i want to bring this passion into my cding career. So, This is my tech demo for a collaborative mapping platform. Collaborative Mapping is beautiful concept because it leverages the power of the community and lets them create something great. The most inspiring example is the OpenStreetMap project.
 
-##Goals
+## Goals
 
 This platform is currently the prototype for an art project that me and some friends are trying to bring into life. We want to collect and share stories surrounding the Berlin Wall. We plan to make the platform public by mid 2024.
 
-##tech stack
+## Tech stack
 
 - ReactJS/NextJS (Frontend/Backend)
 - Typescript (Typing)
