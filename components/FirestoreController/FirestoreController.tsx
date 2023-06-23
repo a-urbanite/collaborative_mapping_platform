@@ -6,7 +6,7 @@ import { FirestoreMarker, MarkerMap } from "../Types";
 interface ContextProps {
   fetchAllMarkers: () => Promise<MarkerMap>;
   uploadEdits: (userFirestoreMarkers: MarkerMap) => Promise<Response>;
-  deleteAllMarkers: () => Promise<any>;
+  deleteAllMarkers: () => Promise<Response>;
   markersUpdated: boolean;
   initialFetch: boolean;
 }
@@ -21,7 +21,7 @@ const FirestoreControllerProvider = ({ children }: ProviderProps) => {
   const [markersUpdated, setmarkersUpdated] = React.useState<boolean>(false);
   const [initialFetch, setinitialFetch] = React.useState<boolean>(true);
 
-  const uploadEdits = async (userMarkers: MarkerMap): Promise<Response> => {
+  const uploadEdits = async (userMarkers: MarkerMap) => {
     try {
       const reshapedGeoJsonArr = Array.from(userMarkers.values())
         .filter((marker) => marker.properties.operationIndicator !== null)
@@ -51,7 +51,7 @@ const FirestoreControllerProvider = ({ children }: ProviderProps) => {
     }
   };
 
-  const fetchAllMarkers = async (): Promise<MarkerMap> => {
+  const fetchAllMarkers = async () => {
     try {
       setmarkersUpdated(false);
       setinitialFetch(false);
@@ -77,12 +77,13 @@ const FirestoreControllerProvider = ({ children }: ProviderProps) => {
     }
   };
 
-  const deleteAllMarkers = async (): Promise<any> => {
+  const deleteAllMarkers = async () => {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/deleteAllMarkers`);
       if (!res.ok) throw new Error(`HTTP error: ${res.status}, ${res.statusText}`);
+      setmarkersUpdated(true);
       const body = await res.json();
-      console.log(body)
+      return body
     } catch (err) {
       throw new Error("Fetch Error", { cause: err });
     }
