@@ -18,7 +18,7 @@ const Settings = () => {
 
   const updateUserProfile = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    updateUser(displayname, email)
+    await updateUser(displayname, email)
     setmessage('Success! information changed!')
     // router.reload()
   }

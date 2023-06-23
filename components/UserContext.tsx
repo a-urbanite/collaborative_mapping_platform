@@ -11,8 +11,8 @@ import { FirebaseUser } from "./Types";
 interface UserContextValue {
   isLoggedIn: boolean; 
   signInWithEmail: (logInEmail: string, logInPassword: string) => Promise<FirebaseUser>;
-  signOutUser: () => void;
-  updateUser: (name: string, email: string) => void;
+  signOutUser: () => Promise<any>;
+  updateUser: (name: string, email: string) => Promise<any>;
   signUpUser: (signupEmail: string, signupPassword: string) => Promise<FirebaseUser>;
 }
 
@@ -36,7 +36,7 @@ const UserContextProvider = ({ children }: UserProviderProps) => {
     }
   };
 
-  const signOutUser = () => {
+  const signOutUser = async () => {
     signOut(auth)
       .then(() => {
         setIsLoggedIn(false);
