@@ -2,7 +2,7 @@ import { doc, documentId, getDocs, query, updateDoc, where } from 'firebase/fire
 import type { NextApiRequest, NextApiResponse } from 'next'
 // import { collRef } from '../../firebase-config';
 import { deleteDoc } from 'firebase/firestore';
-import { firestore, collRef } from "../../firebase-config";
+import { firestore } from "../firebase-config";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   try {

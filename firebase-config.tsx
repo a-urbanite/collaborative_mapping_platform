@@ -13,5 +13,6 @@ const firebaseConfig = {
 
 export const firebaseapp = initializeApp(firebaseConfig);
 export const firestore = getFirestore(firebaseapp);
-export const collRef = collection(firestore, "markers1");
+export const publicMarkerCollRef = collection(firestore, "markers1");
+export const counterCollRef = collection(firestore, "counter")
 export const auth = getAuth(firebaseapp);
