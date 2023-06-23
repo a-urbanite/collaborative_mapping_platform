@@ -4,7 +4,7 @@ import { useMarkerContext } from "../../Map/MarkerContext";
 import { useModal } from "../../Modal/ModalContext";
 import { useFirestoreController } from "../../FirestoreController/FirestoreController";
 import { useRouter } from "next/router";
-import { MarkerMap } from "../../FirestoreController/Types";
+import { MarkerMap } from "../../Types";
 
 const UploadButton = () => {
   const { userMarkers } = useMarkerContext();
@@ -33,7 +33,7 @@ const UploadButton = () => {
     try {
       openModalWithSpinner("Uploading Edits");
       await uploadEdits(userMarkers)
-      await closeModal(500);
+      await closeModal(1000);
       router.push("/home");
     } catch (e: any) {
       console.error(e)

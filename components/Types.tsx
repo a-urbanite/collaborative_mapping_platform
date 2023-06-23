@@ -28,6 +28,7 @@ export interface GeojsonProperties {
   operationIndicator?: null | string;
   markerId: string;
   firebaseDocID: string;
+  orderNum: number;
 }
   export interface UserObj {
     uid: string;

@@ -3,9 +3,13 @@ import router from 'next/router';
 import styles from './Settings.module.css'
 import { useUserContext } from "../../components/UserContext";
 import { auth } from '../../firebase-config';
+import { useFirestoreController } from '../../components/FirestoreController/FirestoreController';
+import { useModal } from '../../components/Modal/ModalContext';
 
 const Settings = () => {
   const { updateUser } = useUserContext();
+  const { deleteAllMarkers } = useFirestoreController();
+  const { openModalWithSpinner, openModalWithError, closeModal } = useModal();
 
   const [displayname, setdisplayname] = useState<string>(auth.currentUser ? auth.currentUser.displayName as string : "no_user");
   const [email, setemail] = useState<string>(auth.currentUser ? auth.currentUser.email as string : "no_email");
@@ -14,9 +18,23 @@ const Settings = () => {
 
   const updateUserProfile = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    await updateUser(displayname, email)
+    updateUser(displayname, email)
     setmessage('Success! information changed!')
     // router.reload()
+  }
+
+  const deleteAllMarkersAction = async () => {
+    try {
+      openModalWithSpinner("Uploading Edits");
+      if (window.confirm("delete all markers?")) {
+        await deleteAllMarkers();
+      } 
+      await closeModal(1000);
+      router.push("/home");
+    } catch (e: any) {
+      console.error(e)
+      openModalWithError(e.message);
+    }
   }
   
   
@@ -45,6 +63,8 @@ const Settings = () => {
           defaultValue={email}/>
         <input type="submit" value="Go!" className={styles.settingsForm__submit}/>
       </form>
+      <h2>ADMIN AREA</h2>
+      <button onClick={ () => deleteAllMarkersAction() }>delete all markers</button>
     </div>
   )
 }

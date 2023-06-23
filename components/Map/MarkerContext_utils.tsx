@@ -1,5 +1,5 @@
 import { uuidv4 } from '@firebase/util';
-import { LeafletMarker, CustomLeafletMarker, UserObj, FirebaseUser, FirestoreMarker, PopupContentObj } from '../FirestoreController/Types';
+import { LeafletMarker, CustomLeafletMarker, UserObj, FirebaseUser, FirestoreMarker, PopupContentObj } from '../Types';
 
 const createNewGeojsonFromLayer = (layer: LeafletMarker, userObj: FirebaseUser | UserObj) => {
   console.log("inside createNewGSONfromLayer")

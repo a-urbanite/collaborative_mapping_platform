@@ -6,7 +6,7 @@ import {
   createGeojsonMarkedForDeletionFromLayer,
   createGeojsonWithUpdatedPopup,
 } from "./MarkerContext_utils";
-import { FirestoreMarker, PopupContentObj, UserObj, MarkerMap, LeafletMarker, GeoJsonObject } from "../FirestoreController/Types";
+import { FirestoreMarker, PopupContentObj, UserObj, MarkerMap, LeafletMarker, GeoJsonObject } from "../Types";
 import { User as FirebaseUser } from "firebase/auth";
 
 interface MarkerContextValue {
@@ -15,6 +15,7 @@ interface MarkerContextValue {
   userMarkers: MarkerMap;
   setUserMarkers: Dispatch<SetStateAction<MarkerMap>>;
   defineUserMarkers: (markerMap: MarkerMap, userObj: FirebaseUser) => void;
+  resetUserMarkers: () => void;
   generatePopupContent: (marker: FirestoreMarker) => string;
   attachMapLayerObjToMarkerInHashmap: (
     geojson: FirestoreMarker,
@@ -71,6 +72,10 @@ const MarkerContextProvider = ({ children }: MarkerProviderProps) => {
     setUserMarkers(new Map([...markerMap].filter(([k, v]) => userObj.uid === v.properties.user.uid)));
   };
 
+  const resetUserMarkers = () => {
+    setUserMarkers(new Map());
+  };
+
   const attachMapLayerObjToMarkerInHashmap = (
     geojson: FirestoreMarker,
     layer: LeafletMarker,
@@ -111,6 +116,7 @@ const MarkerContextProvider = ({ children }: MarkerProviderProps) => {
         userMarkers,
         setUserMarkers,
         defineUserMarkers,
+        resetUserMarkers,
         generatePopupContent,
         attachMapLayerObjToMarkerInHashmap,
         processEdits,

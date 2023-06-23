@@ -6,7 +6,12 @@ import styles from "./contribute.module.scss";
 import { useMarkerContext } from "../../components/Map/MarkerContext";
 
 const Contribute = () => {
-  const { userMarkers } = useMarkerContext();
+  const { userMarkers, resetUserMarkers } = useMarkerContext();
+
+  React.useEffect(() => {
+    resetUserMarkers()
+  }, [])
+  
   
   return (
     <>

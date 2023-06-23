@@ -1,29 +1,23 @@
 import 'firebase/firestore';
 import { addDoc, updateDoc, doc, setDoc, where, query, getDoc, getDocs, limit, deleteDoc } from "firebase/firestore";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { publicMarkerCollRef, counterCollRef, firestore } from "../../firebase-config";
+import { publicMarkerCollRef, counterCollRef, db } from "../../firebase-config";
 import { runTransaction } from "firebase/firestore";
 
 const getOrderNum = async () => {
-
-  // await runTransaction(db, async (transaction) => {
-  //   const sfDoc = await transaction.get(sfDocRef);
-  //   if (!sfDoc.exists()) {
-  //     throw "Document does not exist!";
-  //   }
-
-  //   const newPopulation = sfDoc.data().population + 1;
-  //   transaction.update(sfDocRef, { population: newPopulation });
-  // });
-
   const q = query(counterCollRef);
   const querySnapshot = await getDocs(q)
   const docRef = querySnapshot.docs[0].ref;
-  const docSnapshot = await getDoc(docRef)
-  const data = docSnapshot.data();
-  const lastNum = data!.value;
-  const newNum = lastNum +1;
-  await updateDoc(docRef, {value: newNum})
+  let newNum;
+
+  await runTransaction(db, async (transaction) => {
+    const docSnapshot = await transaction.get(docRef);
+    const data = docSnapshot.data();
+    const lastNum = data!.value;
+    newNum = lastNum +1;
+    transaction.update(docRef, { value: newNum });
+  });
+
   return newNum
 
 }
@@ -39,6 +33,8 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 
         const orderNum = await getOrderNum()
         console.log("ORDERNUM: ", orderNum)
+        marker.properties.orderNum = orderNum
+        console.log("MARKER: ", marker)
 
         await addDoc(publicMarkerCollRef, marker);
       }
@@ -58,7 +54,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
       }
 
       if (status === "deleted in current session") {
-        await deleteDoc(doc(firestore, "markers1", marker.properties.firebaseDocID))
+        await deleteDoc(doc(db, "markers1", marker.properties.firebaseDocID))
       }
 
     });
