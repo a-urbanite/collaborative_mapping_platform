@@ -16,6 +16,7 @@ interface MarkerContextValue {
   setUserMarkers: Dispatch<SetStateAction<MarkerMap>>;
   defineUserMarkers: (markerMap: MarkerMap, userObj: FirebaseUser) => void;
   resetUserMarkers: () => void;
+  findMarkerByOrderNum: (map: MarkerMap, orderNum: number) => { key: string, value: FirestoreMarker } | null;
   generatePopupContent: (marker: FirestoreMarker) => string;
   attachMapLayerObjToMarkerInHashmap: (
     geojson: FirestoreMarker,
@@ -76,12 +77,29 @@ const MarkerContextProvider = ({ children }: MarkerProviderProps) => {
     setUserMarkers(new Map());
   };
 
+  function findMarkerByOrderNum(map: MarkerMap, orderNum: number) {
+    console.log("inside findmakrer func")
+    // console.log("ordernum in search func: ", orderNum)
+    if (map && map.size > 0) {
+      console.log("ALLMARKERS: ", map)
+
+    }
+    for (const [key, value] of map.entries()) {
+      console.log("counter in search func")
+      if (value["properties"] && value["properties"].orderNum === orderNum) {
+        return { key, value };
+      }
+    }
+    
+    return null; // Element not found
+  }
+
   const attachMapLayerObjToMarkerInHashmap = (
     geojson: FirestoreMarker,
     layer: LeafletMarker,
     hashmap: MarkerMap
   ) => {
-    console.log("GEOJSON IN ATTACH FUNC: ", geojson)
+    // console.log("GEOJSON IN ATTACH FUNC: ", geojson)
     const key = geojson.properties.markerId;
     const updatedMarker = hashmap.get(key);
     if (updatedMarker) {
@@ -99,7 +117,7 @@ const MarkerContextProvider = ({ children }: MarkerProviderProps) => {
           <p>by: ${props.user.displayName}</p>
           <p>@ ${new Date(props.dateUpdated ? props.dateUpdated : props.dateCreated).toLocaleDateString()}</p>
         </div>
-        <button onclick="window.location.href = '/story/${marker.properties.firebaseDocID}'"}>story</button>
+        <button class="storyButton" data-orderNum="${props.orderNum}" data-title="${props.popupContent.title.replace(" ","_")}">story</button>
       `;
   };
 
@@ -117,6 +135,7 @@ const MarkerContextProvider = ({ children }: MarkerProviderProps) => {
         setUserMarkers,
         defineUserMarkers,
         resetUserMarkers,
+        findMarkerByOrderNum,
         generatePopupContent,
         attachMapLayerObjToMarkerInHashmap,
         processEdits,

@@ -1,20 +1,26 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import router from 'next/router';
 import styles from './Settings.module.css'
 import { useUserContext } from "../../components/UserContext";
 import { auth } from '../../firebase-config';
 import { useFirestoreController } from '../../components/FirestoreController/FirestoreController';
 import { useModal } from '../../components/Modal/ModalContext';
+import { useMarkerContext } from '../../components/Map/MarkerContext';
 
 const Settings = () => {
   const { updateUser } = useUserContext();
   const { deleteAllMarkers } = useFirestoreController();
   const { openModalWithSpinner, openModalWithError, closeModal } = useModal();
+  const { allMarkers } = useMarkerContext();
 
-  const [displayname, setdisplayname] = useState<string>(auth.currentUser ? auth.currentUser.displayName as string : "no_user");
-  const [email, setemail] = useState<string>(auth.currentUser ? auth.currentUser.email as string : "no_email");
-  const [message, setmessage] = useState('')
+  const [displayname, setdisplayname] = React.useState<string>(auth.currentUser ? auth.currentUser.displayName as string : "no_user");
+  const [email, setemail] = React.useState<string>(auth.currentUser ? auth.currentUser.email as string : "no_email");
+  const [message, setmessage] = React.useState('')
   // const [photoURL, setphotoURL] = useState<string>(auth.currentUser!.photoURL!);
+
+  React.useEffect(() => {
+    console.log("ALLMARKERS in Settings page: ", allMarkers)
+  }, [allMarkers])
 
   const updateUserProfile = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
