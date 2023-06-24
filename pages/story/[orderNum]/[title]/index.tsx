@@ -36,8 +36,8 @@ const StoryPage = () => {
   return (
     <>
       <div>StoryPage</div>
-      {<h2>{currentMarker.properties.popupContent.title}</h2>}
-      {<p>{currentMarker.properties.popupContent.text}</p>}
+      { currentMarker && <h2>{currentMarker.properties.popupContent.title}</h2>}
+      { currentMarker && <p>{currentMarker.properties.popupContent.text}</p>}
       <button onClick={() => Router.push("/home")}>Back</button>
     </>
   );
