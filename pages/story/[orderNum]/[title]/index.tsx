@@ -3,20 +3,12 @@ import Router from "next/router";
 import { useRouter } from "next/router";
 import { useMarkerContext } from "../../../../components/Map/MarkerContext";
 import { FirestoreMarker } from "../../../../components/Types";
-// import { useMarkerContext } from "../../../../components/Map/MarkerContext";
 
 const StoryPage = () => {
   const router = useRouter();
   const { findMarkerByOrderNum, allMarkers } = useMarkerContext();
   const [currentMarker, setcurrentMarker] = React.useState(null as unknown as FirestoreMarker);
 
-  // React.useEffect(() => {
-  //   console.log("CurrentMarker: ", currentMarker)
-  // }, [currentMarker])
-
-  React.useEffect(() => {
-    console.log("ALLMARKERS: ", allMarkers)
-  }, [allMarkers])
 
   React.useEffect(() => {
     // console.log("Router", router.query.orderNum, router.query.title)

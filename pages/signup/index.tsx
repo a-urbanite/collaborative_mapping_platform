@@ -12,7 +12,7 @@ const SignUp = () => {
   const [signupEmail, setsignupEmail] = useState<string>("");
   const [signupPassword, setsignupPassword] = useState<string>("");
 
-  const signupWithEmailWrapper = async (event: React.FormEvent<HTMLFormElement>) => {
+  const signupWithEmailAction = async (event: React.FormEvent<HTMLFormElement>) => {
     try {
       event.preventDefault();
       openModalWithSpinner("Signing Up...");
@@ -31,7 +31,7 @@ const SignUp = () => {
   return (
     <div className={styles.loginWrapper}>
       <h1 className="title"> Sign up </h1>
-      <form className={styles.loginForm} onSubmit={signupWithEmailWrapper}>
+      <form className={styles.loginForm} onSubmit={signupWithEmailAction}>
         <input
           className={styles.loginForm__input}
           name="registerEmail"

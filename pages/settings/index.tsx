@@ -15,7 +15,7 @@ const Settings = () => {
   const [email, setemail] = React.useState<string>(auth.currentUser ? auth.currentUser.email as string : "no_email");
   // const [photoURL, setphotoURL] = useState<string>(auth.currentUser!.photoURL!);
 
-  const updateUserProfileInteraction = async (event: React.FormEvent<HTMLFormElement>) => {
+  const updateUserProfileAction = async (event: React.FormEvent<HTMLFormElement>) => {
 
     try {
       event.preventDefault()
@@ -30,7 +30,7 @@ const Settings = () => {
     }
   }
 
-  const deleteAllMarkersInteraction = async () => {
+  const deleteAllMarkersAction = async () => {
     try {
       openModalWithSpinner("Uploading Edits");
       if (window.confirm("delete all markers?")) {
@@ -51,7 +51,7 @@ const Settings = () => {
       <p>Welcome {displayname || "user"}! Change your profile information here.</p>
       <br></br>
       {/* <img src={auth.currentUser?.photoURL?} className="profilePic" alt='profilePic'></img> */}
-      <form className={styles.settingsForm} onSubmit={updateUserProfileInteraction}>
+      <form className={styles.settingsForm} onSubmit={updateUserProfileAction}>
         <label htmlFor="displayname">User name:</label>
         <input 
           id='displayname' 
@@ -70,7 +70,7 @@ const Settings = () => {
         <input type="submit" value="Go!" className={styles.settingsForm__submit}/>
       </form>
       <h2>ADMIN AREA</h2>
-      <button onClick={ () => deleteAllMarkersInteraction() }>delete all markers</button>
+      <button onClick={ () => deleteAllMarkersAction() }>delete all markers</button>
     </div>
   )
 }
