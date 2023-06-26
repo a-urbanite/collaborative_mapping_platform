@@ -7,6 +7,7 @@ import EditControlFC from "./EditControlFC";
 import MarkerGroup from "./MarkerGroup";
 import React from "react";
 import { useRouter } from "next/router";
+import EventListenersForStoryButtons from "./EventListenersForStoryButtons";
 
 const Map = ({ markers }: any) => {
   const router = useRouter();
@@ -26,6 +27,7 @@ const Map = ({ markers }: any) => {
         <MarkerGroup FGref={FGref} markers={markers} />
         {router.pathname !== "/home" && <EditControlFC />}
       </FeatureGroup>
+      <EventListenersForStoryButtons/>
 
       <TileLayer
         attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'

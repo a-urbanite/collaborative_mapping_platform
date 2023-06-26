@@ -11,29 +11,29 @@ export default function Home() {
   const { fetchAllMarkers, markersUpdated, initialFetch } = useFirestoreController();
   const { setAllMarkers, allMarkers } = useMarkerContext();
 
-  const router = useRouter();
+  // const router = useRouter();
 
-  React.useEffect(() => {
-    const handleStoryClick = (event: any) => {
-      const button = event.target;
-      const orderNum = button.getAttribute('data-orderNum');
-      const title = button.getAttribute('data-title');
-      const url = `/story/${orderNum}/${title.replace(" ", "_")}`;
-      router.push(url);
-    };
+  // React.useEffect(() => {
+  //   const handleStoryClick = (event: any) => {
+  //     const button = event.target;
+  //     const orderNum = button.getAttribute('data-orderNum');
+  //     const title = button.getAttribute('data-title');
+  //     const url = `/story/${orderNum}/${title.replace(" ", "_")}`;
+  //     router.push(url);
+  //   };
   
-    const handleClick = (event: any) => {
-      if (event.target.classList.contains('storyButton')) {
-        handleStoryClick(event);
-      }
-    };
+  //   const handleClick = (event: any) => {
+  //     if (event.target.classList.contains('storyButton')) {
+  //       handleStoryClick(event);
+  //     }
+  //   };
   
-    document.addEventListener('click', handleClick);
+  //   document.addEventListener('click', handleClick);
   
-    return () => {
-      document.removeEventListener('click', handleClick);
-    };
-  }, [router]);
+  //   return () => {
+  //     document.removeEventListener('click', handleClick);
+  //   };
+  // }, [router]);
   
 
   React.useEffect(() => {
