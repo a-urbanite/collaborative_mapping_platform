@@ -4,6 +4,7 @@ import { useMarkerContext } from "../../../../components/Map/MarkerContext";
 import { FirestoreMarker } from "../../../../Types";
 import { useModal } from "../../../../components/Modal/ModalContext";
 import { useFirestoreController } from "../../../../components/FirestoreController/FirestoreController";
+import MapLoader from "../../../../components/Map/MapLoader";
 
 const StoryPage = () => {
   const router = useRouter();
@@ -25,14 +26,18 @@ const StoryPage = () => {
 
   }, [router.isReady]);
 
-  return (
+  if (currentMarker) return (
     <>
       <div>StoryPage</div>
-      { currentMarker && <h2>{currentMarker.properties.popupContent.title}</h2>}
-      { currentMarker && <p>{currentMarker.properties.popupContent.text}</p>}
+      <h2>{currentMarker.properties.popupContent.title}</h2>
+      <p>{currentMarker.properties.popupContent.text}</p>
       <button onClick={() => router.push("/home")}>Back</button>
+      <MapLoader markers={new Map([[currentMarker.properties.markerId, currentMarker]])}/>
+      
     </>
   );
+
+  if (!currentMarker) return <></>;
 };
 
 export default StoryPage;

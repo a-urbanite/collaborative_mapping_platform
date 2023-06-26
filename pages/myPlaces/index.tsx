@@ -14,9 +14,7 @@ const MyPlaces = () => {
   React.useEffect(() => {
     if (!auth.currentUser) {
       router.push('/home')
-    }
-    if (auth.currentUser) {
-      console.log("CURRENTUSER: ", auth.currentUser)
+    } else {
       defineUserMarkers(allMarkers, auth.currentUser)
     }
   }, [])
