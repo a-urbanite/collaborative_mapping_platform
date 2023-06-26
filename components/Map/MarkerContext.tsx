@@ -6,7 +6,7 @@ import {
   createGeojsonMarkedForDeletionFromLayer,
   createGeojsonWithUpdatedPopup,
 } from "./MarkerContext_utils";
-import { FirestoreMarker, PopupContentObj, UserObj, MarkerMap, LeafletMarker, GeoJsonObject } from "../Types";
+import { FirestoreMarker, PopupContentObj, UserObj, MarkerMap, LeafletMarker, GeoJsonObject } from "../../Types";
 import { User as FirebaseUser } from "firebase/auth";
 
 interface MarkerContextValue {
@@ -16,7 +16,7 @@ interface MarkerContextValue {
   setUserMarkers: Dispatch<SetStateAction<MarkerMap>>;
   defineUserMarkers: (markerMap: MarkerMap, userObj: FirebaseUser) => void;
   resetUserMarkers: () => void;
-  findMarkerByOrderNum: (map: MarkerMap, orderNum: number) => { key: string, value: FirestoreMarker } | null;
+  findMarkerByOrderNum: (map: MarkerMap, orderNum: number) => FirestoreMarker | null;
   generatePopupContent: (marker: FirestoreMarker) => string;
   attachMapLayerObjToMarkerInHashmap: (
     geojson: FirestoreMarker,
@@ -78,16 +78,16 @@ const MarkerContextProvider = ({ children }: MarkerProviderProps) => {
   };
 
   function findMarkerByOrderNum(map: MarkerMap, orderNum: number) {
-    console.log("inside findmakrer func")
+    // console.log("inside findmakrer func")
     // console.log("ordernum in search func: ", orderNum)
-    if (map && map.size > 0) {
-      console.log("ALLMARKERS: ", map)
+    // if (map && map.size > 0) {
+    //   console.log("ALLMARKERS: ", map)
 
-    }
+    // }
     for (const [key, value] of map.entries()) {
-      console.log("counter in search func")
+      // console.log("counter in search func")
       if (value["properties"] && value["properties"].orderNum === orderNum) {
-        return { key, value };
+        return value;
       }
     }
     

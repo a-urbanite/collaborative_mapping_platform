@@ -1,11 +1,12 @@
 import React, { ReactNode } from "react";
 import { serializeGeoJsonCoords } from "./Serialisation";
 import { deserializeGeoJsonCoords } from "./Deserialisation";
-import { FirestoreMarker, MarkerMap } from "../Types";
+import { FirestoreMarker, MarkerMap } from "../../Types";
 
 interface ContextProps {
   fetchAllMarkers: () => Promise<MarkerMap>;
   uploadEdits: (userFirestoreMarkers: MarkerMap) => Promise<Response>;
+  fetchSingleMarker: (orderNum: number, title: string) => Promise<FirestoreMarker>;
   deleteAllMarkers: () => Promise<Response>;
   markersUpdated: boolean;
   initialFetch: boolean;
@@ -77,6 +78,26 @@ const FirestoreControllerProvider = ({ children }: ProviderProps) => {
     }
   };
 
+  const fetchSingleMarker = async (orderNum: number, title: string) => {
+    try {
+
+      const res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/location`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({orderNum: orderNum, title: title}),
+      });
+
+      if (!res.ok) throw new Error(`HTTP error: ${res.status}, ${res.statusText}`);
+      const marker = await res.json();
+
+      return marker;
+    } catch (err) {
+      throw new Error("Fetch Error", { cause: err });
+    }
+  }
+
   const deleteAllMarkers = async () => {
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_HOST_URL}/api/deleteAllMarkers`);
@@ -94,6 +115,7 @@ const FirestoreControllerProvider = ({ children }: ProviderProps) => {
       value={{
         fetchAllMarkers,
         uploadEdits,
+        fetchSingleMarker,
         deleteAllMarkers,
         markersUpdated,
         initialFetch,

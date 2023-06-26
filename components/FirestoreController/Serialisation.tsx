@@ -1,4 +1,4 @@
-import {GeoJsonObject} from '../Types'
+import {GeoJsonObject} from '../../Types'
 
 export const serializeGeoJsonCoords = (geoJsonObj: GeoJsonObject):any => {
   let serializedCoordsObj;

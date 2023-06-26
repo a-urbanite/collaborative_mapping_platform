@@ -4,7 +4,7 @@ import { useMarkerContext } from "../../Map/MarkerContext";
 import { useModal } from "../../Modal/ModalContext";
 import { useFirestoreController } from "../../FirestoreController/FirestoreController";
 import { useRouter } from "next/router";
-import { MarkerMap } from "../../Types";
+import { MarkerMap } from "../../../Types";
 
 const UploadButton = () => {
   const { userMarkers } = useMarkerContext();

@@ -1,6 +1,6 @@
 import React from "react";
 import { Marker, Popup, GeoJSON } from "react-leaflet";
-import { FirestoreMarker, LeafletMarker, MarkerMap } from "../components/Types";
+import { FirestoreMarker, LeafletMarker, MarkerMap } from "../Types";
 import { useMarkerContext } from "../components/Map/MarkerContext";
 import L from "leaflet";
 

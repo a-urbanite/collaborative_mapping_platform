@@ -6,7 +6,7 @@ import {
   updateProfile,
   createUserWithEmailAndPassword,
 } from "firebase/auth";
-import { FirebaseUser } from "./Types";
+import { FirebaseUser } from "../Types";
 
 interface UserContextValue {
   isLoggedIn: boolean; 
