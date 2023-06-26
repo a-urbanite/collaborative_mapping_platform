@@ -5,19 +5,15 @@ import { useUserContext } from "../../components/UserContext";
 import { auth } from '../../firebase-config';
 import { useFirestoreController } from '../../components/FirestoreController/FirestoreController';
 import { useModal } from '../../components/Modal/ModalContext';
-import { useMarkerContext } from '../../components/Map/MarkerContext';
 
 const Settings = () => {
   const { updateUser } = useUserContext();
   const { deleteAllMarkers } = useFirestoreController();
   const { openModalWithSpinner, openModalWithNotification, openModalWithError, closeModal } = useModal();
-  // const { allMarkers } = useMarkerContext();
 
   const [displayname, setdisplayname] = React.useState<string>(auth.currentUser ? auth.currentUser.displayName as string : "no_user");
   const [email, setemail] = React.useState<string>(auth.currentUser ? auth.currentUser.email as string : "no_email");
-  // const [message, setmessage] = React.useState('')
   // const [photoURL, setphotoURL] = useState<string>(auth.currentUser!.photoURL!);
-
 
   const updateUserProfileInteraction = async (event: React.FormEvent<HTMLFormElement>) => {
 
@@ -52,8 +48,7 @@ const Settings = () => {
   return (
     <div className={styles.SettingsWrapper}>
       <h1>Settings</h1>
-      <p>Welcome {displayname}! Change your profile information here.</p>
-      {/* <p>{message}</p> */}
+      <p>Welcome {displayname || "user"}! Change your profile information here.</p>
       <br></br>
       {/* <img src={auth.currentUser?.photoURL?} className="profilePic" alt='profilePic'></img> */}
       <form className={styles.settingsForm} onSubmit={updateUserProfileInteraction}>
