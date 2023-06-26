@@ -10,26 +10,31 @@ import { useMarkerContext } from '../../components/Map/MarkerContext';
 const Settings = () => {
   const { updateUser } = useUserContext();
   const { deleteAllMarkers } = useFirestoreController();
-  const { openModalWithSpinner, openModalWithError, closeModal } = useModal();
-  const { allMarkers } = useMarkerContext();
+  const { openModalWithSpinner, openModalWithNotification, openModalWithError, closeModal } = useModal();
+  // const { allMarkers } = useMarkerContext();
 
   const [displayname, setdisplayname] = React.useState<string>(auth.currentUser ? auth.currentUser.displayName as string : "no_user");
   const [email, setemail] = React.useState<string>(auth.currentUser ? auth.currentUser.email as string : "no_email");
-  const [message, setmessage] = React.useState('')
+  // const [message, setmessage] = React.useState('')
   // const [photoURL, setphotoURL] = useState<string>(auth.currentUser!.photoURL!);
 
-  React.useEffect(() => {
-    console.log("ALLMARKERS in Settings page: ", allMarkers)
-  }, [allMarkers])
 
-  const updateUserProfile = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault()
-    await updateUser(displayname, email)
-    setmessage('Success! information changed!')
-    // router.reload()
+  const updateUserProfileInteraction = async (event: React.FormEvent<HTMLFormElement>) => {
+
+    try {
+      event.preventDefault()
+      openModalWithSpinner("Uploading Edits");
+      await updateUser(displayname, email)
+      openModalWithNotification("Success!")
+      await closeModal(3000);
+      router.reload
+    } catch (e: any) {
+      console.error(e)
+      openModalWithError(e.message);
+    }
   }
 
-  const deleteAllMarkersAction = async () => {
+  const deleteAllMarkersInteraction = async () => {
     try {
       openModalWithSpinner("Uploading Edits");
       if (window.confirm("delete all markers?")) {
@@ -48,10 +53,10 @@ const Settings = () => {
     <div className={styles.SettingsWrapper}>
       <h1>Settings</h1>
       <p>Welcome {displayname}! Change your profile information here.</p>
-      <p>{message}</p>
+      {/* <p>{message}</p> */}
       <br></br>
       {/* <img src={auth.currentUser?.photoURL?} className="profilePic" alt='profilePic'></img> */}
-      <form className={styles.settingsForm} onSubmit={updateUserProfile}>
+      <form className={styles.settingsForm} onSubmit={updateUserProfileInteraction}>
         <label htmlFor="displayname">User name:</label>
         <input 
           id='displayname' 
@@ -70,7 +75,7 @@ const Settings = () => {
         <input type="submit" value="Go!" className={styles.settingsForm__submit}/>
       </form>
       <h2>ADMIN AREA</h2>
-      <button onClick={ () => deleteAllMarkersAction() }>delete all markers</button>
+      <button onClick={ () => deleteAllMarkersInteraction() }>delete all markers</button>
     </div>
   )
 }
