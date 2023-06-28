@@ -10,8 +10,10 @@ interface StoryCardInterface {
 const StoryCard = ({marker}: StoryCardInterface) => {
   const router = useRouter();
 
-  const orderNum = marker.properties.orderNum
-  const urlTitle = marker.properties.popupContent.title.replace(" ","_")
+  const orderNum = marker?.properties.orderNum
+  const urlTitle = marker?.properties.popupContent.title.replace(" ","_")
+
+  if (!marker) return <></>
 
   return (
     <li onClick={() => router.push(`/story/${orderNum}/${urlTitle}`)}>
