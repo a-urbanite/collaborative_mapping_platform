@@ -11,48 +11,25 @@ export default function Home() {
   const { fetchAllMarkers, markersUpdated, initialFetch } = useFirestoreController();
   const { setAllMarkers, allMarkers } = useMarkerContext();
 
-  // const router = useRouter();
-
-  // React.useEffect(() => {
-  //   const handleStoryClick = (event: any) => {
-  //     const button = event.target;
-  //     const orderNum = button.getAttribute('data-orderNum');
-  //     const title = button.getAttribute('data-title');
-  //     const url = `/story/${orderNum}/${title.replace(" ", "_")}`;
-  //     router.push(url);
-  //   };
-  
-  //   const handleClick = (event: any) => {
-  //     if (event.target.classList.contains('storyButton')) {
-  //       handleStoryClick(event);
-  //     }
-  //   };
-  
-  //   document.addEventListener('click', handleClick);
-  
-  //   return () => {
-  //     document.removeEventListener('click', handleClick);
-  //   };
-  // }, [router]);
-  
-
   React.useEffect(() => {
     if (!initialFetch && !markersUpdated) return;
 
     openModalWithSpinner("Fetching Markers...");
-    fetchAllMarkers().then((markers) => {
-      setAllMarkers(markers);
-      closeModal();
-    }).catch((e) => {
-      openModalWithError(`Error connecting to Server (${e.cause})`);
-    })
-
+    fetchAllMarkers()
+      .then((markers) => {
+        setAllMarkers(markers);
+        closeModal();
+      })
+      .catch((e) => {
+        openModalWithError(`Error connecting to Server (${e.cause})`);
+      });
   }, []);
 
   return (
     <div className={styles.homeContainer}>
-      <MapLoader markers={allMarkers} />
-      {/* <button onClick={}></button> */}
+      <div className={styles.mapContainer}>
+        <MapLoader markers={allMarkers} />
+      </div>
     </div>
   );
 }

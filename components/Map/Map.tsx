@@ -9,7 +9,7 @@ import React from "react";
 import { useRouter } from "next/router";
 import EventListenersForStoryButtons from "./EventListenersForStoryButtons";
 
-const Map = ({ markers }: any) => {
+const Map = ({ markers, className }: any) => {
   const router = useRouter();
   const FGref = React.useRef<L.FeatureGroup | null>(null);
 
@@ -18,14 +18,14 @@ const Map = ({ markers }: any) => {
       center={[52.52, 13.405]}
       zoom={13}
       scrollWheelZoom={false}
-      className={styles.mapContainer}
+      className={`${styles.map} ${className}`}
       // whenReady={() => {
       //   console.log("MAPLOAD");
       // }}
     >
       <FeatureGroup ref={FGref}>
         <MarkerGroup FGref={FGref} markers={markers} />
-        {router.pathname !== "/home" && <EditControlFC />}
+        {router.pathname == "/myPlaces" && <EditControlFC />}
       </FeatureGroup>
       <EventListenersForStoryButtons/>
 

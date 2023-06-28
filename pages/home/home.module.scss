@@ -1,4 +1,11 @@
 .homeContainer {
   display: flex;
-  flex-direction: row; 
+  flex-direction: row;
+  width: 100vw;
+  height: 92.5vh;
+}
+
+.mapContainer {
+  width: 100%;
+  height: 75%;
 }

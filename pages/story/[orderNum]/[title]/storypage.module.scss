@@ -1,0 +1,25 @@
+.pageContainer {
+  height: 92.5vh;
+  width: 100vw -6rem;
+  margin-left: 3rem;
+  margin-right: 3rem;
+  padding: 3rem;
+  display: flex;
+  flex-direction: row;
+  background-color: gray;
+}
+
+.leftColumn {
+  height: 100%;
+  width: 60%;
+}
+
+.rightColumn {
+  height: 100%;
+  width: 40%;
+}
+
+.mapContainer {
+  width: 100%;
+  height: 50% ;
+}
