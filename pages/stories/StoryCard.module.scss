@@ -1,0 +1,10 @@
+.storyCardContainer {
+  margin: 1rem;
+  padding: 1rem;
+  background-color: yellow;
+  max-width: fit-content;
+
+  &:hover {
+    background-color: red;
+  }
+}

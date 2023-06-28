@@ -12,7 +12,7 @@ const MainNav = () => {
     <nav className={styles.mainNav}>
       <ul className={styles.list}>
         <MenuPoint href="/home">Home</MenuPoint>
-        <MenuPoint href="/story">story</MenuPoint>
+        <MenuPoint href="/stories">Stories</MenuPoint>
         {!isLoggedIn && <MenuPoint href="/contribute">contribute</MenuPoint>}
         <MenuPoint href="/aboutUs">About Us</MenuPoint>
         {isLoggedIn && <MenuPoint href="/myPlaces">My Places</MenuPoint>}
