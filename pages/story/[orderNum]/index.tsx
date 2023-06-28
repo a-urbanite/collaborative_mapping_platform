@@ -21,7 +21,7 @@ const Index = () => {
         router.push(`/story/${orderNum}/${title}`)
       })
       .catch((e) => {
-        openModalWithError(`Server Error: (${e.cause})`);
+        openModalWithError(`No story registered under this number`);
       });
   }, [router.isReady]);
 

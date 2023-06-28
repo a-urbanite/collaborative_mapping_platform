@@ -12,10 +12,18 @@ import EventListenersForStoryButtons from "./EventListenersForStoryButtons";
 const Map = ({ markers, className }: any) => {
   const router = useRouter();
   const FGref = React.useRef<L.FeatureGroup | null>(null);
+  
+  const getMapFocusCoords = () => {
+    if ( markers && markers.size == 1) {
+      return [...markers.entries()][0][1].geometry.coordinates.slice().reverse() 
+    } else {
+      return [52.52, 13.405]
+    }
+  }
 
   return (
     <MapContainer
-      center={markers.size > 1 ? [52.52, 13.405] : [...markers.entries()][0][1].geometry.coordinates.slice().reverse()}
+      center={getMapFocusCoords()}
       zoom={13}
       scrollWheelZoom={false}
       className={`${styles.map} ${className}`}
@@ -25,7 +33,7 @@ const Map = ({ markers, className }: any) => {
     >
       <FeatureGroup ref={FGref}>
         <MarkerGroup FGref={FGref} markers={markers} />
-        {router.pathname == "/myPlaces" && <EditControlFC />}
+        {["/myPlaces", "/contribute"].includes(router.pathname) && <EditControlFC />}
       </FeatureGroup>
       <EventListenersForStoryButtons/>
 

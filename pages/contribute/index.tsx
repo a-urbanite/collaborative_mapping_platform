@@ -17,7 +17,9 @@ const Contribute = () => {
     <>
       <p>Contribute</p>
       <div className={styles.homeContainer}>
-        <MapLoader markers={userMarkers} />
+        <div className={styles.mapContainer}>
+          <MapLoader markers={userMarkers} />
+        </div>
         <div className={styles.sidebar}>
           <MarkerList />
           <UploadButton />
