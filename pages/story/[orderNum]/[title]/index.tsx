@@ -35,7 +35,7 @@ const StoryPage = () => {
         <div className={styles.leftColumn}>
           <h2>{currentMarker.properties.popupContent.title}</h2>
           <p>{currentMarker.properties.popupContent.text}</p>
-          <button onClick={() => router.push("/home")}>Back</button>
+          <button onClick={() => router.back()}>Back</button>
         </div>
         <div className={styles.rightColumn}>
           <div className={styles.mapContainer}>
