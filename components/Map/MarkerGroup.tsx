@@ -8,7 +8,7 @@ const MarkerGroup = ({ FGref, markers }: any) => {
 
   React.useEffect(() => {
     const featureGroup = FGref.current;
-    console.log("MARKERS: ", markers)
+    // console.log("MARKERS: ", markers)
 
     markers.forEach((marker: any) => {
       if (marker.properties.operationIndicator == "deleted in current session") return;

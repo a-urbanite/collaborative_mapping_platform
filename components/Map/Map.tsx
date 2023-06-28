@@ -15,7 +15,7 @@ const Map = ({ markers, className }: any) => {
 
   return (
     <MapContainer
-      center={[52.52, 13.405]}
+      center={markers.size > 1 ? [52.52, 13.405] : [...markers.entries()][0][1].geometry.coordinates.slice().reverse()}
       zoom={13}
       scrollWheelZoom={false}
       className={`${styles.map} ${className}`}
