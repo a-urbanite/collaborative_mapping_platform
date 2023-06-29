@@ -1,5 +1,5 @@
 import React from 'react'
-import { FirestoreMarker } from '../../Types';
+import { FirestoreMarker } from '../../../../Types';
 import styles from "./StoryCard.module.scss"
 import { useRouter } from 'next/router';
 
