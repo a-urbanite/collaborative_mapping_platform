@@ -4,7 +4,7 @@ I am passionate about maps and i want to bring this passion into my cding career
 
 ## Goals
 
-This platform is currently the prototype for an art project that me and some friends are trying to bring into life. We want to collect and share stories surrounding the Berlin Wall. We plan to make the platform public by mid 2024.
+This platform is currently the prototype for an art project that me and some friends are trying to bring into life. We want to collect and share stories surrounding the Berlin Wall. We plan to make the platform public by mid-2024.
 
 ## Tech stack
 
